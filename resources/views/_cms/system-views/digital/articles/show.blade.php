@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="mt-md-4 mt-lg-4 mt-sm-0 mb-5">
-            <a href="{{ route('articles.index') }}" class="btn btn-outline-dark" ><i class="fa fa-arrow-left"></i>  Back on List</a>
+            <a href="{{ route('articles.index') }}" class="btn btn-outline-dark" ><i class="fa fa-arrow-left"></i>  Back</a>
             <div class="my-4"></div>
             <div class="lead">Article Id: {{ $article->unique_id }}</div>
             <hr class="my-4">
@@ -13,9 +13,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <div class="card">
-                        <div class="card-img-top">
-                            <img src="{{ url('images/articles/'.$article->image)}}" class="img-fluid" alt="{{ $article->image }}">
-                        </div>
+                        <img src="{{ url('images/articles/'.$article->image)}}" class="img-fluid card-img-top" alt="{{ $article->image }}">
                         <div class="card-body">
                             <span class="card-title lead">{{ $article->title }}</span>
                             <p class="text-muted" style="font-weight: 300;">{{ $article->heading }}</p>
@@ -45,11 +43,14 @@
                     <hr>
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-6">
-                                <a href="#editArticleModal" class="btn btn-outline-dark btn-block" data-toggle="modal"><i class="fa fa-edit"></i>&nbsp;Edit Article</a>
+                            <div class="col-md-4">
+                                <a href="#editArticleModal" class="btn btn-outline-dark btn-block" data-toggle="modal"><i class="fa fa-edit"></i>&nbsp;Edit</a>
                             </div>
-                            <div class="col-md-6">
-                                <a href="#addArticleImage" class="btn btn-outline-dark btn-block" data-toggle="modal"><i class="fa fa-image"></i>&nbsp;Add Article Image</a>
+                            <div class="col-md-4">
+                                <a href="{{ route('article.preview', $article->id) }}" class="btn btn-outline-dark btn-block"><i class="fa fa-search"></i>&nbsp;&nbsp;Preview</a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="#addArticleImage" class="btn btn-outline-dark btn-block" data-toggle="modal"><i class="fa fa-image"></i>&nbsp;Add Image</a>
                             </div>
                         </div>
                     </div>
@@ -266,22 +267,25 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <form method="post" action="{{ route('articles.publish', $article->id) }}">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <input type="text" id="article_id" name="id" value="{{ $article->id }}" style="display:none;">
-                                    <div class="btn-group fa-pull-right">
-                                        <button type="submit" class="btn btn-outline-dark">Yes</button>
-                                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">No</button>
-                                    </div>
+                <form method="post" action="{{ route('articles.publish', $article->id) }}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="text" id="article_id" name="id" value="{{ $article->id }}" style="display:none;">
+                                <div class="lead">
+                                    Publish <span class="h5">{{ $article->title }}</span>?
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                    <div class="modal-footer">
+                        <div class="btn-group fa-pull-right">
+                            <button type="submit" class="btn btn-outline-dark">Yes</button>
+                            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

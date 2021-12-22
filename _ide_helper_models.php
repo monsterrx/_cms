@@ -16,11 +16,11 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string|null $year
- * @property string|null $type
+ * @property string $year
+ * @property string $type
  * @property int $artist_id
  * @property int $genre_id
- * @property string|null $image
+ * @property string $image
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -54,7 +54,7 @@ namespace App\Models{
  * @property string $unique_id
  * @property string $title
  * @property string $heading
- * @property string $location
+ * @property string|null $location
  * @property string|null $published_at
  * @property string $image
  * @property int $categories_id
@@ -96,8 +96,8 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string|null $country
- * @property string|null $type
+ * @property string $country
+ * @property string $type
  * @property string|null $image
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
@@ -126,14 +126,14 @@ namespace App\Models{
  * App\Models\Award
  *
  * @property int $id
- * @property string $name
+ * @property string $award_name
  * @property int|null $jock_id
  * @property int|null $show_id
- * @property string $title
+ * @property string $award_title
  * @property string $location
- * @property string|null $description
+ * @property string|null $award_description
  * @property string $year
- * @property int $is_special
+ * @property int $special
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -142,16 +142,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Award newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Award newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Award query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Award whereAwardDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Award whereAwardName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Award whereAwardTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Award whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Award whereIsSpecial($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereJockId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereLocation($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Award whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereShowId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Award whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Award whereSpecial($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereYear($value)
  */
@@ -169,14 +169,12 @@ namespace App\Models{
  * @property string $end_year
  * @property string|null $description
  * @property string|null $image
- * @property string $location
+ * @property string|null $location
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Photo[] $Image
  * @property-read int|null $image_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Student[] $Scholar
- * @property-read int|null $scholar_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Sponsor[] $Sponsor
  * @property-read int|null $sponsor_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Student[] $Student
@@ -208,7 +206,7 @@ namespace App\Models{
  * @property string $description
  * @property string $image
  * @property int $employee_id
- * @property string $location
+ * @property string|null $location
  * @property int $is_resolved
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -263,18 +261,18 @@ namespace App\Models{
  * @property int $id
  * @property int $song_id
  * @property int $position
- * @property int|null $last_position
- * @property int|null $re_entry
+ * @property string|null $last_position
+ * @property string $re_entry
  * @property string $dated
- * @property string $location
+ * @property string|null $location
  * @property int $daily
  * @property int $local
  * @property int|null $is_dropped
  * @property string|null $votes
  * @property string|null $last_results
- * @property string|null $phone_votes
- * @property string|null $social_votes
- * @property string|null $online_votes
+ * @property string $phone_votes
+ * @property string $social_votes
+ * @property string $online_votes
  * @property string|null $voted_at
  * @property int $is_posted
  * @property string|null $deleted_at
@@ -320,7 +318,6 @@ namespace App\Models{
  * @property int $article_id
  * @property string|null $content
  * @property string|null $image
- * @property string|null $link
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -334,7 +331,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Content whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereUpdatedAt($value)
  */
 	class Content extends \Eloquent {}
@@ -352,7 +348,7 @@ namespace App\Models{
  * @property string $is_active
  * @property string $type
  * @property string $description
- * @property string $location
+ * @property string|null $location
  * @property string|null $line1
  * @property string|null $line2
  * @property string|null $line3
@@ -425,9 +421,9 @@ namespace App\Models{
  * App\Models\Designation
  *
  * @property int $id
- * @property string|null $name
+ * @property string $name
  * @property string $level
- * @property string|null $description
+ * @property string $description
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -459,7 +455,7 @@ namespace App\Models{
  * @property string|null $birthday
  * @property string|null $contact_number
  * @property string|null $address
- * @property string $location
+ * @property string|null $location
  * @property int $designation_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
@@ -582,9 +578,9 @@ namespace App\Models{
  * @property int $id
  * @property string $title
  * @property string $start_date
- * @property string|null $end_date
+ * @property string $end_date
  * @property string|null $description
- * @property string $location
+ * @property string|null $location
  * @property string|null $sub_description
  * @property string|null $image
  * @property int $school_id
@@ -618,11 +614,11 @@ namespace App\Models{
  * App\Models\Header
  *
  * @property int $id
- * @property int $number
+ * @property string $number
  * @property string $image
  * @property string $title
  * @property string|null $sub_title
- * @property string $location
+ * @property string|null $location
  * @property string|null $link
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
@@ -684,7 +680,7 @@ namespace App\Models{
  * @property string $name
  * @property string|null $moniker
  * @property string|null $description
- * @property string|null $profile_image
+ * @property string $profile_image
  * @property string|null $background_image
  * @property string|null $main_image
  * @property string $is_active
@@ -702,6 +698,8 @@ namespace App\Models{
  * @property-read int|null $link_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Show[] $Show
  * @property-read int|null $show_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Timeslot[] $Timeslot
+ * @property-read int|null $timeslot_count
  * @method static \Illuminate\Database\Eloquent\Builder|Jock newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Jock newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Jock query()
@@ -729,9 +727,9 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $email
- * @property string $contact_number
+ * @property string $contact_no
  * @property string $topic
- * @property string $content
+ * @property string $message
  * @property int $is_seen
  * @property string $location
  * @property string|null $deleted_at
@@ -740,14 +738,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message query()
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereContactNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Message whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereContactNo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereIsSeen($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Message whereMessage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereTopic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
@@ -762,8 +760,8 @@ namespace App\Models{
  * @property int $id
  * @property int $song_id
  * @property string $dated
- * @property string|null $track_link
- * @property string $location
+ * @property string $track_link
+ * @property string|null $location
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -828,7 +826,7 @@ namespace App\Models{
  * @property string $date
  * @property string $link
  * @property string|null $image
- * @property string $location
+ * @property string|null $location
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -908,8 +906,8 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string|null $address
- * @property string|null $seal
- * @property string $location
+ * @property string $seal
+ * @property string|null $location
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -942,11 +940,11 @@ namespace App\Models{
  * @property string $front_description
  * @property string $description
  * @property string $icon
- * @property string|null $header_image
+ * @property string $header_image
  * @property string|null $background_image
  * @property int $is_special
  * @property int $is_active
- * @property string $location
+ * @property string|null $location
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property string|null $deleted_at
@@ -990,7 +988,7 @@ namespace App\Models{
  * @property int|null $article_id
  * @property int|null $show_id
  * @property string $website
- * @property string|null $url
+ * @property string $url
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -1081,7 +1079,7 @@ namespace App\Models{
  * @property string $last_name
  * @property string $course
  * @property int $year_level
- * @property string $location
+ * @property string|null $location
  * @property string|null $data
  * @property string|null $image
  * @property string|null $deleted_at
@@ -1150,7 +1148,7 @@ namespace App\Models{
  * App\Models\StudentJockBatch
  *
  * @property int $id
- * @property int $batch_number
+ * @property string $batch_number
  * @property string $start_year
  * @property string $end_year
  * @property string $location
@@ -1179,8 +1177,8 @@ namespace App\Models{
  * App\Models\Tally
  *
  * @property int $id
- * @property string|null $results
- * @property string|null $last_results
+ * @property string $result
+ * @property string $last_result
  * @property int|null $chart_id
  * @property string|null $dated
  * @property \Illuminate\Support\Carbon $updated_at
@@ -1193,8 +1191,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereDated($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tally whereLastResults($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Tally whereResults($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tally whereLastResult($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tally whereResult($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereUpdatedAt($value)
  */
 	class Tally extends \Eloquent {}
@@ -1205,15 +1203,17 @@ namespace App\Models{
  * App\Models\Timeslot
  *
  * @property int $id
- * @property int $show_id
- * @property string $day
+ * @property int|null $show_id
+ * @property int|null $jock_id
  * @property string $start
  * @property string $end
  * @property string $location
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Show $Show
+ * @property string $day
+ * @property-read \App\Models\Jock|null $Jock
+ * @property-read \App\Models\Show|null $Show
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot query()
@@ -1222,6 +1222,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereJockId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereShowId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereStart($value)
@@ -1326,7 +1327,7 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $image
- * @property string $location
+ * @property string|null $location
  * @property string $device
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $updated_at

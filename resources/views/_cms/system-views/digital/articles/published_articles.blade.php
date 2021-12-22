@@ -9,7 +9,7 @@
                     <img src="{{ url('images/articles/'.$articles->image) }}" class="img-fluid" alt="{{ $articles->image }}">
                 </div>
                 <div class="card-body">
-                    <p class="lead">{{ $articles->title }}</p>
+                    <p class="lead">{{ Str::limit($articles->title, 45, '...') }}</p>
                 </div>
                 <div class="card-footer">
                     <div class="fa-pull-left">

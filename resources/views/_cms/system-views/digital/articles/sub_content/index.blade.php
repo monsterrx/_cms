@@ -4,7 +4,7 @@
     <div class="container">
         <div class="mt-md-4 mt-lg-4 mt-sm-0 mb-5">
             <div class="lead">
-                Article: {{ $data['article']->article_Title }}
+                Article: {{ $data['article']->title }}
             </div>
             @include('_cms.system-views._feedbacks.success')
             @include('_cms.system-views._feedbacks.error')

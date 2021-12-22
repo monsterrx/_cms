@@ -140,6 +140,7 @@ Route::middleware('auth')->group(function() {
 
     Route::post('/article_publish', [ArticleController::class, 'publish'])->name('articles.publish');
     Route::get('/archive', [ArticleController::class, 'archive'])->name('article.archives');
+    Route::get('/articles/{id}/preview', [ArticleController::class, 'preview'])->name('article.preview');
 
     Route::resource('/articles/{id}/sub_contents', ContentController::class);
 

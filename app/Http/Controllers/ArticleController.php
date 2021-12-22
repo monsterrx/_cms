@@ -33,6 +33,10 @@ class ArticleController extends Controller {
                         ->orderBy('updated_at', 'desc')
                         ->paginate(6);
 
+                    foreach ($published as $article) {
+                        $article->image = $this->verifyPhoto($article->image, 'articles');
+                    }
+
                     $next = $published->nextPageUrl();
                     $previous = $published->previousPageUrl();
 
@@ -45,6 +49,10 @@ class ArticleController extends Controller {
                     ->whereNull('deleted_at')
                     ->orderBy('updated_at', 'desc')
                     ->paginate(6);
+
+                foreach ($published as $article) {
+                    $article->image = $this->verifyPhoto($article->image, 'articles');
+                }
 
                 $next = $published->nextPageUrl();
                 $previous = $published->previousPageUrl();
@@ -61,6 +69,9 @@ class ArticleController extends Controller {
                         ->orderBy('created_at', 'desc')
                         ->paginate(6);
 
+                    foreach ($unpublished as $article) {
+                        $article->image = $this->verifyPhoto($article->image, 'articles');
+                    }
 
                     $next = $unpublished->nextPageUrl();
                     $previous = $unpublished->previousPageUrl();
@@ -74,6 +85,10 @@ class ArticleController extends Controller {
                     ->whereNull('deleted_at')
                     ->orderBy('created_at', 'desc')
                     ->paginate(6);
+
+                foreach ($unpublished as $article) {
+                    $article->image = $this->verifyPhoto($article->image, 'articles');
+                }
 
                 $next = $unpublished->nextPageUrl();
                 $previous = $unpublished->previousPageUrl();
@@ -504,4 +519,12 @@ class ArticleController extends Controller {
 
 		return redirect()->withErrors('Restricted Access!');
 	}
+
+    public function preview($id) {
+        $article = Article::with('Content', 'Relevant', 'Social')->findOrFail($id);
+
+        $article->image = $this->verifyPhoto($article->image, 'articles');
+
+        return view('_cms.system-views.digital.articles.preview', compact('article'));
+    }
 }

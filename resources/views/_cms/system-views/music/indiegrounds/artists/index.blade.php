@@ -66,7 +66,7 @@
                             <select id="new_indie_artist_id" name="artist_id" class="custom-select">
                                 <option value>--</option>
                                 @foreach($data['artist'] as $artists)
-                                    <option value="{{ $artists->id }}">{{ $artists->Name }}</option>
+                                    <option value="{{ $artists->id }}">{{ $artists->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -114,7 +114,7 @@
                                         <select name="artist_id" id="indie_artist_id" class="custom-select" disabled>
                                             <option value>--</option>
                                             @foreach($data['artist'] as $artists)
-                                                <option value="{{ $artists->id }}">{{ $artists->Name }}</option>
+                                                <option value="{{ $artists->id }}">{{ $artists->name }}</option>
                                             @endforeach
                                         </select>
                                         <div class="my-3"></div>

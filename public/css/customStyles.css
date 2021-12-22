@@ -143,4 +143,104 @@ audio {
     display: none;
 }
 
+p > img {
+    width: 100%;
+    height: auto;
+}
 
+p > iframe {
+    width: 100%;
+    height: 605px;
+}
+
+p > span > iframe {
+    width: 100%;
+    height: 560px;
+}
+
+.btn-monster-blue {
+    background-color: #00c9ff !important;
+    font-weight: 700;
+}
+
+.btn-monster-blue:hover {
+    background-color: #00c9ff !important;
+    color: #f4f900 !important;
+    transition: .3s;
+}
+
+.bg-medium-gray {
+    background-color: #282828 !important;
+    width: 100%;
+}
+
+.text-monster-yellow {
+    color: #f4f900 !important;
+    transition: 0.5s;
+}
+
+.barlow {
+    font-family: "Barlow Condensed", sans-serif !important;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+@media only screen and (max-width: 600px) {
+    .barlow {
+        font-size: .74rem;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .barlow {
+        font-size: .80rem;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .barlow {
+        font-size: .87rem;
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .barlow {
+        font-size: .93rem;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .barlow {
+        font-size: 1.15rem;
+    }
+}
+
+.rubik {
+    font-family: "Rubik", sans-serif !important;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.fs-1 {
+    font-size: calc(1.4625rem + 2.55vw) !important;
+}
+
+.fs-2 {
+    font-size: calc(1.395rem + 1.74vw) !important;
+}
+
+.fs-3 {
+    font-size: calc(1.36125rem + 1.335vw) !important;
+}
+
+.fs-4 {
+    font-size: calc(1.3275rem + 0.93vw) !important;
+}
+
+.fs-5 {
+    font-size: calc(1.29375rem + 0.525vw) !important;
+}
+
+.fs-6 {
+    font-size: calc(1.26rem + 0.12vw) !important;
+}

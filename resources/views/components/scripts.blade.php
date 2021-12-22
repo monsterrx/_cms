@@ -979,8 +979,8 @@
                 $('#indie-name, #update-content, #image-container, #delete-indie-header, #delete-indie-body').empty();
                 $('#indie-name, #delete-indie-header').empty().append(result.indieground.artist.name);
                 $('#delete-indie-body').empty().append('<p class="h5 text-center">Are you sure to delete '+result.indieground.artist.name+' from indiegrounds?</p>')
-                $('#indie_artist_id, #artist_id').val(result.indieground.artist.id);
-                $('#image-container').empty().append('<div class="text-center"><img src="'+result.indieground.image+'" alt="'+result.indieground.artist.name+'" width="200px"></div>');
+                $('#indie_artist_id, #artist_id').val(result.indieground.artist_id);
+                $('#image-container').empty().append('<div class="text-center"><img src="{{ asset('images/indie') }}/'+result.indieground.image+'" alt="'+result.indieground.artist.name+'" width="200px"></div>');
                 tinymce.get('update-content').setContent('<p>'+result.indieground.introduction+'</p>');
                 let content = tinymce.get('update-content').getContent();
 
