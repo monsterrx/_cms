@@ -2231,12 +2231,12 @@
             $('#jocks').removeAttr('hidden');
             $('#jock_id').attr('required', 'required');
             $('#shows').attr('hidden', 'hidden');
-            $('#show_id').removeAttr('required');
+            $('#show_id').attr('disabled', 'disabled').removeAttr('required');
         } else {
             $('#shows').removeAttr('hidden');
             $('#show_id').attr('required', 'required');
             $('#jocks').attr('hidden', 'hidden');
-            $('#jock_id').removeAttr('required');
+            $('#jock_id').attr('disabled', 'disabled').removeAttr('required');
         }
     });
 
