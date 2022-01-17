@@ -158,6 +158,8 @@ Route::middleware('auth')->group(function() {
 
     Route::resource('/timeslots', TimeslotController::class);
     Route::get('/timeslot/select', [TimeslotController::class, 'selectDay'])->name('timeslots.select');
+    Route::get('/timeslot/{id}/add/jock/{jock_id}', [TimeslotController::class, 'addJock'])->name('timeslot.add.jock');
+    Route::get('/timeslot/{id}/remove/jock/{jock_id}', [TimeslotController::class, 'removeJock'])->name('timeslot.remove.jock');
 
     Route::resource('/podcasts', PodcastController::class);
 

@@ -187,7 +187,7 @@ class ShowController extends Controller
             ->where('show_id', $id)
             ->count();
 
-        if ($count >= 1) {
+        if ($count > 0) {
             return redirect()->back()->withErrors(['The jock is already on the show']);
         }
 

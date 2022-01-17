@@ -46,7 +46,7 @@ class Jock extends Model
     }
 
     public function Timeslot() {
-        return $this->hasMany(Timeslot::class);
+        return $this->belongsToMany(Timeslot::class);
     }
 
 }

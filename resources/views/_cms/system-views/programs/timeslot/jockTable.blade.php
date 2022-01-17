@@ -5,7 +5,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>Jock Id</th>
+                        <th>Show</th>
                         <th>Jock Name</th>
                         <th>Timeslot</th>
                         <th>Action</th>
@@ -13,17 +13,18 @@
                     </thead>
                     <tbody>
                     @forelse($timeslots as $timeslot)
-                        <tr>
-                            <td>{{ $timeslot->Jock->id }}</td>
-                            <td>{{ $timeslot->Jock->name }}</td>
-                            <td>{{ date('h:i a', strtotime($timeslot->start)) }} to {{ date('h:i a', strtotime($timeslot->end)) }}</td>
-                            <td>
-                                <div class="btn-group">
-                                    <a href="#edit-timeslot" id="edit-timeslot-toggler" data-id="{{ $timeslot->id }}" type="jock" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-search"></i></a>
-                                    <a href="#delete-timeslot" id="delete-timeslot-toggler" data-id="{{ $timeslot->id }}" type="jock" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-trash"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach($timeslot->Jock as $jock)
+                            <tr>
+                                <td>{{ $timeslot->Show->title }}</td>
+                                <td>{{ $jock->name }}</td>
+                                <td>{{ date('h:i a', strtotime($timeslot->start)) }} to {{ date('h:i a', strtotime($timeslot->end)) }}</td>
+                                <td>
+                                    <a href="{{ route('timeslot.remove.jock', [$timeslot->id, $jock->id]) }}" class="btn btn-outline-dark">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
                     @empty
                         <tr>
                             <td colspan="4">

@@ -67,32 +67,56 @@
                 <div class="modal-body">
                     <form id="new-timeslot" method="post" action="{{ route('timeslots.store') }}">
                         @csrf
-                        <div class="form-group">
+                        {{--<div class="form-group">
                             <label class="label" for="schedule_type">Type</label>
                             <select id="schedule_type" class="custom-select">
                                 <option value selected>--</option>
                                 <option value="jock">Jock</option>
                                 <option value="show">Show</option>
                             </select>
-                        </div>
+                        </div>--}}
                         <div id="shows" class="form-group">
                             <label class="label" for="show_id">Shows</label>
                             <select id="show_id" name="show_id" required="required" class="custom-select">
                                 <option value selected>--</option>
-                                @foreach($shows as $show)
-                                    <option value="{{ $show->id }}">{{ $show->id }} - {{ $show->title }}</option>
-                                @endforeach
+                                @if($station === 'mnl')
+                                    @foreach($shows as $show)
+                                        <option value="{{ $show->id }}">{{ $show->title }} @if($show->location === $station) @elseif($show->location === 'cbu') (Cebu) @elseif($show->location === 'dav') (Davao) @endif</option>
+                                    @endforeach
+                                @elseif ($station === 'cbu')
+                                    @foreach($shows as $show)
+                                        <option value="{{ $show->id }}">{{ $show->title }} @if($show->location === $station) @elseif($show->location === 'mnl') (Manila) @elseif($show->location === 'dav') (Davao) @endif</option>
+                                    @endforeach
+                                @elseif ($station === 'dav')
+                                    @foreach($shows as $show)
+                                        <option value="{{ $show->id }}">{{ $show->title }} @if($show->location === $station) @elseif($show->location === 'cbu') (Cebu) @elseif($show->location === 'mnl') (Manila) @endif</option>
+                                    @endforeach
+                                @else
+                                    <option value selected>Error occurred [Station is undefined]</option>
+                                @endif
                             </select>
                         </div>
-                        <div id="jocks" class="form-group" hidden>
+                        {{--<div id="jocks" class="form-group" hidden>
                             <label class="label" for="jock_id">Jocks</label>
                             <select id="jock_id" name="jock_id" class="custom-select">
                                 <option value selected>--</option>
-                                @foreach($jocks as $jock)
-                                    <option value="{{ $jock->id }}">{{ $jock->id }} - {{ $jock->name }}</option>
-                                @endforeach
+                                @if ($station === 'mnl')
+                                    @foreach($jocks as $jock)
+                                        <option value="{{ $jock->id }}">{{ $jock->name }} ({{ $jock->Employee->first_name }} {{ $jock->Employee->last_name }}) @if($jock->Employee->location === $station) @elseif($jock->Employee->location === 'cbu') (Cebu) @elseif($jock->Employee->location === 'dav') (Davao) @endif</option>
+                                    @endforeach
+                                @elseif ($station === 'cbu')
+                                    @foreach($jocks as $jock)
+                                        <option value="{{ $jock->id }}">{{ $jock->name }} ({{ $jock->Employee->first_name }} {{ $jock->Employee->last_name }}) @if($jock->Employee->location === $station) @elseif($jock->Employee->location === 'mnl') (Manila) @elseif($jock->Employee->location === 'dav') (Davao) @endif</option>
+                                    @endforeach
+                                @elseif ($station === 'dav')
+                                    @foreach($jocks as $jock)
+                                        <option value="{{ $jock->id }}">{{ $jock->name }} ({{ $jock->Employee->first_name }} {{ $jock->Employee->last_name }}) @if($jock->Employee->location === $station) @elseif($jock->Employee->location === 'cbu') (Cebu) @elseif($jock->Employee->location === 'mnl') (Manila) @endif</option>
+                                    @endforeach
+                                @else
+                                    <option value selected>Error occurred [Station is undefined]</option>
+                                @endif
                             </select>
-                        </div>
+                        </div>--}}
                         <div class="form-group">
                             <label class="label" for="day">Day</label>
                             <select id="day" name="day" class="custom-select">

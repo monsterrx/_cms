@@ -1371,10 +1371,6 @@
 
         function beforeSend() {
             $(this).attr('disabled', 'disabled');
-            manualToast.fire({
-                icon: 'info',
-                title: day +' timeslots loading'
-            });
         }
 
         function onSuccess(result) {
@@ -1382,11 +1378,6 @@
             $('#timeslot-subtitle').empty();
             $('#timeslot-subtitle').append(day +' '+ schedule_type +' timeslots');
             $('#switch_timeslots').attr('day', day);
-
-            Toast.fire({
-                icon: 'success',
-                title: day + ' '+ schedule_type +' timeslots has been loaded'
-            });
 
             $('#tab-container').empty();
             $('#tab-container').append(result);
@@ -1409,6 +1400,7 @@
             $('#update_schedule_type').attr('disabled', 'disabled');
 
             if(timeslot_type === 'jock') {
+                $('#update_jock_id').removeAttr('disabled');
                 $('#update_shows').attr('hidden', 'hidden');
                 $('#update_show_id').attr('disabled', 'disabled');
                 $('#update_schedule_type').val(timeslot_type);
@@ -1418,6 +1410,7 @@
                 $('#delete-timeslot-header').append('Delete '+result.jock.name);
                 $('#delete-timeslot-body').append('Are you sure to delete '+result.jock.name+'\'s timeslot?');
             } else {
+                $('#update_show_id').removeAttr('disabled');
                 $('#update_jocks').attr('hidden', 'hidden');
                 $('#update_jock_id').attr('disabled', 'disabled');
                 $('#update_schedule_type').val(timeslot_type);
@@ -2229,12 +2222,12 @@
 
         if(type === 'jock') {
             $('#jocks').removeAttr('hidden');
-            $('#jock_id').attr('required', 'required');
+            $('#jock_id').attr('required', 'required').removeAttr('disabled');
             $('#shows').attr('hidden', 'hidden');
             $('#show_id').attr('disabled', 'disabled').removeAttr('required');
         } else {
             $('#shows').removeAttr('hidden');
-            $('#show_id').attr('required', 'required');
+            $('#show_id').attr('required', 'required').removeAttr('disabled');
             $('#jocks').attr('hidden', 'hidden');
             $('#jock_id').attr('disabled', 'disabled').removeAttr('required');
         }
@@ -2510,6 +2503,14 @@
                 $('#awardee').html(result);
             }
         }
+    });
+
+    $('.dropdown-menu button[data_url]').on('click', function(e) {
+        e.preventDefault();
+
+        let url = $(this).attr('data-url');
+
+        console.log(url);
     });
 
     // Music page functions

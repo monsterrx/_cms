@@ -23,6 +23,6 @@ class Timeslot extends Model
     }
 
     public function Jock() {
-        return $this->belongsTo(Jock::class);
+        return $this->belongsToMany(Jock::class);
     }
 }
