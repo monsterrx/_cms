@@ -65,7 +65,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('timeslots.store') }}">
+                    <form id="new-timeslot" method="post" action="{{ route('timeslots.store') }}">
                         @csrf
                         <div class="form-group">
                             <label class="label" for="schedule_type">Type</label>

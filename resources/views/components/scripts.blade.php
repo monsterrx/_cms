@@ -1406,8 +1406,11 @@
             $('bs.modal').modal('hide');
             $('#update_start, #update_end, #timeslot-modal-title, #delete-timeslot-header, #delete-timeslot-body').empty();
 
+            $('#update_schedule_type').attr('disabled', 'disabled');
+
             if(timeslot_type === 'jock') {
                 $('#update_shows').attr('hidden', 'hidden');
+                $('#update_show_id').attr('disabled', 'disabled');
                 $('#update_schedule_type').val(timeslot_type);
                 $('#update_jocks').removeAttr('hidden').attr('required', 'required');
                 $('#update_jock_id').val(result.jock.id);
@@ -1416,11 +1419,11 @@
                 $('#delete-timeslot-body').append('Are you sure to delete '+result.jock.name+'\'s timeslot?');
             } else {
                 $('#update_jocks').attr('hidden', 'hidden');
+                $('#update_jock_id').attr('disabled', 'disabled');
                 $('#update_schedule_type').val(timeslot_type);
                 $('#update_shows').removeAttr('hidden').attr('required', 'required');
                 $('#update_show_id').val(result.show.id);
                 $('#timeslot-modal-title').append(result.show.title + ' Timeslot');
-                $('#delete-timeslot-header').append('Delete '+result.show.title);
                 $('#delete-timeslot-header').append('Delete '+result.show.title);
                 $('#delete-timeslot-body').append('Are you sure to delete '+result.show.title+' timeslot?');
             }

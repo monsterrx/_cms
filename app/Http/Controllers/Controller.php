@@ -88,7 +88,7 @@ class Controller extends BaseController
         } else {
             // $photoDirectory = '/images/'.$directory.'/'.$fileName;
 
-            if(Storage::disk(''.$directory.'')->exists(''.$fileName.'')) {
+            if(Storage::disk(''.$directory)->exists(''.$fileName.'')) {
                 return $fileName;
             } else {
                 $fileName = $this->getFileName($longPhoto, $banner, $banner500, $mobileWallpaper, $desktopWallpaper);
