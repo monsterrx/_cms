@@ -52,7 +52,7 @@ class JockController extends Controller {
 
 		$level = Auth::user()->Employee->Designation->level;
 
-        if ($level === '1' || $level === '2' || $level === '3' || $level === '4') {
+        if ($level >= '1' && $level <= '4') {
             if($request->ajax()) {
                 return response()->json($jocks);
             }
@@ -61,32 +61,18 @@ class JockController extends Controller {
         }
 
         if ($level === '5' || $level === '8') {
-            $jock_id = Jock::where('employee_id', Auth::user()->Employee->id)
-                ->pluck('id')
+            $jock = Jock::with('Fact', 'Image', 'Link', 'Show')
+                ->where('employee_id', Auth::user()->Employee->id)
                 ->first();
 
-            $jock_name = Jock::where('employee_id', Auth::user()->Employee->id)->pluck('name');
+            if (!$jock) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Restricted Access'
+                ], 400);
+            }
 
-            $fact = Fact::Where('jock_id', $jock_id)->get();
-
-            $show = DB::table('jock_show')
-                ->join('jocks', 'jock_show.jock_id', '=', 'jocks.id')
-                ->join('shows', 'jock_show.show_id', '=', 'shows.id')
-                ->select('title', 'shows.id')
-                ->where('jock_show.jock_id', $jock_id)
-                ->get();
-
-            $image = Photo::whereNull('deleted_at')
-                ->where('jock_id', $jock_id)
-                ->orderBy('created_at')
-                ->get();
-
-            $link = Social::whereNull('deleted_at')
-                ->where('jock_id', $jock_id)
-                ->orderBy('created_at')
-                ->get();
-
-            return view('_cms.system-views.employeeUI.Jocks.index', compact('fact','jock_id','show','image','link','jock_name'));
+            return view('_cms.system-views.employeeUI.Jocks.index', compact('jock'));
         }
 
         return redirect()->back()->withErrors('Restricted Access!');
@@ -144,7 +130,7 @@ class JockController extends Controller {
         $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', true);
         $jock['main_image'] = $this->verifyPhoto($jock['main_image'], 'jocks');
 
-        if ($level === '1' || $level === '2' || $level === '3' || $level === '4') {
+        if ($level >= '1' && $level <= '4') {
             if($request->ajax()) {
                 if($request->has('jock_info')) {
                     return response()->json(['images' => $jock->Image, 'links' => $jock->Link, 'facts' => $jock->Fact]);
@@ -166,7 +152,7 @@ class JockController extends Controller {
             ->pluck('id')
             ->first();
 
-		if ($level === '1' || $level === '2' || $level === '4') {
+		if ($level >= '1' && $level <= '4') {
 			$this->validate($request, [
 			    'employee_id' => 'required',
 			    'name' => 'required|min:2',
@@ -393,12 +379,4 @@ class JockController extends Controller {
         Session::flash('success', 'Link successfully deleted');
         return redirect()->back();
 	}
-
-    public function addTimeslot($id, Request $request) {
-
-    }
-
-    public function removeTimeslot($id, Request $request) {
-
-    }
 }

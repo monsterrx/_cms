@@ -10,7 +10,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
-            @foreach($show as $shows)
+            @foreach($jock->Show as $shows)
                 @if($shows->id === 4) {{-- The Daily Survey --}}
                     <li class="nav-item">
                         <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
@@ -25,7 +25,7 @@
                     {{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="{{ route('jocks.profile', $jock_id) }}">Profile</a>
+                    <a class="dropdown-item" href="{{ route('jocks.profile', $jock->id) }}">Profile</a>
                     <a href="#reportBug" class="dropdown-item" data-toggle="modal">Report a Bug</a>
                     <a href="{{ route('logout') }}" id="logoutJock" class="dropdown-item">
                         Sign Out

@@ -26,7 +26,7 @@ class ShowController extends Controller
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === '1' || $level === '2' || $level === '4') {
+        if ($level >= '1' && $level <= '4') {
             return view('_cms.system-views.programs.show.index', compact('show'));
         }
 
@@ -119,7 +119,7 @@ class ShowController extends Controller
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === '1' || $level === '2' || $level === '4') {
+        if ($level >= '1' && $level <= '4') {
             return view('_cms.system-views.programs.show.show', compact('show', 'jock', 'jock_show', 'timeslot', 'image'));
         }
 
