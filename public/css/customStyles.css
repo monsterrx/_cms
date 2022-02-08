@@ -1,10 +1,7 @@
-body {
-    font-family: "Calibri", sans-serif;
-}
-
 @-ms-viewport {
     width: device-width;
 }
+
 .visible-xs,
 .visible-sm,
 .visible-md,

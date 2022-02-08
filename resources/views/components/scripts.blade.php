@@ -1,5 +1,5 @@
 <script src="{{ asset('js/popper.min.js') }}"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 <script src="{{ asset('js/feather.min.js') }}"></script>
 <script src="{{ asset('js/dashboard.js') }}"></script>
@@ -289,10 +289,6 @@
         function onSuccess(result) {
             $('#show_id, #update_show_id').empty();
             $('#show_id, #update_show_id').append(result.shows);
-            Toast.fire({
-                icon: 'success',
-                title: 'Shows has been loaded',
-            });
         }
     }
     // End

@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="my-4"></div>
-        @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2')
+        @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2' || Auth::user()->Employee->Designation->level === '7')
             @if($chart->isEmpty())
                 <div class="col-md-12">
                     <div class="alert alert-info text-center h5 text-info">

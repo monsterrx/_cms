@@ -14,18 +14,18 @@
             </div>
             <div class="row">
                 <div class="col-12 my-4">
-                    <div class="btn-group fa-pull-left">
-                        <a href="#addStudent" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-plus"></i>  Add Student</a>
-                    </div>
-                    <div class="btn-group fa-pull-right">
+                    <div class="btn-group">
                         <a href="{{ route('radioOne.batches') }}" class="btn btn-outline-dark"><i class="fa fa-arrow-left"></i>  Back</a>
                         <a href="#update-batch" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-file-import"></i>  Update</a>
                         <a href="{{ route('radioOne.batches.delete', $batch->id) }}" class="btn btn-outline-dark"
                            onclick="event.preventDefault(); document.getElementById('deleteForm').submit();"><i class="fas fa-trash-alt"></i>  Delete</a>
-                        <form id="deleteForm" method="post" action="{{ route('radioOne.batches.delete', $batch->id) }}">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                        </form>
+                    </div>
+                    <form id="deleteForm" method="post" action="{{ route('radioOne.batches.delete', $batch->id) }}" hidden>
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+                    </form>
+                    <div class="btn-group fa-pull-right">
+                        <a href="#addStudent" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-plus"></i>  Add Student</a>
                     </div>
                 </div>
             </div>

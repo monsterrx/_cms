@@ -310,7 +310,7 @@
             <a class="dropdown-item" href="{{ route('gimikboards.index') }}">Gimik Board</a>
         </div>
     </li>
-
+    {{-- Receptionist --}}
 @elseif(Auth()->user()->Employee->Designation->level === '6')
     <li class="nav-item">
         <a class="nav-link" id="Dashboard" href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;Dashboard <span class="sr-only">(current)</span></a>
@@ -349,16 +349,45 @@
             <a class="dropdown-item" href="{{ route('dropouts.index') }}">Dropouts</a>
         </div>
     </li>
+    {{-- On Job Trainee --}}
 @elseif(Auth()->user()->Employee->Designation->level === '7')
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="MusicDropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-play-circle"></i>&nbsp;&nbsp;Music</a>
-        <div class="dropdown" aria-labelledby="MusicDropdown">
+        <a href="#" class="nav-link dropdown-toggle" id="musicManagerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-music"></i>&nbsp;&nbsp;Music
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="musicManagerDropdown">
+            <div class="dropdown-header">Chart Music</div>
             <a href="{{ route('artists.index') }}" class="dropdown-item">Artists</a>
             <a href="{{ route('albums.index') }}" class="dropdown-item">Albums</a>
             <a href="{{ route('songs.index') }}" class="dropdown-item">Songs</a>
             <a href="{{ route('genres.index') }}" class="dropdown-item">Genres</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">Charts</div>
+            <a class="dropdown-item" href="{{ route('charts.index') }}">{{ env('STATION_CHART') }}</a>
+            @if(env('STATION_CODE') === 'dav')
+                <a class="dropdown-item" href="{{ route('outbreaks.index') }}">Monster Outbreaks</a>
+            @elseif(env('STATION_CODE') === 'cbu')
+                <a class="dropdown-item" href="{{ route('outbreaks.index') }}">Monster Outbreaks</a>
+                <a class="dropdown-item" href="{{ route('southsides.index') }}">Southside Sounds</a>
+            @else
+                <a class="dropdown-item" href="{{ route('survey.votes') }}">Votes</a>
+            @endif
+            <a class="dropdown-item" href="{{ route('dropouts.index') }}">Dropouts</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">Indieground</div>
+            <a class="dropdown-item" href="{{ route('indiegrounds.index') }}">Artists</a>
+            <a class="dropdown-item" href="{{ route('featured.index') }}">Featured</a>
         </div>
     </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" id="Radio1Dropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-compact-disc"></i>&nbsp;&nbsp;Radio-1 Jocks</a>
+        <div class="dropdown-menu" aria-labelledby="Radio1Dropdown">
+            <a href="{{ route('radioOne.batches') }}" class="dropdown-item">Batches</a>
+            <a href="{{ route('radioOne.jocks') }}" class="dropdown-item">Student Jocks</a>
+        </div>
+    </li>
+    {{-- Plain User --}}
 @elseif(Auth()->user()->Employee->Designation->level === '9')
     <li class="nav-item">
         <a class="nav-link" id="Dashboard" href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;Dashboard <span class="sr-only">(current)</span></a>

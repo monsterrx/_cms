@@ -1,5 +1,5 @@
 <link rel="icon" type="image/gif" sizes="16x16" href="{{ asset('images/monster-logo.png') }}">
-<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" >
+<link rel="stylesheet" href="{{ asset('css/app.css') }}" >
 <link rel="stylesheet" href="{{ asset('css/all.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/datatables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('css/pe-icon-7-stroke.css') }}">

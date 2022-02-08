@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2' || Auth::user()->Employee->Designation->level === '3' || Auth::user()->Employee->Designation->level === '6')
+            @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2' || Auth::user()->Employee->Designation->level === '3' || Auth::user()->Employee->Designation->level === '6'|| Auth::user()->Employee->Designation->level === '7')
                 <div class="row my-4">
                     <div class="col-12">
                         <a href="#new-student" data-toggle="modal" class="btn btn-outline-dark fa-pull-right">New Student Jock</a>
@@ -118,7 +118,7 @@
                                 <label for="studentJockImage" class="lead">Student Jock Image</label>
                                 <div class="custom-file" id="studentJockImage">
                                     <input type="file" id="image" name="image" class="custom-file-input">
-                                    <label for="image" class="custom-file-label">Recommended is 1:1 or equal sizes as to Width and Height</label>
+                                    <label for="image" class="custom-file-label">Must be 1:1 or equal sizes as to Width and Height</label>
                                 </div>
                             </div>
                         </div>

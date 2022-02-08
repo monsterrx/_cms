@@ -89,6 +89,10 @@ class HomeController extends Controller
                 ->get()
                 ->take(3);
 
+            foreach ($podcasts as $podcast) {
+                $podcast->image = $this->verifyPhoto($podcast->image, 'podcasts');
+            }
+
             //
             $outbreaks = Outbreak::with('Song.Album.Artist')
                 ->whereNull('deleted_at')

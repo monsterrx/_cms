@@ -3,14 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row">
-        @include('system-views._feedbacks.success')
-        @include('system-views._feedbacks.error')
+        @include('_cms.system-views._feedbacks.success')
+        @include('_cms.system-views._feedbacks.error')
         <div class="col"></div>
         <div class="col-6">
             <div class="mt-5"></div>
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title text-center"><a href="{{ route('home') }}"><img src="{{ asset('images/rx-logo.png') }}" alt="rx-logo" width="100px"></a></div>
+                    <div class="card-title text-center"><a href="{{ route('home') }}"><img src="{{ asset('images/monster-logo.png') }}" alt="rx-logo" width="100px"></a></div>
                 </div>
                 <div class="card-body">
                     <form class="form-horizontal" method="POST" action="{{ route('password.email') }}">
