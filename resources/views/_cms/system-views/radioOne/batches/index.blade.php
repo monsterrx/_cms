@@ -75,7 +75,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="batchNumber" class="lead">Batch Number</label>
-                                    <input type="text" id="batchNumber" name="batchNumber" class="form-control" placeholder="Batch Number">
+                                    <input type="text" id="batchNumber" name="batch_number" class="form-control" placeholder="Batch Number">
                                 </div>
                             </div>
                         </div>
@@ -85,13 +85,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="startYear" class="lead">Start</label>
-                                    <input type="number" id="startYear" name="startYear" class="form-control" placeholder="20xx">
+                                    <input type="number" id="startYear" name="start_year" class="form-control" placeholder="20xx">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="endYear" class="lead">End</label>
-                                    <input type="number" id="endYear" name="endYear" class="form-control" placeholder="20xx">
+                                    <input type="number" id="endYear" name="end_year" class="form-control" placeholder="20xx">
                                 </div>
                             </div>
                         </div>

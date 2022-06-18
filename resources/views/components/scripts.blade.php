@@ -1740,9 +1740,9 @@
                 image_caption: true,
                 image_advtab: true,
 
-                external_filemanager_path:window.location.protocol + "//" + window.location.host + "/tinymce/filemanager/",
+                external_filemanager_path: window.location.protocol + "//" + window.location.host + "/tinymce/filemanager/",
                 filemanager_title: "File Manager",
-                external_plugins: {"filemanager":window.location.protocol + "//" + window.location.host + "/tinymce/filemanager/plugin.min.js"},
+                external_plugins: {"filemanager": window.location.protocol + "//" + window.location.host + "/tinymce/filemanager/plugin.min.js"},
                 visualblocks_default_state: true,
 
                 style_formats_autohide: true,
@@ -3570,6 +3570,49 @@
                 }
             });
         });
+    });
+
+    tinymce.init({
+        selector: "#content, #update-content, #bug-content",
+        theme: "modern",
+        height: 300,
+        width: '100%',
+        plugins: [
+            "advlist autolink link image lists charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+            "table contextmenu directionality emoticons paste textcolor responsivefilemanager code advlist instagram twitter_url"
+        ],
+        toolbar1: "undo redo | bold italic underline fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+        toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor | print preview code | caption instagram twitter_url",
+        image_caption: true,
+        image_advtab: true,
+
+        external_filemanager_path: '{{ url('/') }}' + "/tinymce/filemanager/",
+        filemanager_title: "File Manager",
+        external_plugins: {"filemanager": '{{ url('/') }}' + "/tinymce/filemanager/plugin.min.js"},
+        visualblocks_default_state: true,
+
+        style_formats_autohide: true,
+        style_formats_merge: true,
+
+        plugin_preview_width: 1000,
+        plugin_preview_height: 800,
+
+        valid_elements : '+*[*]',
+
+        extended_valid_elements : "iframe[width|height|name|align|class|frameborder|allowfullscreen|allow|src|*]," +
+            "script[language|type|async|src|charset]" +
+            "img[*]" +
+            "embed[width|height|name|flashvars|src|bgcolor|align|play|loop|quality|allowscriptaccess|type|pluginspage]" +
+            "blockquote[dir|style|cite|class|id|lang|onclick|ondblclick"
+            +"|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout"
+            +"|onmouseover|onmouseup|title]",
+        setup: function (editor) {
+            //console.log(editor);
+            editor.on('init', function (args) {
+                editor_id = args.target.id;
+            });
+        },
     });
 
     $('#active').addClass('active');

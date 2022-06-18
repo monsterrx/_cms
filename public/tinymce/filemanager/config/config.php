@@ -103,15 +103,15 @@ $config = array(
 	|--------------------------------------------------------------------------
 	|
 	| If you want enable ftp use write these parametres otherwise leave empty
-	| Remember to set base_url properly to point in the ftp server domain and 
+	| Remember to set base_url properly to point in the ftp server domain and
 	| upload dir will be ftp_base_folder + upload_dir so without final /
 	|
 	*/
 	'ftp_host'         => "ftp.rx931.com", //put the FTP host
-	'ftp_user'         => "tamtam@rx931.com",
-	'ftp_pass'         => "obra@RX931",
+	'ftp_user'         => "developer@rx931.com",
+	'ftp_pass'         => "MonsterDeveloper",
 	'ftp_base_folder'  => "",
-	'ftp_base_url'     => "http://rx931.com",
+	'ftp_base_url'     => "https://rx931.com",
 	// Directory where place files before to send to FTP with final /
 	'ftp_temp_folder'  => "",
 	/*
@@ -260,7 +260,7 @@ $config = array(
 	//******************
 	//
 	// WATERMARK IMAGE
-	// 
+	//
 	//Watermark url or false
 	'image_watermark'                          => false,
 	# Could be a pre-determined position such as:
@@ -321,7 +321,7 @@ $config = array(
 	// if you want you can add html,css etc.
 	// but for security reasons it's NOT RECOMMENDED!
 	'editable_text_file_exts'                 => array( 'txt', 'log', 'xml', 'html', 'css', 'htm', 'js' ),
-	
+
 	// Preview with Google Documents
 	'googledoc_enabled'                       => true,
 	'googledoc_file_exts'                     => array( 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx' , 'pdf', 'odt', 'odp', 'ods'),

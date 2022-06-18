@@ -303,7 +303,7 @@
                         @method('PATCH')
                         <div class="form-group">
                             <label for="article_Title" class="label lead">Title</label>
-                            <input type="text" id="article_Title" name="article_Title" class="form-control" value="{{ $article->title }}">
+                            <input type="text" id="title" name="title" class="form-control" value="{{ $article->title }}">
                         </div>
                         <div class="form-group">
                             <label for="categories_id" class="label lead">Category</label>
