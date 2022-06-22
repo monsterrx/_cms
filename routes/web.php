@@ -81,12 +81,12 @@ Route::middleware('auth')->group(function() {
 
     Route::get('/jocks_show_image', [JockController::class, 'showImage'])->name('jocks.show.image');
     Route::post('/jocks_add_image', [JockController::class, 'addImage'])->name('jocks.store.image');
-    Route::put('/jocks_update_image', [JockController::class, 'updateImage'])->name('jocks.update.image');
+    Route::match(['put', 'patch'], '/jocks_update_image', [JockController::class, 'updateImage'])->name('jocks.update.image');
     Route::delete('/jocks_remove_image', [JockController::class, 'removeImage'])->name('jocks.remove.image');
 
     Route::get('/jocks_show_link', [JockController::class, 'showLink'])->name('jocks.show.link');
     Route::post('/jocks_add_link', [JockController::class, 'addLink'])->name('jocks.add.link');
-    Route::put('/jocks_update_link/{id}', [JockController::class, 'updateLink'])->name('jocks.update.link');
+    Route::match(['put', 'patch'], '/jocks_update_link/{id}', [JockController::class, 'updateLink'])->name('jocks.update.link');
     Route::delete('/jocks_delete_link/{id}', [JockController::class, 'removeLink'])->name('jocks.delete.link');
 
     Route::resource('/artists', ArtistController::class);
@@ -153,8 +153,8 @@ Route::middleware('auth')->group(function() {
     Route::resource('/shows', ShowController::class);
     Route::post('/shows_Jocks/{id}', [ShowController::class, 'addJock'])->name('shows.add.jock');
     Route::post('/remove_jocks/{id}', [ShowController::class, 'removeJock'])->name('shows.remove.jock');
-    Route::patch('/shows/update/background_image/{id}', [ShowController::class, 'storeBackgroundImage'])->name('shows.update.background.image');
-    Route::patch('/shows/update/header_image/{id}', [ShowController::class, 'storeHeaderImage'])->name('shows.update.header.image');
+    Route::match(['put', 'patch'], '/shows/update/background_image/{id}', [ShowController::class, 'storeBackgroundImage'])->name('shows.update.background.image');
+    Route::match(['put', 'patch'], '/shows/update/header_image/{id}', [ShowController::class, 'storeHeaderImage'])->name('shows.update.header.image');
 
     Route::resource('/timeslots', TimeslotController::class);
     Route::get('/timeslot/select', [TimeslotController::class, 'selectDay'])->name('timeslots.select');
@@ -193,12 +193,12 @@ Route::middleware('auth')->group(function() {
     Route::get('/radio_one/batches', [RadioOneController::class, 'batches'])->name('radioOne.batches');
     Route::get('/radio_one/batch/{id}', [RadioOneController::class, 'showBatch'])->name('radioOne.batch');
     Route::post('/radio_one/batches/store', [RadioOneController::class, 'storeBatch'])->name('radioOne.batches.new');
-    Route::put('/radio_one/batch/update/{id}', [RadioOneController::class, 'updateBatch'])->name('radioOne.batches.update');
+    Route::match(['put', 'patch'], '/radio_one/batch/update/{id}', [RadioOneController::class, 'updateBatch'])->name('radioOne.batches.update');
     Route::delete('/radio_one/batch/delete/{id}', [RadioOneController::class, 'deleteBatch'])->name('radioOne.batches.delete');
 
     Route::get('/radio_one/jocks', [StudentJockController::class, 'studentJocks'])-> name('radioOne.jocks');
     Route::post('/radio_one/jocks/store', [StudentJockController::class, 'storeJock'])-> name('radioOne.jocks.store');
-    Route::put('/radio_one/jocks/update/{id}', [StudentJockController::class, 'updateStudentJock'])-> name('radioOne.jocks.update');
+    Route::match(['put', 'patch'], '/radio_one/jocks/update/{id}', [StudentJockController::class, 'updateStudentJock'])-> name('radioOne.jocks.update');
     Route::delete('/radio_one/jocks/{id}', [StudentJockController::class, 'deleteJock'])-> name('radioOne.jocks.delete');
 
     Route::post('/radio_one/add/student_jock/{id}', [StudentJockController::class, 'addStudentToBatch'])->name('radioOne.add.student');
