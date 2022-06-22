@@ -87,13 +87,13 @@ class StudentJockController extends Controller
         ]);
 
         if($validator->passes()) {
-            $img = $request->file('file');
+            $img = $request->file('image');
             $path = 'images/studentJocks';
 
             $studentJock = StudentJock::with('Batch', 'School')->findOrFail($id);
 
             if($img) {
-                $studentJock['image'] = $this->storePhoto($request, $path, 'schools', false);;
+                $studentJock['image'] = $this->storePhoto($request, $path, 'studentJocks', false);;
                 $studentJock->save();
 
                 Session::flash('success', 'Student jock has been updated');
