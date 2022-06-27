@@ -78,7 +78,7 @@
                                             </div>
                                         </div>
                                         <div class="custom-file">
-                                            <input type="file" id="image" name="image" class="custom-file-input">
+                                            <input type="file" id="image" name="seal" class="custom-file-input">
                                             <label for="image" class="custom-file-label">School Seal</label>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
                                 <div class="custom-file">
-                                    <input type="file" id="image" name="image" class="custom-file-input" required>
+                                    <input type="file" id="image" name="seal" class="custom-file-input" required>
                                     <label for="image" class="custom-file-label">School Seal</label>
                                 </div>
                             </div>
