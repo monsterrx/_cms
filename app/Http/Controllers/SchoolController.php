@@ -31,8 +31,6 @@ class SchoolController extends Controller {
             $path = 'images/schools';
             $request['location'] = $this->getStationCode();
 
-            $school = new School($request->all());
-
             if($img) {
                 $imgname = date('Ymd') . '-' . mt_rand() . '.' .$img->getClientOriginalExtension();
 
@@ -44,6 +42,7 @@ class SchoolController extends Controller {
                 Storage::disk('schools')->put($imgname, file_get_contents($file));
             }
 
+            $school = new School($request->all());
             $school->save();
 
             Session::flash('success', 'A new school has been added!');
