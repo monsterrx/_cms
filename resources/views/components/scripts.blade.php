@@ -1893,6 +1893,7 @@
         sessionStorage.setItem('artist_country', $('#country').val() || $('#update_artist_country').val());
         sessionStorage.setItem('artist_type', $('#artist_type').val() || $('#update_artist_type').val());
         sessionStorage.setItem('active_modal', '#'+$('.modal:visible').attr('id'));
+        sessionStorage.setItem('is_new', $('#is_new').val() || false);
 
         active_modal = sessionStorage.getItem('active_modal');
 
@@ -1902,6 +1903,7 @@
 
         $('#update-artist-image').modal('show');
     });
+
     $(document).on('click', '#artistCropButton', function () {
         $imageToBeCropped.croppie('result', {
             type: 'canvas',
@@ -1935,7 +1937,17 @@
 
                     sessionStorage.setItem('image', data);
 
-                    $('#new-artist, #update-artist, #new-indie, #indie-artist-modal').modal('show');
+                    $('#new-artist, #update-artist').modal('show');
+
+                    let is_new = sessionStorage.getItem('is_new');
+
+                    if (is_new) {
+                        $('#indieground_save_button').removeAttr('disabled');
+                        $('#indieground_image').attr('hidden', 'hidden');
+                        $('#new-indie').modal('show');
+                    } else {
+                        $('#indie-artist-modal').modal('show');
+                    }
 
                     $('#name, #update_artist_name').val(sessionStorage.getItem('artist_name'));
                     $('#country, #update_artist_country').val(sessionStorage.getItem('artist_country'));

@@ -13,8 +13,14 @@ class CreateFeaturesTable extends Migration
      */
     public function up()
     {
-        Schema::create('features', function (Blueprint $table) {
+        Schema::create('featured_indiegrounds', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('indieground_id');
+            $table->text('content');
+            $table->string('month', 2);
+            $table->year('year');
+            $table->string('location')->default('mnl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

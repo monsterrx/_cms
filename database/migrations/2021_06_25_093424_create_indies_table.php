@@ -13,8 +13,13 @@ class CreateIndiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('indies', function (Blueprint $table) {
+        Schema::create('indiegrounds', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('artist_id');
+            $table->text('introduction');
+            $table->string('image')->nullable()->default('default.png');
+            $table->string('location')->default('mnl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

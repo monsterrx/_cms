@@ -13,8 +13,14 @@ class CreateSocialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('socials', function (Blueprint $table) {
+        Schema::create('links', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('jock_id')->nullable();
+            $table->unsignedBigInteger('article_id')->nullable();
+            $table->unsignedBigInteger('show_id')->nullable();
+            $table->string('website');
+            $table->string('url');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

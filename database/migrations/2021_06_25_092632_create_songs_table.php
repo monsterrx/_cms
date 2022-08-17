@@ -15,6 +15,12 @@ class CreateSongsTable extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
+            $table->string('album_id');
+            $table->string('name');
+            $table->string('type')->nullable();
+            $table->string('track_link')->nullable();
+            $table->boolean('is_charted');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

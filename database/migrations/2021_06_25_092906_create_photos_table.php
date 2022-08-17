@@ -13,8 +13,15 @@ class CreatePhotosTable extends Migration
      */
     public function up()
     {
-        Schema::create('photos', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('jock_id')->nullable();
+            $table->unsignedBigInteger('article_id')->nullable();
+            $table->unsignedBigInteger('show_id')->nullable();
+            $table->unsignedBigInteger('batch_id')->nullable();
+            $table->string('file');
+            $table->string('name')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -26,6 +33,6 @@ class CreatePhotosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('photos');
+        Schema::dropIfExists('images');
     }
 }

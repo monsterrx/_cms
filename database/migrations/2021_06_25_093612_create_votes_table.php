@@ -15,6 +15,11 @@ class CreateVotesTable extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('chart_id')->nullable();
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->string('action');
+            $table->datetime('dated');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

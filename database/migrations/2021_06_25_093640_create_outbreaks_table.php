@@ -15,6 +15,11 @@ class CreateOutbreaksTable extends Migration
     {
         Schema::create('outbreaks', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('song_id');
+            $table->date('dated');
+            $table->string('track_link');
+            $table->string('location')->default('mnl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

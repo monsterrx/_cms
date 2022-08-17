@@ -13,8 +13,12 @@ class CreateContentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contents', function (Blueprint $table) {
+        Schema::create('sub_contents', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('article_id');
+            $table->longText('content');
+            $table->string('image')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

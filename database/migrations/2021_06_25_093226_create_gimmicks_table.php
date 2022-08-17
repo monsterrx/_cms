@@ -13,8 +13,18 @@ class CreateGimmicksTable extends Migration
      */
     public function up()
     {
-        Schema::create('gimmicks', function (Blueprint $table) {
+        Schema::create('gimikboards', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('school_id');
+            $table->string('title');
+            $table->longText('description');
+            $table->longText('sub_description');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('image')->nullable()->default('default.png');
+            $table->boolean('is_published')->default(0);
+            $table->string('location')->default('mnl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -15,6 +15,9 @@ class CreateFactsTable extends Migration
     {
         Schema::create('facts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('jock_id');
+            $table->text('content');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

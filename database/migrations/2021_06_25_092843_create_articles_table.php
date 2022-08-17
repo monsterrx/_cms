@@ -15,6 +15,16 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('category_id');
+            $table->string('unique_id');
+            $table->string('title');
+            $table->mediumText('heading');
+            $table->string('image')->default('default.png');
+            $table->date('published_at')->nullable();
+            $table->boolean('is_published')->default(0);
+            $table->string('location')->default('mnl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -13,8 +13,10 @@ class CreateRelevantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('relevants', function (Blueprint $table) {
-            $table->id();
+        Schema::create('relateds', function (Blueprint $table) {
+            $table->unsignedBigInteger('article_id');
+            $table->unsignedBigInteger('related_article_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

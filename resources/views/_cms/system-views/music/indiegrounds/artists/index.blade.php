@@ -61,6 +61,7 @@
                 <div class="modal-body">
                     <form id="newIndiegroundForm" method="POST" action="{{ route('indiegrounds.store') }}">
                         @csrf
+                        <input type="hidden" id="is_new" value="true" />
                         <div class="form-group">
                             <label for="new_indie_artist_id" class="lead">Artist</label>
                             <select id="new_indie_artist_id" name="artist_id" class="custom-select">

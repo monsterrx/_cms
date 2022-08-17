@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArtistsTable extends Migration
+class CreateBatchStudentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateArtistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('artists', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('country');
-            $table->string('type');
-            $table->string('image')->nullable()->default('default.png');
-            $table->softDeletes();
+        Schema::create('batch_student', function (Blueprint $table) {
+            $table->unsignedBigInteger('batch_id');
+            $table->unsignedBigInteger('student_id');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ class CreateArtistsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('artists');
+        Schema::dropIfExists('batch_student');
     }
 }

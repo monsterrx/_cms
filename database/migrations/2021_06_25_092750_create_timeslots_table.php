@@ -15,6 +15,13 @@ class CreateTimeslotsTable extends Migration
     {
         Schema::create('timeslots', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('show_id')->nullable();
+            $table->unsignedBigInteger('jock_id')->nullable();
+            $table->string('day');
+            $table->time('start');
+            $table->time('end');
+            $table->string('location');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

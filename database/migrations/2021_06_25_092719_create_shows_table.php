@@ -15,6 +15,17 @@ class CreateShowsTable extends Migration
     {
         Schema::create('shows', function (Blueprint $table) {
             $table->id();
+            $table->string('slug_string');
+            $table->string('title');
+            $table->string('front_description');
+            $table->text('description');
+            $table->string('icon');
+            $table->string('header_image')->nullable()->default('default-banner.png');
+            $table->string('background_image')->nullable()->default('default.png');
+            $table->boolean('is_special')->default(1);
+            $table->boolean('is_active')->default(1);
+            $table->string('location')->default('mnl');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
