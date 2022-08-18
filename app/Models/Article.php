@@ -12,7 +12,7 @@ class Article extends Model
     protected $fillable = [
         'unique_id',
         'employee_id',
-        'categories_id',
+        'category_id',
         'title',
         'heading',
         'published_at',
@@ -21,7 +21,7 @@ class Article extends Model
     ];
 
     public function Category() {
-        return $this->belongsTo(Category::class, 'categories_id');
+        return $this->belongsTo(Category::class);
     }
 
     public function Image() {

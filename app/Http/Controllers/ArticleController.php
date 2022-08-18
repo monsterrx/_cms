@@ -203,14 +203,7 @@ class ArticleController extends Controller {
 	{
         $level = Auth::user()->Employee->Designation->level;
 
-		try {
-
-			$article = Article::findOrfail($id);
-
-		} catch(ModelNotFoundException $e) {
-
-			return redirect()->back()->withErrors(['Model Error','Data not Found!']);
-		}
+        $article = Article::with('Category')->findOrfail($id);
 
 		$category = Category::orderBy('name')->whereNull('deleted_at')->get();
 		$content = Content::where('article_id', $id)->orderBy('created_at', 'desc')->get();
@@ -218,10 +211,11 @@ class ArticleController extends Controller {
 		$link = Social::where('article_id', $id)->orderBy('created_at', 'desc')->get();
 		$forRelated = Article::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
 
-		$related = DB::table('relateds')->join('articles', 'articles.id', '=', 'relateds.related_article')
-					->where('relateds.article_id', $id)->whereNull('relateds.deleted_at')
-					->select('articles.id','articles.image','articles.title','relateds.id as related_id')
-					->orderBy('relateds.created_at','asc')->get();
+		$related = DB::table('relateds')->join('articles', 'articles.id', '=', 'relateds.related_article_id')
+            ->where('relateds.article_id', $id)->whereNull('relateds.deleted_at')
+            ->select('articles.id','articles.image','articles.title')
+            ->orderBy('relateds.created_at')
+            ->get();
 
         foreach($image as $images)
         {
@@ -415,11 +409,13 @@ class ArticleController extends Controller {
 	public function addRelated(Request $request){
 
 		$this->validate($request, [
-			'related_article' => 'required'
+			'related_article_id' => 'required'
         ]);
 
-		$related = Relevant::where('article_id', $request['article_id'])
-					->where('related_article', $request['related_article'])->whereNull('deleted_at')->count();
+		$related = Relevant::with('Article')
+            ->where('article_id', $request['article_id'])
+            ->where('related_article', $request['related_article_id'])
+            ->whereNull('deleted_at')->count();
 
 		if ($related === 1) {
             return redirect()->back()->withErrors(['The article is already related to the content']);

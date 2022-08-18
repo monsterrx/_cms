@@ -53,13 +53,11 @@ class IndieController extends Controller {
         ]);
 
 		if($validator->passes()) {
-            $img = $request->file('image'); //file for Album Image
-            $path = 'images/indie';
             $request['location'] = $this->getStationCode();
 
             $indieground = new Indie($request->all());
 
-            if($img) {
+            /*if($img) {
                 $indieground['image'] = $this->storePhoto($request, $path, 'indie', true);
                 $indieground->save();
 
@@ -73,7 +71,7 @@ class IndieController extends Controller {
             copy('images/artists/'.$artistImage['image'], 'images/indie/'.$artistImage['image']);
 
             $file = 'images/artists/'.$indieground['image'];
-            $this->storeAsset('indie', $indieground->image, $file);
+            $this->storeAsset('indie', $indieground->image, $file);*/
 
             // check if artist is already independent
             $indie = Indie::where('artist_id', $request['artist_id'])->count();

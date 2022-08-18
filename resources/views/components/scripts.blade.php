@@ -1893,7 +1893,7 @@
         sessionStorage.setItem('artist_country', $('#country').val() || $('#update_artist_country').val());
         sessionStorage.setItem('artist_type', $('#artist_type').val() || $('#update_artist_type').val());
         sessionStorage.setItem('active_modal', '#'+$('.modal:visible').attr('id'));
-        sessionStorage.setItem('is_new', $('#is_new').val() || false);
+        sessionStorage.setItem('is_new', $('#is_new').val() || $('#update_is_new').val());
 
         active_modal = sessionStorage.getItem('active_modal');
 
@@ -1944,6 +1944,7 @@
                     if (is_new) {
                         $('#indieground_save_button').removeAttr('disabled');
                         $('#indieground_image').attr('hidden', 'hidden');
+                        $('#indie_image').val(data);
                         $('#new-indie').modal('show');
                     } else {
                         $('#indie-artist-modal').modal('show');
