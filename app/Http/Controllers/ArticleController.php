@@ -203,29 +203,32 @@ class ArticleController extends Controller {
 	{
         $level = Auth::user()->Employee->Designation->level;
 
-        $article = Article::with('Category')->findOrfail($id);
+        $article = Article::with('Category', 'Content', 'Image', 'Social', 'Relevant')
+            ->findOrfail($id);
 
-		$category = Category::orderBy('name')->whereNull('deleted_at')->get();
-		$content = Content::where('article_id', $id)->orderBy('created_at', 'desc')->get();
-		$image = Photo::where('article_id', $id)->orderBy('created_at', 'desc')->get();
-		$link = Social::where('article_id', $id)->orderBy('created_at', 'desc')->get();
-		$forRelated = Article::whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
+		$category = Category::orderBy('name')
+            ->whereNull('deleted_at')->get();
 
-		$related = DB::table('relateds')->join('articles', 'articles.id', '=', 'relateds.related_article_id')
-            ->where('relateds.article_id', $id)->whereNull('relateds.deleted_at')
-            ->select('articles.id','articles.image','articles.title')
-            ->orderBy('relateds.created_at')
+        $articles = Article::with('Relevant')
+            ->latest()
+            ->where('id', '!=', $id)
+            ->where('location', $this->getStationCode())
+            ->whereNotNull('published_at')
             ->get();
 
-        foreach($image as $images)
+        foreach($article->Image as $images)
         {
             $images['file'] = $this->verifyPhoto($images['file'], 'articles');
+        }
+
+        foreach ($article->Relevant as $relatedArticles) {
+            $relatedArticles->RelatedArticle->image = $this->verifyPhoto($relatedArticles->RelatedArticle->image, 'articles');
         }
 
         $article['image'] = $this->verifyPhoto($article['image'], 'articles');
 
 		if ($level === '1' || $level === '2' || $level === '3') {
-			return view('_cms.system-views.digital.articles.show',compact('article','image','link','category','forRelated','related','content'));
+			return view('_cms.system-views.digital.articles.show',compact('article', 'category', 'articles'));
 		}
 
         return redirect()->back()->withErrors('Restricted Access!');
@@ -357,8 +360,8 @@ class ArticleController extends Controller {
 		return redirect()->back();
 	}
 
-	public function addLink(Request $request){
-
+	public function addLink(Request $request)
+    {
 		$this->validate($request, [
 			'website' => 'required',
 			'link_string' => 'required',
@@ -406,18 +409,21 @@ class ArticleController extends Controller {
 
 	}
 
-	public function addRelated(Request $request){
-
+	public function addRelated($article_id, Request $request)
+    {
 		$this->validate($request, [
 			'related_article_id' => 'required'
         ]);
 
-		$related = Relevant::with('Article')
-            ->where('article_id', $request['article_id'])
-            ->where('related_article', $request['related_article_id'])
-            ->whereNull('deleted_at')->count();
+        $request['article_id'] = $article_id;
 
-		if ($related === 1) {
+		$related = Relevant::with('Article')
+            ->where('article_id', $article_id)
+            ->where('related_article_id', $request['related_article_id'])
+            ->whereNull('deleted_at')
+            ->count();
+
+		if ($related > 0) {
             return redirect()->back()->withErrors(['The article is already related to the content']);
         }
 
@@ -429,11 +435,13 @@ class ArticleController extends Controller {
 		return redirect()->back();
 	}
 
-	public function removeRelated(Request $request){
-
+	public function removeRelated($article_id, Request $request){
 		try {
 
-			$related = Relevant::findOrfail($request['id']);
+			$related = Relevant::with('Article')
+                ->where('article_id', $article_id)
+                ->where('related_article_id', $request['related_article_id'])
+                ->first();
 
 		} catch(ModelNotFoundException $e) {
 

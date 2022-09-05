@@ -135,8 +135,8 @@ Route::middleware('auth')->group(function() {
     Route::post('/article_link', [ArticleController::class, 'addLink'])->name('articles.add.link');
     Route::post('/article_link_delete', [ArticleController::class, 'removeLink'])->name('articles.remove.link');
 
-    Route::post('/article_related', [ArticleController::class, 'addRelated'])->name('articles.add.related');
-    Route::post('/article_related_delete', [ArticleController::class, 'removeRelated'])->name('articles.remove.related');
+    Route::post('/article_related/{article_id}', [ArticleController::class, 'addRelated'])->name('articles.add.related');
+    Route::post('/article_related_delete/{article_id}', [ArticleController::class, 'removeRelated'])->name('articles.remove.related');
 
     Route::post('/article_publish', [ArticleController::class, 'publish'])->name('articles.publish');
     Route::get('/archive', [ArticleController::class, 'archive'])->name('article.archives');

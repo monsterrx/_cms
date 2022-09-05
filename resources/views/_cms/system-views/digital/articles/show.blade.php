@@ -65,24 +65,24 @@
                 <div class="col-md-12">
                     <table class="table table-hover">
                         <thead>
-                            <tr>
-                                <th>Content</th>
-                                <th>View</th>
-                            </tr>
+                        <tr>
+                            <th>Content</th>
+                            <th>View</th>
+                        </tr>
                         </thead>
                         <tbody>
-                        @forelse($content as $contents)
-                            <?php try { ?>
-                                <tr>
-                                    <td><p>{{ Str::limit($contents->content, $limit = 90, $end = '...') }}</p></td>
-                                    <td><a href="{{ route('sub_contents.show', [$article->id, $contents->id]) }}">Edit/Delete</a></td>
-                                </tr>
+                        @forelse($article->Content as $contents)
+                                <?php try { ?>
+                            <tr>
+                                <td><p>{{ Str::limit($contents->content, $limit = 90, $end = '...') }}</p></td>
+                                <td><a href="{{ route('sub_contents.show', [$article->id, $contents->id]) }}">Edit/Delete</a></td>
+                            </tr>
                             <?php } catch (ErrorException $e) { ?>
-                                <td>
-                                    <div class="alert alert-danger text-center lead">
-                                        Deleted Data
-                                    </div>
-                                </td>
+                            <td>
+                                <div class="alert alert-danger text-center lead">
+                                    Deleted Data
+                                </div>
+                            </td>
                             <?php } ?>
                         @empty
                             <tr>
@@ -114,7 +114,7 @@
             </div>
             <hr class="my-4">
             <div class="row mb-3">
-                @forelse($image as $images)
+                @forelse($article->Image as $images)
                     <div class="col-md-3">
                         <div class="card mb-3">
                             <div class="card-img-top">
@@ -177,22 +177,26 @@
             </div>
             <hr class="my-4">
             <div class="row mb-3">
-                @forelse($related as $relateds)
+                @forelse($article->Relevant as $relatedArticles)
                     <div class="col-md-3">
                         <div class="card mb-3">
                             <div class="card-img-top">
-                                <img class="img-fluid" src="{{ url('images/articles/'.$relateds->image) }}" alt="{{ $relateds->image }}">
+                                <img class="img-fluid" src="{{ url('images/articles/'.$relatedArticles->RelatedArticle->image) }}" alt="{{ $relatedArticles->RelatedArticle->image }}">
                             </div>
                             <div class="card-body">
-                                <p><a href="{{ route('articles.show', [$relateds->id]) }}">{{ $relateds->title }}</a></p>
-                                <a href="#deleteRelated-{{ $relateds->related_id }}" class="btn btn-outline-dark" data-toggle="modal">
+                                <a class="lead text-decoration-none" href="{{ route('articles.show', [$relatedArticles->related_article_id]) }}" target="_blank" title="{{ $relatedArticles->RelatedArticle->title }}">
+                                    {{ Str::limit($relatedArticles->RelatedArticle->title, '35', '...') }}
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#deleteRelated-{{ $relatedArticles->related_article_id }}" class="btn btn-outline-dark" data-toggle="modal">
                                     <i class="fa fa-trash-alt"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
 
-                    <div id="deleteRelated-{{ $relateds->related_id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div id="deleteRelated-{{ $relatedArticles->related_article_id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -201,20 +205,23 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
-                                    <form method="POST" action="{{ route('articles.remove.related') }}" id="delete_post2">
-                                        @csrf
+                                <form method="POST" action="{{ route('articles.remove.related', $article->id) }}" id="delete_post2">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <p class="lead">The article "<span class="font-weight-bold">{{ $relatedArticles->RelatedArticle->title }}</span>" will be removed from the related articles</p>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <input type="text" id="image_id" name="id" value="{{ $relateds->related_id }}" style="display: none;">
-                                                <div class="btn-group fa-pull-right">
-                                                    <button type="submit" class="btn btn-outline-dark">Yes</button>
-                                                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">No</button>
-                                                </div>
+                                                <input type="text" id="image_id" name="related_article_id" value="{{ $relatedArticles->related_article_id }}" style="display: none;">
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="btn-group fa-pull-right">
+                                            <button type="submit" class="btn btn-outline-dark">Yes</button>
+                                            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -421,14 +428,13 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{{ route('articles.add.related') }}">
+                    <form method="post" action="{{ route('articles.add.related', $article->id) }}">
                         @csrf
-                        <input type="text" id="article_id" name="article_id" value="{{ $article->id }}" style="display: none;">
                         <label for="article_related" class="label">Related To:</label>
-                        <select id="article_related" name="article_related" class="custom-select">
+                        <select id="article_related" name="related_article_id" class="custom-select">
                             <option value>--</option>
-                            @forelse($forRelated as $related)
-                                <option value="{{ $related->id }}">{{ $related->title }}</option>
+                            @forelse($articles as $relatedArticle)
+                                <option value="{{ $relatedArticle->id }}">{{ $relatedArticle->title }}</option>
                             @empty
                                 <option>No Data Found</option>
                             @endforelse

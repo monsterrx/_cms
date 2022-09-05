@@ -19,4 +19,8 @@ class Relevant extends Model
     public function Article() {
         return $this->belongsTo(Article::class);
     }
+
+    public function RelatedArticle() {
+        return $this->belongsTo(Article::class, 'related_article_id');
+    }
 }
