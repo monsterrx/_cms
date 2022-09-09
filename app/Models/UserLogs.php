@@ -4,8 +4,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserLogs extends Model {
 
-    protected $table = 'logs_users';
-
     protected $dates = [
         'deleted_at'
     ];

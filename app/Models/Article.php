@@ -16,7 +16,7 @@ class Article extends Model
         'title',
         'heading',
         'published_at',
-        'primary_image',
+        'image',
         'location'
     ];
 

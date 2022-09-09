@@ -20,7 +20,8 @@ class Bugs extends Model
         'description',
         'image',
         'employee_id',
-        'location'
+        'location',
+        'is_resolved'
     ];
 
     public function Employee() {
