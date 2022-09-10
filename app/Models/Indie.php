@@ -9,7 +9,7 @@ class Indie extends Model
 {
     use HasFactory;
 
-    protected $table = 'independents';
+    protected $table = 'indiegrounds';
 
     protected $fillable = [
         'artist_id',
