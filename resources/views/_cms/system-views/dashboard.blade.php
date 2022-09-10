@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="my-4"></div>
-        @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2' || Auth::user()->Employee->Designation->level === '7')
+        @if(Auth::user()->Employee->Designation->level === 1 || Auth::user()->Employee->Designation->level === 2 || Auth::user()->Employee->Designation->level === 7)
             @if($chart->isEmpty())
                 <div class="col-md-12">
                     <div class="alert alert-info text-center h5 text-info">
@@ -322,7 +322,8 @@
                 </div>
             </div>
             <div class="my-4"></div>
-        @elseif(Auth::user()->Employee->Designation->level === '6')
+
+        @elseif(Auth::user()->Employee->Designation->level === 6)
             <div class="my-4"></div>
             <div class="container">
                 <h4 class="h4"><i class="fa fa-user-tie ml-3 mr-3"></i>Employees</h4>

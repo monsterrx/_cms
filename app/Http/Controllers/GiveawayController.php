@@ -10,7 +10,8 @@ class GiveawayController extends Controller {
 
 	public function index()
 	{
-		$giveaways = Contest::whereNull('deleted_at')
+		$giveaways = Contest::with('Contestant')
+            ->whereNull('deleted_at')
             ->where('location', $this->getStationCode())
             ->get();
 

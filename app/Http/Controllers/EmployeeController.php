@@ -54,7 +54,7 @@ class EmployeeController extends Controller {
 
 		//getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === '1' || $level === '2' || $level === '6') {
+		if ($level === 1 || $level === 2 || $level === 6) {
 			return view('_cms.system-views.employees.index', compact('designation','newMessage'));
 		}
 
@@ -80,7 +80,7 @@ class EmployeeController extends Controller {
             $employee = Employee::where('employee_number', $employee_number)->first();
 
             // Jock and Jock Admin
-            if($request->designation_id === 9 || $request->designation_id === '9' || $request->designation_id === 19 || $request->designation_id === '19')
+            if($request->designation_id === 9 || $request->designation_id === 19)
             {
                 $jockName = $request->first_name . ' ' . $request->last_name;
 
@@ -123,7 +123,7 @@ class EmployeeController extends Controller {
 
 		//getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === '1' || $level === '2' || $level === '6') {
+		if ($level === 1 || $level === 2 || $level === 6) {
 			return response()->json($employee);
 		}
 

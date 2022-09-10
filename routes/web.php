@@ -182,7 +182,7 @@ Route::middleware('auth')->group(function() {
 
     Route::resource('/giveaways', GiveawayController::class, ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
     Route::get('/giveaways/activate/{id}', [GiveawayController::class, 'activate'])->name('giveaways.activate');
-    Route::resource('/contestants', ContestantController::class, ['only' => ['index', 'show', 'destroy']]);
+    Route::resource('/contestants', ContestantController::class, ['only' => ['index', 'show', 'update', 'destroy']]);
 
     Route::resource('/user_logs', UserLogsController::class, ['only' => ['index']]);
     Route::resource('/archives', ArchiveLogsController::class, ['only' => ['index']]);

@@ -17,7 +17,7 @@ class DropoutsController extends Controller {
             ->get();
 
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === '1' || $level === '2') {
+		if ($level === 1 || $level === 2) {
 			return view('_cms.system-views.music._chart.dropouts', compact('dropout'));
 		}
 
@@ -49,7 +49,7 @@ class DropoutsController extends Controller {
 
 		// Getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === '1' || $level === '2') {
+		if ($level === 1 || $level === 2) {
 			return view('chart_pages.chart_dropouts_show', compact('dropout'));
 		}
 

@@ -31,12 +31,12 @@
                                 <tbody>
                                 @forelse($contestant as $contestants)
                                     <tr>
-                                        <td>{{ $contestants->firstName }} {{ $contestants->lastName }}</td>
-                                        <td>{{ $contestants->phoneNumber }}</td>
-                                        <td>{{ Carbon\Carbon::parse($contestants->birthDate)->age }}</td>
+                                        <td>{{ $contestants->first_name }} {{ $contestants->last_name }}</td>
+                                        <td>{{ $contestants->phone_number }}</td>
+                                        <td>{{ Carbon\Carbon::parse($contestants->birthday)->age }}</td>
                                         <td>{{ $contestants->email }}</td>
                                         <td>{{ $contestants->city }}</td>
-                                        <td>{{ $contestants->Giveaway->count() }}</td>
+                                        <td>{{ $contestants->Contest->count() }}</td>
                                         <td>
                                             <a href="{{ route('contestants.show', $contestants->id) }}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="left" title="View {{ $contestants->firstName }}"><i class="fas fa-paper-plane"></i></a>
                                         </td>

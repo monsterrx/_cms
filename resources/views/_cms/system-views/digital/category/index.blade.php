@@ -68,25 +68,25 @@
             </div>
         </div>
     </div>
-    @foreach($category as $categories)
-        <div id="edit-{{ $categories->id }}" class="modal fade" role="dialog">
+    @foreach($categories as $category)
+        <div id="edit-{{ $category->id }}" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="lead">Edit {{ $categories->categoryName }}</h4>
+                        <h4 class="lead">Edit {{ $category->name }}</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('categories.update', $categories->id) }}" method="POST">
+                        <form action="{{ route('categories.update', $category->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
                                 <label for="categoryName" class="label">Category Name</label>
-                                <input type="text" id="categoryName" name="categoryName" class="form-control" value="{{ $categories->categoryName }}">
+                                <input type="text" id="categoryName" name="categoryName" class="form-control" value="{{ $category->name }}">
                             </div>
                             <div class="form-group">
                                 <label for="description" class="label">Description</label>
-                                <textarea id="description" name="description" class="form-control">{{ $categories->description }}</textarea>
+                                <textarea id="description" name="description" class="form-control">{{ !$category->description ? 'No Description Available' : $category->description }}</textarea>
                             </div>
                             <div class="form-group fa-pull-right">
                                 <button type="submit" id="categoryUpdateButton" class="btn btn-outline-dark">Save</button>

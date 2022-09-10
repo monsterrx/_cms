@@ -24,7 +24,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $level = Auth::user()->Employee->Designation->level;
-        if ($level === '1' || $level === '2' || $level === '6' || $level === '7' || $level === '9') {
+        if ($level === 1 || $level === 2 || $level === 6 || $level === 7 || $level === 9) {
             $where = DB::table('charts')
                 ->whereNull('deleted_at')
                 ->where('daily', 0)
@@ -133,15 +133,15 @@ class HomeController extends Controller
         }
 
         switch ($level){
-            case '3':
+            case 3:
                 return redirect()->route('articles.index');
-            case '4':
+            case 4:
                 return redirect()->route('sliders.index');
-            case '5' || '8':
+            case 5 || 8:
                 return redirect()->route('jocks.index');
-            case '6':
+            case 6:
                 return redirect()->route('messages.index');
-            case '7':
+            case 7:
                 return redirect()->route('artists.index');
             default:
                 return redirect()->back()->withErrors('User level not found');
@@ -160,7 +160,9 @@ class HomeController extends Controller
                 return response()->json($report);
             }
 
-            $reports = Bugs::with('Employee')->whereNull('deleted_at')->get();
+            $reports = Bugs::with('Employee')
+                ->whereNull('deleted_at')
+                ->get();
 
             foreach($reports as $report) {
                 $report->name = $report->Employee->first_name . ' ' . $report->Employee->last_name;

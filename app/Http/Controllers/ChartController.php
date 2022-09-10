@@ -181,7 +181,7 @@ class ChartController extends Controller {
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === '1' || $level === '2' || $level === '6' || $level === '7') {
+        if ($level === 1 || $level === 2 || $level === 6|| $level === 7) {
             return view('_cms.system-views.music._chart.index', compact('chart', 'latestChartDate', 'chart_type'));
         }
 
@@ -212,7 +212,7 @@ class ChartController extends Controller {
 
             $latestChart = $dated->first()->dated;
 
-            return response()->json(['dates' => $options, 'latest' => $latestChart], 200);
+            return response()->json(['dates' => $options, 'latest' => $latestChart]);
         }
 
         return redirect()->back()->withErrors('Restricted Access!');
@@ -264,7 +264,7 @@ class ChartController extends Controller {
                 return response()->json(['status' => 'success', 'message' => "A new charted song has been uploaded"]);
             }
 
-            if ($level === '1' || $level === '2' || $level === '6' || $level === '7') {
+            if ($level === 1 || $level === 2 || $level === 6 || $level === 7) {
                 return response()->json(['status' => 'success', 'message' => "A new charted song has been uploaded"]);
             }
 
@@ -481,7 +481,7 @@ class ChartController extends Controller {
         $data = array('drop' => $drop);
 
         $level = Auth::user()->Employee->Designation->level;
-        if ($level === '1' || $level === '2' || $level === '6' || $level === '7')
+        if ($level === 1 || $level === 2 || $level === 6 || $level === 7)
         {
             return view('_cms.system-views.music._chart.index',compact('chart','dated', 'data'));
         }

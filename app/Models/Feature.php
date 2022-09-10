@@ -12,7 +12,8 @@ class Feature extends Model
     protected $table = 'featured_indiegrounds';
 
     protected $fillable = [
-        'independent_id',
+        'indieground_id',
+        'header',
         'content',
         'month',
         'year',
@@ -20,6 +21,6 @@ class Feature extends Model
     ];
 
     public function Indie() {
-        return $this->belongsTo(Indie::class, 'independent_id');
+        return $this->belongsTo(Indie::class, 'indieground_id');
     }
 }

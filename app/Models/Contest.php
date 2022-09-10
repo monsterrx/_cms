@@ -26,6 +26,6 @@ class Contest extends Model
     ];
 
     public function Contestant() {
-        return $this->belongsToMany(Contestant::class);
+        return $this->belongsToMany(Contestant::class, 'contestant_giveaway', 'contestant_id', 'giveaway_id');
     }
 }

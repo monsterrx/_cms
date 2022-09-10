@@ -109,9 +109,7 @@ class VoteController extends Controller
 
     public function refreshTallyLogsTable(Request $request) {
         if($request->ajax()) {
-            $tally = Tally::join('charts', 'tallies.chart_id', '=', 'charts.id')
-                ->join('songs', 'charts.song_id', '=', 'songs.id')
-                ->select('tallies.dated', 'tallies.results', 'tallies.last_results', 'songs.name')
+            $tally = Tally::with('Chart.Song')
                 ->get();
 
             return response()->json($tally);

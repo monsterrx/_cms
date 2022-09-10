@@ -24,6 +24,6 @@ class Contestant extends Model implements AuthenticatableContract, CanResetPassw
     ];
 
     public function Contest() {
-        return $this->belongsToMany(Contest::class);
+        return $this->belongsToMany(Contest::class, 'contestant_giveaway', 'giveaway_id', 'contestant_id');
     }
 }

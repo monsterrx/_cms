@@ -45,7 +45,7 @@ class MessageController extends Controller {
             ->orderBy('created_at', 'desc')
             ->get();
 
-		if ($user === '1' || $user === '2' || $user === '6' || $user === '7') {
+		if ($user === 1 || $user === 2 || $user === 6 || $user === 7) {
 			return view('_cms.system-views.employeeUI.receptionist.messages', compact('message'));
 		}
 

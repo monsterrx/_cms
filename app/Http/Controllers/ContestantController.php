@@ -11,7 +11,9 @@ class ContestantController extends Controller {
 
 	public function index()
 	{
-        $contestant = Contestant::whereNull('deleted_at')->get();
+        $contestant = Contestant::with('Contest')
+            ->whereNull('deleted_at')
+            ->get();
 
 		return view('_cms.system-views.monsterGiveaway.contestants.index', compact( 'contestant'));
 	}
@@ -40,7 +42,7 @@ class ContestantController extends Controller {
 
 	public function update($id)
 	{
-		//
+		return redirect()->back()->withErrors('Feature is not ready yet');
 	}
 
 	public function destroy($id)

@@ -52,7 +52,7 @@ class JockController extends Controller {
 
 		$level = Auth::user()->Employee->Designation->level;
 
-        if ($level >= '1' && $level <= '4') {
+        if ($level >= 1 && $level <= 4) {
             if($request->ajax()) {
                 return response()->json($jocks);
             }
@@ -60,7 +60,7 @@ class JockController extends Controller {
             return view('_cms.system-views.employees.jocks.index',compact('employees','jocks'));
         }
 
-        if ($level === '5' || $level === '8') {
+        if ($level === 5 || $level === 8) {
             $jock = Jock::with('Fact', 'Image', 'Link', 'Show')
                 ->where('employee_id', Auth::user()->Employee->id)
                 ->first();
@@ -130,7 +130,7 @@ class JockController extends Controller {
         $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', true);
         $jock['main_image'] = $this->verifyPhoto($jock['main_image'], 'jocks');
 
-        if ($level >= '1' && $level <= '4') {
+        if ($level >= 1 && $level <= 4) {
             if($request->ajax()) {
                 if($request->has('jock_info')) {
                     return response()->json(['images' => $jock->Image, 'links' => $jock->Link, 'facts' => $jock->Fact]);
@@ -152,12 +152,12 @@ class JockController extends Controller {
             ->pluck('id')
             ->first();
 
-		if ($level >= '1' && $level <= '4') {
+		if ($level >= 1 && $level <= 4) {
 			$this->validate($request, [
 			    'employee_id' => 'required',
 			    'name' => 'required|min:2',
 			]);
-		} elseif ($level === '5') {
+		} elseif ($level === 5) {
 		    $this->validate($request, [
                 'name' => 'required|min:2',
             ]);
@@ -188,7 +188,7 @@ class JockController extends Controller {
 
         $jock->update($request->all());
 
-        if ($level === '5') {
+        if ($level === 5) {
             Session::flash('success', 'Your jock profile has been successfully updated');
             return redirect()->route('jocks.profile', $jock_id);
         }
@@ -249,7 +249,7 @@ class JockController extends Controller {
 
 		// Getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === '5' || $level === '8') {
+		if ($level === 5 || $level === 8) {
 			return  view('_cms.system-views.employeeUI.Jocks.profile', compact('jock','employee', 'jock_id', 'image','link', 'fact', 'show'));
 		}
 

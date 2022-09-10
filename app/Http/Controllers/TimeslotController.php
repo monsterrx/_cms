@@ -62,7 +62,7 @@ class TimeslotController extends Controller {
 
 		// Getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === '1' || $level === '2') {
+		if ($level === 1 || $level === 2) {
 			return view('_cms.system-views.programs.timeslot.index', compact('shows', 'jocks', 'timeslots', 'day', 'station'));
 		}
 

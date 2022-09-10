@@ -26,7 +26,7 @@ class ArticleController extends Controller {
 	        if($request['status'] === 'published') {
                 $user_level = Auth::user()->Employee->Designation->level;
 
-                if($user_level === '1' || $user_level === '2') {
+                if($user_level === 1 || $user_level === 2) {
                     $published = Article::whereNotNull('published_at')
                         ->where('location', $this->getStationCode())
                         ->whereNull('deleted_at')
@@ -62,7 +62,7 @@ class ArticleController extends Controller {
             } elseif ($request['status'] === 'unpublished') {
                 $user_level = Auth::user()->Employee->Designation->level;
 
-                if($user_level === '1' || $user_level === '2') {
+                if($user_level === 1 || $user_level === 2) {
                     $unpublished = Article::whereNull('published_at')
                         ->where('location', $this->getStationCode())
                         ->whereNull('deleted_at')
@@ -103,7 +103,7 @@ class ArticleController extends Controller {
 
 		$level = Auth::user()->Employee->Designation->level;
 
-		if ($level === '1' || $level === '2' || $level === '3') {
+		if ($level === 1 || $level === 2 || $level === 3) {
 			return view('_cms.system-views.digital.index', compact('category'));
 		}
 
@@ -227,7 +227,7 @@ class ArticleController extends Controller {
 
         $article['image'] = $this->verifyPhoto($article['image'], 'articles');
 
-		if ($level === '1' || $level === '2' || $level === '3') {
+		if ($level === 1 || $level === 2 || $level === 3) {
 			return view('_cms.system-views.digital.articles.show',compact('article', 'category', 'articles'));
 		}
 

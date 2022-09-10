@@ -636,7 +636,7 @@
         columns: [
             { data: 'name' },
             { data: 'description' },
-            { data: 'created_at' },
+            { data: 'created_date' },
             { data: 'options' }
         ]
     });

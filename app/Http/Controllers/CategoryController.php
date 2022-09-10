@@ -12,33 +12,36 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $category = Category::whereNULL('deleted_at')
+        $categories = Category::with('Article')
+            ->whereNull('deleted_at')
             ->orderBy('name')
             ->get();
 
         if($request->ajax())
         {
-            foreach ($category as $categories)
+            foreach ($categories as $category)
             {
-                if($categories->description === '' || $categories->description === null)
+                if($category->description === '' || $category->description === null)
                 {
-                    $categories->description = 'No Description Available';
+                    $category->description = 'No Description Available';
                 }
 
-                $categories->options =
-                    '<a href="#edit-'.$categories->id.'" class="btn btn-outline-dark" data-toggle="modal">
+                $category->created_date = date('F d, Y', strtotime($category->created_at));
+
+                $category->options =
+                    '<a href="#edit-'.$category->id.'" class="btn btn-outline-dark" data-toggle="modal">
                         <i class="fas fa-search"></i>
                      </a>';
             }
 
-            return response()->json($category);
+            return response()->json($categories);
         }
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === '1' || $level === '2' || $level === '3')
+        if ($level === 1 || $level === 2 || $level === 3)
         {
-            return view('_cms.system-views.digital.category.index',compact('category'));
+            return view('_cms.system-views.digital.category.index',compact('categories'));
         }
 
         return redirect()->back()->withErrors('Restricted Access!');
