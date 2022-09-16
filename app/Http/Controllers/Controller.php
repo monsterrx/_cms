@@ -30,7 +30,7 @@ class Controller extends BaseController
     }
 
     public function getStationCode() {
-        return Env::get('STATION_CODE');
+        return env('STATION_CODE');
     }
 
     public function getAppVersion() {

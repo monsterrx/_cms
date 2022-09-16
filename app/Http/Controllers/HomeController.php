@@ -31,7 +31,7 @@ class HomeController extends Controller
                 ->where('local', 0)
                 ->where('location', $this->getStationCode())
                 ->select('dated')
-                ->Max('dated');
+                ->max('dated');
 
             $chart = Chart::where('dated', $where)
                 ->whereNull('deleted_at')
