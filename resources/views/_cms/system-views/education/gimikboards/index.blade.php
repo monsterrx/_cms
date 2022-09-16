@@ -91,13 +91,13 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="gimik_date_start" class="lead">Start Date</label>
-                                    <input type="date" id="gimik_date_start" name="gimik_date_start" class="form-control">
+                                    <input type="date" id="gimik_date_start" name="start_date" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="gimik_date_end" class="lead">End Date</label>
-                                    <input type="date" id="gimik_date_end" name="gimik_date_end" class="form-control">
+                                    <input type="date" id="gimik_date_end" name="end_date" class="form-control">
                                 </div>
                             </div>
                         </div>
