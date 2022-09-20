@@ -42,7 +42,7 @@ class ContentController extends Controller
         $data = array('content' => $subcontent, 'article' => $article);
 
         $level = Auth::user()->Employee->Designation->level;
-        if ($level === '1' || $level === '2' || $level === '3') {
+        if ($level === 1 || $level === 2 || $level === 3) {
             return view('_cms.system-views.digital.articles.sub_content.index',compact('data'));
         }
 

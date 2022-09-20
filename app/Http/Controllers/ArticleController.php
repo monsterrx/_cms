@@ -154,7 +154,7 @@ class ArticleController extends Controller {
 		$validator = Validator::make($request->all(), [
             'title' => 'required',
             'heading' => 'required|min:20',
-            'categories_id' => 'required',
+            'category_id' => 'required',
         ]);
 
 		if($validator->passes()) {
@@ -239,7 +239,7 @@ class ArticleController extends Controller {
 		$validator = Validator::make($request->all(), [
             'title' => 'required',
             'heading' => 'required|min:10',
-            'categories_id' => 'required',
+            'category_id' => 'required',
         ]);
 
         if($validator->passes()) {
