@@ -1283,23 +1283,32 @@
 
         console.log([action, payload, type]);
         if(action === 'post') {
-            getAsync('{{ route('charts.index') }}', { "action": action, "dated": payload, "data-local": type }, 'JSON', onSend, onSuccess)
+            DialogAlert.fire({
+                'icon': 'question',
+                'title': 'Are you sure to post the charts?'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    DialogAlert.close();
 
-            function onSend() {
-                manualToast.fire({
-                    icon: 'info',
-                    title: 'Posting charts ...',
-                });
-            }
+                    getAsync('{{ route('charts.index') }}', { "action": action, "dated": payload, "data-local": type }, 'JSON', onSend, onSuccess)
 
-            function onSuccess(result) {
-                Toast.fire({
-                    icon: result.status,
-                    title: result.message
-                });
+                    function onSend() {
+                        manualToast.fire({
+                            icon: 'info',
+                            title: 'Posting charts ...',
+                        });
+                    }
 
-                $('button#official').click();
-            }
+                    function onSuccess(result) {
+                        Toast.fire({
+                            icon: result.status,
+                            title: result.message
+                        });
+
+                        $('button#official').click();
+                    }
+                }
+            });
         }
 
         if (action === 'official') {

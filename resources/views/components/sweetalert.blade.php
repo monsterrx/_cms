@@ -20,4 +20,13 @@
         showConfirmButton: false,
         showCloseButton: true,
     });
+
+    let DialogAlert = swal.mixin({
+        timer: 0,
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        allowOutsideClick: false
+    });
 </script>

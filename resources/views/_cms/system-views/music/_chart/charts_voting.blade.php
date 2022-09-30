@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-hover mb-5">
+                <table class="table table-hover m-0">
                     <thead>
                     <tr>
                         <th scope="col">Spot</th>
@@ -41,7 +41,6 @@
                     @endforelse
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
