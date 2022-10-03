@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="label" for="category_id">Category</label>
-                                    <select id="categories_id" name="category_id" class="custom-select">
+                                    <select id="category_id" name="category_id" class="custom-select">
                                         <option value>--</option>
                                         @foreach($category as $categories)
                                             <option value="{{ $categories->id }}">{{ $categories->name }}</option>
