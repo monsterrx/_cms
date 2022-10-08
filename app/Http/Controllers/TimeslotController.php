@@ -30,7 +30,7 @@ class TimeslotController extends Controller {
                 return $day;
             }
 
-            $timeslots = Timeslot::with('Show')
+            $timeslots = Timeslot::with('Show', 'Jock')
                 ->whereNull('deleted_at')
                 ->where('day', $day)
                 ->where('location', $this->getStationCode())
@@ -53,7 +53,7 @@ class TimeslotController extends Controller {
             ->orderBy('title')
             ->get();
 
-		$timeslots = Timeslot::with('Show')
+		$timeslots = Timeslot::with('Show', 'Jock')
             ->whereNull('deleted_at')
             ->where('day', $day)
             ->where('location', $this->getStationCode())
@@ -113,7 +113,6 @@ class TimeslotController extends Controller {
 
             if($validator->passes()) {
                 $timeslot = Timeslot::findOrfail($id);
-
                 $timeslot->update($request->all());
 
                 return response()->json(['status' => 'success']);
@@ -127,9 +126,8 @@ class TimeslotController extends Controller {
 
 	public function destroy($id)
 	{
-		$time = Timeslot::findOrfail($id);
-
-		$time->delete();
+		$timeslot = Timeslot::with('Show', 'Jock')->findOrfail($id);
+		$timeslot->delete();
 
 		return response()->json(['status' => 'success']);
 	}

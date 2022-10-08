@@ -67,6 +67,7 @@
                 <div class="modal-body">
                     <form id="new-timeslot" method="post" action="{{ route('timeslots.store') }}">
                         @csrf
+                        {{-- Commented, you may now enter the jocks from the table itself --}}
                         {{--<div class="form-group">
                             <label class="label" for="schedule_type">Type</label>
                             <select id="schedule_type" class="custom-select">
