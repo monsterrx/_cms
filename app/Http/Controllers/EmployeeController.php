@@ -80,9 +80,9 @@ class EmployeeController extends Controller {
             $employee = Employee::where('employee_number', $employee_number)->first();
 
             // Jock and Jock Admin
-            if($request->designation_id === 9 || $request->designation_id === 19)
+            if($request->designation_id === 9 || $request->designation_id === 19 || $request->designation_id === '9' || $request->designation_id === '19')
             {
-                $jockName = $request->first_name . ' ' . $request->last_name;
+                $jockName = $request['first_name'] . ' ' . $request['last_name'];
 
                 $jock = new Jock([
                     'employee_id' => Employee::latest()->first()->id,

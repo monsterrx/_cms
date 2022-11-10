@@ -164,7 +164,7 @@ class UsersController extends Controller {
 
         Session::flash('success', 'Header picture has been successfully saved!');
 
-        if ($level === '1' || $level === '2') {
+        if ($level === 1 || $level === 2) {
             return redirect()->route('users.header', $jock['id']);
             //return response()->json(['success' => 'Image Uploaded to Database'], 200);
         }
@@ -192,7 +192,7 @@ class UsersController extends Controller {
         $jock->save();
 
         Session::flash('success', 'Main picture has been successfully saved!');
-        if ($level === '1' || $level === '2') {
+        if ($level === 1 || $level === 2) {
 
             return redirect()->route('jocks.show', $jock['id']);
             //return response()->json(['success' => 'Image Uploaded to Database'], 200);

@@ -600,7 +600,7 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="add_image_name">Image Name</label>
-                                    <input type="text" id="add_image_name" name="image_name" class="form-control" placeholder="Image Name">
+                                    <input type="text" id="add_image_name" name="name" class="form-control" placeholder="Image Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="add_jock_image">Jock Image</label>

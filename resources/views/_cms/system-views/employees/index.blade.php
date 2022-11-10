@@ -14,10 +14,10 @@
                 </div>
             </div>
 
-            @if(Auth()->user()->Employee->Designation->level === '1')
+            @if(Auth()->user()->Employee->Designation->level === 1)
                 <div class="row my-4">
                     <div class="col-md-12 col-sm-12 col-12 col-lg-12">
-                        @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2')
+                        @if(Auth::user()->Employee->Designation->level === 1 || Auth::user()->Employee->Designation->level === 2)
                             <a href="#create_employee_modal" data-toggle="modal" class="btn btn-outline-dark fa-pull-right">New Employee</a>
                         @endif
                     </div>
