@@ -1860,7 +1860,7 @@
 
         function onSuccess(result) {
             if(result.image) {
-                $('#view_image, #name, #file').val('');
+                $('#view_image, #image_name, #file').val('');
                 $('#jock-remove-image-text, #custom-file-label').empty();
 
                 $('[name="jock_id"]').val(result.image.jock.id);
@@ -1868,7 +1868,7 @@
                 $('#view_image').attr('src', '{{ url('images/jocks') }}' + '/' + result.image.file);
                 $('#view_image').attr('alt', result.image.name);
 
-                $('#name').val(result.image.name); cdess
+                $('#image_name').val(result.image.name);
                 $('#custom-file-label').append(result.image.file);
                 $('#jock-remove-image-text').append('Are you sure to delete <b>' + result.image.file + '</b>?');
 
