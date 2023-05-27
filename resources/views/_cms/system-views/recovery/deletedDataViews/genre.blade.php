@@ -14,7 +14,7 @@
         <tr>
             <td>{{ $genre->id }}</td>
             <td>
-                {{ $genre->GenreName }}
+                {{ $genre->name }}
             </td>
             <td>{{ $genre->GenreDescription }}</td>
             <td>{{ date('M d, Y', strtotime($genre->deleted_at)) }}</td>

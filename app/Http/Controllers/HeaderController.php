@@ -101,7 +101,6 @@ class HeaderController extends Controller {
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'image' => 'file|max:2048|image|required'
         ]);
 
         if($validator->passes()) {

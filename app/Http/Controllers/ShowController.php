@@ -55,14 +55,15 @@ class ShowController extends Controller
             'title' => 'required',
             'front_description' => 'max:255',
             'description' => 'required',
-            'icon' => 'required|image|file|max:2048',
             'is_special' => 'required',
         ]);
 
         if ($validator->passes()) {
             $img = $request->file('background_image');
-            $path = public_path('images/shows');
+            $path = 'images/shows';
             $request['location'] = $this->getStationCode();
+            $request['slug_string'] = Str::studly($request['title']);
+            $request['is_active'] = 0;
 
             $show = new Show($request->all());
 
@@ -71,23 +72,20 @@ class ShowController extends Controller
                 $show->save();
             } else {
                 if ($request['is_special'] === '2' || $request['is_special'] === 2) {
-                    $request['slug_string'] = Str::studly($request['title']);
                     $show->icon = $this->storePhoto($request, $path, 'shows', true);
                     $show->save();
 
-                    Session::flash('success', 'Show Successfully Added');
+                    Session::flash('success', 'Show successfully added');
                     return redirect()->back();
                 }
 
                 return redirect()->back()->withErrors('There is no provided header picture');
             }
-
-            $show['slug_string'] = Str::studly($request['title']);
             $show->save();
 
             $show = Show::latest()->first();
 
-            Session::flash('success', 'Show has been successfully Added');
+            Session::flash('success', 'Show has been successfully added');
             return redirect()->route('shows.show', $show->id);
         }
 

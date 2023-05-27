@@ -86,7 +86,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="url" class="label">Link</label>
-                                    <input type="text" id="url" name="url" class="form-control" placeholder="If you want a redirecting page on a slider" value="{{ $data['slider']->link }}">
+                                    <input type="text" id="link" name="link" class="form-control" placeholder="If you want a redirecting page on a slider" value="{{ $data['slider']->link }}">
                                 </div>
                             </div>
                         </div>

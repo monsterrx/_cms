@@ -208,7 +208,7 @@ $(document).ready(function () {
         });
     });
 
-    //tinymce editor
+    /*// tinymce editor
     let editor_id = "";
     tinymce.PluginManager.add('instagram', function(editor, url) {
         // Add a button that opens a window
@@ -231,7 +231,7 @@ $(document).ready(function () {
                         // Insert content when the window form is submitted
                         tinymce.activeEditor.insertContent('<iframe frameborder="0" src="'+e.data.instagram+'embed" frameborder="0"></iframe>')
 
-                        /*let embedCode = e.data.instagram;
+                        /!*let embedCode = e.data.instagram;
                         let script = embedCode.match(/<script.*<\/script>/)[0];
                         let scriptSrc = script.match(/".*\.js/)[0].split("\"")[1];
                         let sc = document.createElement("script");
@@ -242,14 +242,13 @@ $(document).ready(function () {
                         let iframeHead = iframe.contentWindow.document.getElementsByTagName('head')[0];
                         iframeHead.appendChild(sc);
 
-                        tinyMCE.activeEditor.insertContent(e.data.instagram);*/
+                        tinyMCE.activeEditor.insertContent(e.data.instagram);*!/
                         // editor.insertContent('Title: ' + e.data.title);
                     }
                 });
             }
         });
     });
-
     tinymce.PluginManager.add('twitter_url', function(editor, url) {
         let icon_url=window.location.protocol + "//" + window.location.host + '/images/Twitter-color.svg';
 
@@ -319,5 +318,5 @@ $(document).ready(function () {
                     });
                 }
             });
-    });
+    });*/
 });

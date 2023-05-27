@@ -16,8 +16,8 @@
                 <div class="col-6">
                     <p class="lead">Monster Shows</p>
                 </div>
-                <?php $level = Auth::user()->Employee->Designation->level; ?>
-                @if($level === '1' || $level === '2')
+                @php $level = Auth::user()->Employee->Designation->level; @endphp
+                @if($level === 1 || $level === 2)
                     <div class="col-6">
                         <a href="#newShow" class="btn btn-outline-dark fa-pull-right" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;&nbsp;New Show</a>
                     </div>
@@ -102,8 +102,8 @@
                                     <input type="text" id="title" name="title" class="form-control" placeholder="Show Title">
                                 </div>
                                 <div class="form-group">
-                                    <label class="label" for="frontDescription">Front Description</label>
-                                    <input type="text" id="frontDescription" name="frontDescription" class="form-control" placeholder="Front Description">
+                                    <label class="label" for="front_description">Front Description</label>
+                                    <input type="text" id="front_description" name="front_description" class="form-control" placeholder="Front Description">
                                 </div>
                                 <div class="form-group">
                                     <label class="label" for="content">Description</label>
@@ -128,7 +128,7 @@
                                     <label class="label" for="header">Icon</label>
                                     <div id="header" class="custom-file">
                                         <label class="custom-file-label" for="icon">Show Icon</label>
-                                        <input type="file" id="icon" name="image" class="custom-file-input">
+                                        <input type="file" id="icon" name="icon" class="custom-file-input">
                                     </div>
                                 </div>
                             </div>

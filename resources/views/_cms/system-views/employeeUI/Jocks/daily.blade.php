@@ -471,7 +471,7 @@
                                     <select id="genre_id" name="genre_id" class="custom-select">
                                         <option value="" disabled selected>--</option>
                                         @forelse($genres as $genre)
-                                            <option value="{{ $genre->id }}">{{ $genre->GenreName }}</option>
+                                            <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                                         @empty
                                             <option value="" disabled selected>--</option>
                                         @endforelse
@@ -855,7 +855,7 @@
                                         <label for="update_genre_id">Genre</label>
                                         <select id="update_genre_id" name="genre_id" class="custom-select" required>
                                             @forelse($genres as $genre)
-                                                <option value="{{ $genre->id }}">{{ $genre->GenreName }}</option>
+                                                <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                                             @empty
                                                 <option value="">No Data Found</option>
                                             @endforelse

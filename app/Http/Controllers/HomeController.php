@@ -13,11 +13,13 @@ use App\Models\Outbreak;
 use App\Models\Podcast;
 use App\Models\Song;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use \Firebase\JWT\JWT;
 
 class HomeController extends Controller
 {
@@ -185,14 +187,14 @@ class HomeController extends Controller
         $employee = Auth::user()->Employee->id;
 
         $image = $request['image'];
-        $path = public_path('images/reports');
+        $path = 'images/reports';
 
         if($image) {
             $imageName = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
 
             $image->move($path, $imageName);
 
-            $file = public_path('images/reports/'.$imageName);
+            $file = 'images/reports/'.$imageName;
             Storage::disk('reports')->put($imageName, file_get_contents($file));
 
             if($this->getStationCode() === 'dav') {

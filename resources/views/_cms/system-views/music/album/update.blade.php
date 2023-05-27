@@ -26,7 +26,7 @@
                         <?php try { ?>
                         <tr data-href="{{ route('songs.show', $songs->id) }}" onclick="viewData()">
                             <td>{{ $songs->SongName }}</td>
-                            <td>{{ $album->Genre->GenreName }}</td>
+                            <td>{{ $album->Genre->name }}</td>
                         </tr>
                         <?php } catch (ErrorException $e) {?>
                             <td>DELETED DATA</td>
@@ -69,10 +69,10 @@
                             <div class="col-md-6">
                                 <label for="genre_id">Genre</label>
                                 <select id="genre_id" name="genre_id" class="custom-select">
-                                    <option value="{{ $album->Genre->id }}" selected>{{ $album->Genre->GenreName }}</option>
+                                    <option value="{{ $album->Genre->id }}" selected>{{ $album->Genre->name }}</option>
                                     @forelse($genre as $genres)
                                         <?php try { ?>
-                                        <option value="{{ $genres->id }}">{{ $genres->GenreName }}</option>
+                                        <option value="{{ $genres->id }}">{{ $genres->name }}</option>
                                         <?php } catch (ErrorException $e) {?>
                                         <option value="{{ $genres->id }}">Deleted</option>
                                         <?php } ?>

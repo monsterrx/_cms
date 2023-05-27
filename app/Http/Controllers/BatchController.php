@@ -242,12 +242,12 @@ class BatchController extends Controller {
 
 			foreach ($img as $images) {
 
-				$path = public_path('images/schools');
+				$path = 'images/schools';
 				$imgname = date('Ymd') . '-' . mt_rand() . '.' . $images->getClientOriginalExtension();
 
 				$images->move($path, $imgname);
 
-				$file = public_path('images/schools/'.$imgname);
+				$file = 'images/schools/'.$imgname;
 				Storage::disk('schools')->put($imgname, file_get_contents($file));
 
 				$request['file'] = $imgname;

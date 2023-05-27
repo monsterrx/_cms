@@ -4,7 +4,9 @@
 <script src="{{ asset('js/feather.min.js') }}"></script>
 <script src="{{ asset('js/dashboard.js') }}"></script>
 <script src="{{ asset('js/all.min.js') }}"></script>
- <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
+{{-- Old Tinymce --}}
+{{--<script src="{{ asset('tinymce/tinymce.min.js') }}"></script>--}}
+<script src="https://cdn.tiny.cloud/1/u3b0v3xpk1gxxfrea1jh5z3bewrv4z22l10o1ue35aiqglfx/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
@@ -3596,45 +3598,13 @@
 
     tinymce.init({
         selector: "#content, #update-content, #bug-content",
-        theme: "modern",
         height: 300,
         width: '100%',
-        plugins: [
-            "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-            "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-            "table contextmenu directionality emoticons paste textcolor responsivefilemanager code advlist instagram twitter_url"
-        ],
-        toolbar1: "undo redo | bold italic underline fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
-        toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor | print preview code | caption instagram twitter_url",
-        image_caption: true,
-        image_advtab: true,
-
-        external_filemanager_path: '{{ url('/') }}' + "/tinymce/filemanager/",
-        filemanager_title: "File Manager",
-        external_plugins: {"filemanager": '{{ url('/') }}' + "/tinymce/filemanager/plugin.min.js"},
-        visualblocks_default_state: true,
-
-        style_formats_autohide: true,
-        style_formats_merge: true,
-
-        plugin_preview_width: 1000,
-        plugin_preview_height: 800,
-
-        valid_elements : '+*[*]',
-
-        extended_valid_elements : "iframe[width|height|name|align|class|frameborder|allowfullscreen|allow|src|*]," +
-            "script[language|type|async|src|charset]" +
-            "img[*]" +
-            "embed[width|height|name|flashvars|src|bgcolor|align|play|loop|quality|allowscriptaccess|type|pluginspage]" +
-            "blockquote[dir|style|cite|class|id|lang|onclick|ondblclick"
-            +"|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout"
-            +"|onmouseover|onmouseup|title]",
-        setup: function (editor) {
-            //console.log(editor);
-            editor.on('init', function (args) {
-                editor_id = args.target.id;
-            });
-        },
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount image media link tinydrive code',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat | insertfile image link | code ',
+        tinydrive_token_provider: '{{ url('/') }}/jwt.php',
+        tinydrive_google_drive_key: 'AIzaSyC_IryDOhUCYAM1WBKzNUbLQ5tYNuywYyY',
+        tinydrive_google_drive_client_id: '199937399789-s34bf73o7apfapo7ejobpg2pjm7ade7j.apps.googleusercontent.com',
     });
 
     $('#active').addClass('active');

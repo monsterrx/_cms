@@ -39,7 +39,13 @@ class Controller extends BaseController
 
     public function storePhoto(Request $request, string $path, string $directory, bool $universal, $profile_pic = false, $header_pic = false, $main_pic = false): string
     {
-        $image = $request->file('image');
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+        } else if ($request->hasFile('background_image')) {
+            $image = $request->file('background_image');
+        } else {
+            $image = $request->file('header_image');
+        }
 
         $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
 
@@ -152,7 +158,7 @@ class Controller extends BaseController
             'Content-Type' => 'image/jpeg',
         ];
 
-        $file = public_path('images/wallpapers/' . $request['image']);
+        $file = 'images/wallpapers/' . $request['image'];
 
         return response()->download($file, $request['image'], $headers);
     }

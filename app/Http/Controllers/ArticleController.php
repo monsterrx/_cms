@@ -320,12 +320,12 @@ class ArticleController extends Controller {
 		if($img){
 
 			foreach ($img as $images){
-                $path = public_path('images/articles');
+                $path = 'images/articles';
                 $imgname = date('Ymd') . '-' . mt_rand() . '.' . $images->getClientOriginalExtension();
 
                 $images->move($path, $imgname);
 
-                $file = public_path('images/articles/' . $imgname);
+                $file = 'images/articles/' . $imgname;
                 Storage::disk('articles')->put($imgname, file_get_contents($file));
 
                 $request['file'] = $imgname;
