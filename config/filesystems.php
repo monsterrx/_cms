@@ -364,6 +364,18 @@ return [
             'root' => '../monsterdavao/davaocms/audios'
         ],
         // END
+
+        // New additions
+        '_assets/mobile' =>[
+            'driver' => 'local',
+            'root' => '../images/_assets/mobile'
+        ],
+
+        'bugs' => [
+            'driver' => 'local',
+            'root' => '../images/bugs'
+        ]
+        // END
     ],
 
     /*

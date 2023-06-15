@@ -32,7 +32,7 @@
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div class="bg-dark">
-                                <img src="{{ url('images/scholarBatch/'.$batch->image) }}" class="img-fluid" alt="image">
+                                <img src="{{ $batch->image }}" class="img-fluid" alt="image">
                             </div>
                         </div>
                     </div>

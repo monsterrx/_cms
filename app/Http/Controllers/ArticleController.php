@@ -9,6 +9,8 @@ use App\Models\Photo;
 use App\Models\Relevant;
 use App\Models\Social;
 use App\Models\User;
+use App\Traits\MediaProcessors;
+use App\Traits\SystemFunctions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

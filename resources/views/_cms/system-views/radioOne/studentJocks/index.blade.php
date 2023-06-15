@@ -185,7 +185,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="text-center">
-                                                <img src="{{ asset('images/studentJocks/'.$students->image) }}" width="100px" alt="{{ $students->image }}" class="my-3"/>
+                                                <img src="{{ $students->image }}" width="100px" alt="{{ $students->image }}" class="my-3"/>
                                             </div>
                                         </div>
                                     </div>

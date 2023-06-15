@@ -33,7 +33,7 @@
                     @if($charts->position === 1)
                         <div class="col-md-4 col-sm-4">
                             <div class="card">
-                                <img class="card-img-top" src="{{ asset('images/albums/'. $charts->Song->Album->image) }}" alt="{{ $charts->Song->Album->name }}">
+                                <img class="card-img-top" src="{{ $charts->Song->Album->image }}" alt="{{ $charts->Song->Album->name }}">
                                 <div class="card-body">
                                     <div class="card-title text-center">
                                         <p class="h6 m-0">{{ $charts->Song->name }}</p>

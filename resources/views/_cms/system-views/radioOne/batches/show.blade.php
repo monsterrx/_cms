@@ -42,7 +42,7 @@
                                             <a href="#removeStudent" remove_student modal route="{{ route('radioOne.remove.student', $studentJocks->id) }}" student_jock_id="{{ $studentJocks->id }}" class="close" data-toggle="modal">&times;</a>
                                         </div>
                                         <div class="mt-3 text-center">
-                                            <img src="{{ asset('images/studentJocks/'.$studentJocks['image']) }}" width="100px" alt="{{ $studentJocks->image }}"/>
+                                            <img src="{{ $studentJocks['image'] }}" width="100px" alt="{{ $studentJocks->image }}"/>
                                             <div class="card-body">
                                                 <div class="card-title text-muted mb-0">{{ $studentJocks->first_name }} {{ $studentJocks->last_name }}</div>
                                                 <div class="card-text">{{ $studentJocks->School->name }}</div>
@@ -83,7 +83,7 @@
                                             <a href="#removeStudent" remove_student modal route="{{ route('radioOne.remove.student', $studentJocks->id) }}" batch_id="{{ $batch->id }}" student_jock_id="{{ $studentJocks->id }}" class="close" data-toggle="modal">&times;</a>
                                         </div>
                                         <div class="mt-3 text-center">
-                                            <img src="{{ asset('images/studentJocks/'.$studentJocks['image']) }}" width="100px" alt="{{ $studentJocks->image }}"/>
+                                            <img src="{{ $studentJocks['image'] }}" width="100px" alt="{{ $studentJocks->image }}"/>
                                             <div class="card-body">
                                                 <div class="card-title text-muted mb-0">{{ $studentJocks->first_name }} {{ $studentJocks->last_name }}</div>
                                                 <div class="card-text">{{ $studentJocks->School->school_name }}</div>
@@ -124,7 +124,7 @@
                                             <a href="#removeStudent" remove_student modal route="{{ route('radioOne.remove.student', $studentJocks->id) }}" batch_id="{{ $batch->id }}" student_jock_id="{{ $studentJocks->id }}" class="close" data-toggle="modal">&times;</a>
                                         </div>
                                         <div class="mt-3 text-center">
-                                            <img src="{{ asset('images/studentJocks/'.$studentJocks['image']) }}" width="100px" alt="{{ $studentJocks->image }}"/>
+                                            <img src="{{ $studentJocks['image'] }}" width="100px" alt="{{ $studentJocks->image }}"/>
                                             <div class="card-body">
                                                 <div class="card-title text-muted mb-0">{{ $studentJocks->first_name }} {{ $studentJocks->last_name }}</div>
                                                 <div class="card-text">{{ $studentJocks->School->school_name }}</div>
@@ -165,7 +165,7 @@
                                             <a href="#removeStudent" remove_student modal route="{{ route('radioOne.remove.student', $studentJocks->id) }}" batch_id="{{ $batch->id }}" student_jock_id="{{ $studentJocks->id }}" class="close" data-toggle="modal">&times;</a>
                                         </div>
                                         <div class="mt-3 text-center">
-                                            <img src="{{ asset('images/studentJocks/'.$studentJocks['image']) }}" width="100px" alt="{{ $studentJocks->image }}"/>
+                                            <img src="{{ $studentJocks['image'] }}" width="100px" alt="{{ $studentJocks->image }}"/>
                                             <div class="card-body">
                                                 <div class="card-title text-muted mb-0">{{ $studentJocks->first_name }} {{ $studentJocks->last_name }}</div>
                                                 <div class="card-text">{{ $studentJocks->School->school_name }}</div>

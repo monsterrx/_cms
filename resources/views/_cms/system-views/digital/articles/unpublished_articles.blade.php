@@ -5,7 +5,7 @@
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 mb-2">
             <div class="card" style="width: 19rem;  height: 520px;">
                 <div class="card-img-top">
-                    <img src="{{ url('images/articles/'.$article->image) }}" class="img-fluid" alt="{{ $article->image }}">
+                    <img src="{{ $article->image }}" class="img-fluid" alt="{{ $article->image }}">
                 </div>
                 <div class="card-body">
                     <p class="lead">{{ $article->title }}</p>

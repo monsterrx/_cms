@@ -41,7 +41,7 @@ class GenreController extends Controller {
 
 		if($request->ajax()) {
             $level = Auth::user()->Employee->Designation->level;
-            if ($level === '1' || $level === '2' || $level === '6' || $level === '7') {
+            if ($level === 1 || $level === 2 || $level === 6 || $level === 7) {
                 return response()->json($genre);
             }
         }

@@ -11,6 +11,8 @@
 
     @include('components.links')
 
+    @yield('stylesheet')
+
     @include('components.sweetalert')
     <style>
         .bd-placeholder-img {
@@ -89,7 +91,6 @@
         </main>
     </div>
 </div>
-@include('components.scripts')
     <div id="dialog" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -344,5 +345,9 @@
             </div>
         </div>
     </div>
+
+@include('components.scripts')
+
+@yield('scripts')
 </body>
 </html>

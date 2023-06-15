@@ -17,9 +17,9 @@ class FeaturedController extends Controller {
             ->get();
 
 		if($request->ajax()) {
-            $featuredIndieArtists = Feature::with('Indie.Artist')->whereNull('deleted_at')
-                ->where('location', $this->getStationCode())
+            $featuredIndieArtists = Feature::with('Indie.Artist')
                 ->latest()
+                ->whereNull('deleted_at')
                 ->orderBy('created_at', 'desc')
                 ->get();
 

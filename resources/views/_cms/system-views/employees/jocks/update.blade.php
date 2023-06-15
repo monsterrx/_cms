@@ -13,7 +13,7 @@
                     <div class="row justify-content-center text-center">
                         <div class="col-12 col-sm-12 col-md">
                             <div class="card-img">
-                                <img src="{{ asset('images/jocks/'.$jock->main_image) }}" class="img-thumbnail" alt="{{ $jock->main_image }}">
+                                <img src="{{ $jock->main_image }}" class="img-thumbnail" alt="{{ $jock->main_image }}">
                             </div>
                             <div class="card-body">
                                 <div class="card-text">Main Picture</div>
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-12 col-sm-12 col-md">
                             <div class="card-img">
-                                <img src="{{ asset('images/jocks/'.$jock->profile_image) }}" class="img-thumbnail" alt="{{ $jock->profile_image }}">
+                                <img src="{{ $jock->profile_image }}" class="img-thumbnail" alt="{{ $jock->profile_image }}">
                             </div>
                             <div class="card-body">
                                 <div class="card-text">Profile Picture</div>

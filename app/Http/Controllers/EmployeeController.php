@@ -112,10 +112,13 @@ class EmployeeController extends Controller {
 	{
         $employee = Employee::with('Designation')->findOrfail($id);
 
-        $userid = User::where('employee_number', $employee['employee_number'])->first();
+        $userid = User::with('Employee')
+            ->where('employee_id', $employee->id)
+            ->first();
 
         if ($userid) {
-            $user = User::findOrfail($userid['id']);
+            $user = User::with('Employee')
+                ->findOrfail($userid['id']);
         } else {
             Session::flash('error', 'User not registered');
             return response()->json($employee);

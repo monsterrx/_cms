@@ -12,6 +12,8 @@ use App\Models\Message;
 use App\Models\Outbreak;
 use App\Models\Podcast;
 use App\Models\Song;
+use App\Traits\MediaProcessors;
+use App\Traits\SystemFunctions;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;

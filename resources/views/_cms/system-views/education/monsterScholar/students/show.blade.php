@@ -4,7 +4,7 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-4">
-                <img src="{{ url('images/schools/'. $student->image) }}" alt="{{ $student->first_name }}" class="img-fluid img-thumbnail">
+                <img src="{{ $student->image }}" alt="{{ $student->first_name }}" class="img-fluid img-thumbnail">
             </div>
             <div class="col-md-8">
                 <div class="row">

@@ -63,6 +63,7 @@
             <a class="dropdown-item" href="{{ route('articles.index') }}">Articles</a>
             <a class="dropdown-item" href="{{ route('categories.index') }}">Category</a>
             <a class="dropdown-item" href="{{ route('sliders.index') }}">Graphics Artist</a>
+            <a class="dropdown-item" href="{{ route('asset.index') }}">Mobile Application</a>
             <a class="dropdown-item" href="{{ route('wallpapers.index') }}">Wallpapers</a>
             <div class="dropdown-divider"></div>
             <div class="dropdown-header">Programs</div>

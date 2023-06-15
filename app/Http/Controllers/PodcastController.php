@@ -2,6 +2,8 @@
 
 use App\Models\Show;
 use App\Models\Podcast;
+use App\Traits\MediaProcessors;
+use App\Traits\SystemFunctions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;

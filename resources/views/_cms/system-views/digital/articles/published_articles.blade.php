@@ -6,7 +6,7 @@
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 mb-2">
             <div class="card" style="width: 19rem;  height: 520px;">
                 <div class="card-img-top">
-                    <img src="{{ url('images/articles/'.$articles->image) }}" class="img-fluid" alt="{{ $articles->image }}">
+                    <img src="{{ $articles->image }}" class="img-fluid" alt="{{ $articles->image }}">
                 </div>
                 <div class="card-body">
                     <p class="lead">{{ Str::limit($articles->title, 45, '...') }}</p>

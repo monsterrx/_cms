@@ -76,8 +76,6 @@ class AlbumController extends Controller {
 
         $album['image'] = $this->verifyPhoto($album['image'], 'albums');
 
-        $album['image'] = asset('images/albums/' . $album['image']);
-
 		if($request->ajax()) {
             return response()->json($album);
         }

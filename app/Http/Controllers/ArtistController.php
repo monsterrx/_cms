@@ -83,10 +83,6 @@ class ArtistController extends Controller {
 
         $artist['image'] = $this->verifyPhoto($artist['image'], 'artists');
 
-        foreach ($artist->Album as $album) {
-            $album->image = url('images/albums/'.$album->image);
-        }
-
         // for indiegrounds and albums
         if($request->ajax()) {
             return response()->json($artist);

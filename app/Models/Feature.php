@@ -18,6 +18,6 @@ class Feature extends Model
     ];
 
     public function Indie() {
-        return $this->belongsTo(Indie::class, 'independent_id');
+        return $this->belongsTo(Indie::class, 'indieground_id');
     }
 }

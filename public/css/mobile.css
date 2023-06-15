@@ -1,0 +1,1749 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+.card .card-title {
+    font-family: "Open Sans", sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.card .card-content .card-title.youTube-embed {
+    font-family: "Open Sans", sans-serif;
+    display: inline-block;
+    text-align: center;
+    font-size: 22px;
+    padding: 5px;
+    line-height: 20px;
+}
+
+.panel-open {
+    overflow: hidden;
+}
+
+.panel-open .panel {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    outline: 0;
+}
+
+.panel-dialog {
+    position: relative;
+    width: auto;
+    margin: 0.5rem;
+    pointer-events: none;
+}
+
+.panel.fade .panel-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panel.fade .panel-dialog {
+        transition: none;
+    }
+}
+
+.panel.show .panel-dialog {
+    transform: none;
+}
+
+.panel.panel-static .panel-dialog {
+    transform: scale(1.02);
+}
+
+.panel-dialog-scrollable {
+    display: flex;
+    max-height: subtract(100%, 1rem);
+}
+
+.panel-dialog-scrollable .panel-content {
+    max-height: subtract(100vh, 1rem);
+    overflow: hidden;
+}
+
+.panel-dialog-scrollable .panel-header,
+.panel-dialog-scrollable .panel-footer {
+    flex-shrink: 0;
+}
+
+.panel-dialog-scrollable .panel-body {
+    overflow-y: auto;
+}
+
+.panel-dialog-centered {
+    display: flex;
+    align-items: center;
+    min-height: subtract(100%, 1rem);
+}
+
+.panel-dialog-centered::before {
+    display: block;
+    height: subtract(100vh, 1rem);
+    content: "";
+}
+
+.panel-dialog-centered.panel-dialog-scrollable {
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.panel-dialog-centered.panel-dialog-scrollable .panel-content {
+    max-height: none;
+}
+
+.panel-dialog-centered.panel-dialog-scrollable::before {
+    content: none;
+}
+
+.panel-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+
+.panel-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+}
+
+.panel-backdrop.fade {
+    opacity: 0;
+}
+
+.panel-backdrop.show {
+    opacity: 0.5;
+}
+
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem 0 2rem 0;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: subtract(0.3rem, 1px);
+    border-top-right-radius: subtract(0.3rem, 1px);
+}
+
+.panel-header .close {
+    padding: 1rem 1rem;
+    margin: -1rem -1rem -1rem auto;
+}
+
+.panel-header.header-logo-free {
+    background-color: #c4c4c4;
+    padding: 1rem 0 1rem 0;
+    display: inline-block;
+}
+
+.panel-header.header-logo-free .panel-title {
+    position: relative;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: bold;
+}
+
+.panel-header.header-logo-free .panel-title.header-text {
+    text-align: center;
+    font-size: 38px;
+    padding: 5px;
+}
+
+.panel-header.header-logo-free .panel-title.header-text.small-text {
+    font-size: 17px;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.header-logo-free .panel-title.header-text.small-text {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.header-logo-free .panel-title.header-text.small-text {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.header-logo-free .panel-title.header-text.small-text {
+        font-size: 20px;
+    }
+}
+
+.panel-header.no-logo {
+    font-size: 28px;
+    padding: 15px 10px;
+    display: inline-block;
+    text-align: center;
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.no-logo {
+        font-size: 20px;
+        padding: 15px 15px;
+    }
+}
+
+.panel-header.no-logo .panel-title {
+    position: relative;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 200;
+}
+
+.panel-header.no-logo .panel-title.misc-title {
+    position: relative;
+    font-family: "Open Sans", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.panel-header.no-logo .panel-title.misc-title.small-text {
+    font-size: 16px;
+}
+
+.panel-header.no-logo .panel-title.large-title {
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 28px;
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.no-logo .panel-title.large-title {
+        font-size: 18px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.no-logo .panel-title.large-title {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.no-logo .panel-title.large-title {
+        font-size: 22px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.no-logo .panel-title.large-title {
+        font-size: 22px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.no-logo .panel-title.large-title {
+        font-size: 34px;
+        margin: 5px 10px 15px 10px;
+    }
+}
+
+.panel-header.avatar {
+    min-height: 110px;
+    padding: 20px 20px 20px 72px;
+    position: relative;
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle,
+.panel-header.avatar :not(.circle-clipper) > .circle {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+    top: 25px;
+    left: 10px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 18px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 28px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 35px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 40px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 42px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 30px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.charts-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.charts-logo {
+        top: 15px;
+    }
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+    top: 16px;
+    left: 10px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        left: 2px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        left: 2px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        left: 2px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        left: 5px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        top: 16px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        top: 16px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-logo {
+        top: 15px;
+    }
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+    top: 35px;
+    left: 10px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 13px;
+        left: 5px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 12px;
+        left: 5px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 22px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.shows-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.shows-logo {
+        top: 15px;
+    }
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.articles-icon,
+.panel-header.avatar :not(.circle-clipper) > .circle.articles-icon {
+    top: 20px;
+    left: 5px;
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-icon,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-icon {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-icon,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-icon {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-icon,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-icon {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-icon,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-icon {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.articles-icon,
+    .panel-header.avatar :not(.circle-clipper) > .circle.articles-icon {
+        top: 15px;
+    }
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+    top: 30px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 15px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 17px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 17px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 17px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 17px;
+        left: 15px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 20px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 18px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.youTube-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.youTube-logo {
+        top: 18px;
+    }
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.aboutApp-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.aboutApp-logo {
+    top: 15px;
+    left: 0;
+    width: 100px;
+    height: 100px;
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.aboutApp-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.aboutApp-logo {
+        top: 5px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.aboutApp-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.aboutApp-logo {
+        top: 5px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.aboutApp-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.aboutApp-logo {
+        top: 5px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar:not(.circle-clipper) > .circle.aboutApp-logo,
+    .panel-header.avatar :not(.circle-clipper) > .circle.aboutApp-logo {
+        top: 5px;
+    }
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.aboutMonster-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.aboutMonster-logo {
+    width: 100px;
+    height: 100px;
+    top: 5px;
+    left: 5px;
+}
+
+.panel-header.avatar:not(.circle-clipper) > .circle.misc-logo,
+.panel-header.avatar :not(.circle-clipper) > .circle.misc-logo {
+    top: 8px;
+    left: 0;
+    width: 90px;
+    height: 90px;
+    background-color: #d1e6fc;
+}
+
+.panel-header.avatar i.circle {
+    font-size: 18px;
+    line-height: 42px;
+    color: #fff;
+    background-color: #999;
+    text-align: center;
+}
+
+.panel-header.avatar .panel-title {
+    position: absolute;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 200;
+    margin: 0 10px 0 30px;
+}
+
+.panel-header.avatar .panel-title.charts-title {
+    font-size: 18px;
+    line-height: 17px;
+    margin: 8px 10px 0 20px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar .panel-title.charts-title {
+        margin: 18px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 22px;
+        line-height: 27px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 29px;
+        line-height: 31px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 30px;
+        line-height: 33px;
+        margin: 12px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 30px;
+        line-height: 33px;
+        margin: 12px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 24px;
+        line-height: 33px;
+        margin: 12px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 22px;
+        line-height: 33px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 28px;
+        line-height: 33px;
+        margin: 0 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar .panel-title.charts-title {
+        font-size: 28px;
+        line-height: 33px;
+        margin: 0 10px 0 20px;
+    }
+}
+
+.panel-header.avatar .panel-title.articles-title {
+    font-size: 20px;
+    margin: 5px 10px 0 30px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 13px;
+        margin: 10px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 17px;
+        margin: 5px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 20px;
+        margin: 5px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 22px;
+        margin: 5px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 24px;
+        margin: 2px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 26px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 26px;
+        margin: 5px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 28px;
+        margin: 0 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 30px;
+        margin: 0 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar .panel-title.articles-title {
+        font-size: 30px;
+        margin: 0 10px 0 30px;
+    }
+}
+
+.panel-header.avatar .panel-title.show-title {
+    font-size: 20px;
+    margin: 15px 10px 0 20px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 15px;
+        margin: 7px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 13px;
+        margin: 6px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 18px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 17px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 20px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 24px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 24px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 26px;
+        margin: 5px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 28px;
+        margin: 0 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar .panel-title.show-title {
+        font-size: 30px;
+        margin: 0 10px 0 30px;
+    }
+}
+
+.panel-header.avatar .panel-title.youTube-title {
+    position: relative;
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 16px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 18px;
+        margin: 8px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 20px;
+        margin: 5px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 20px;
+        margin: 5px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 20px;
+        margin: 5px 20px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 24px;
+        margin: 5px 20px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 25px;
+        margin: 10px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar .panel-title.youTube-title {
+        font-size: 28px;
+        margin: 10px 10px 0 30px;
+    }
+}
+
+.panel-header.avatar .panel-title.aboutApp-title {
+    position: relative;
+    font-size: 17px;
+    margin: 5px 20px 0 25px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar .panel-title.aboutApp-title {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar .panel-title.aboutApp-title {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.aboutApp-title {
+        font-size: 16px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar .panel-title.aboutApp-title {
+        font-size: 22px;
+        margin: 0 20px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar .panel-title.aboutApp-title {
+        font-size: 22px;
+        margin: 15px 20px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar .panel-title.aboutApp-title {
+        font-size: 32px;
+        margin: 15px 20px 0 35px;
+    }
+}
+
+.panel-header.avatar .panel-title.aboutMonster-title {
+    position: relative;
+    font-size: 26px;
+    font-weight: bold;
+    margin: 15px 0 0 30px;
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.aboutMonster-title {
+        font-size: 21px;
+    }
+}
+
+.panel-header.avatar .panel-title.misc-title {
+    position: relative;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0 0 10px;
+}
+
+.panel-header.avatar .panel-title.large-title {
+    position: relative;
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0 10px 0 10px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 13px;
+        margin: 8px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 13px;
+        margin: 15px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 16px;
+        margin: 10px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 16px;
+        margin: 10px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 20px;
+        margin: 5px 10px 0 25px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 21px;
+        margin: 5px 10px 0 25px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 24px;
+        margin: 15px 10px 0 25px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 24px;
+        margin: 15px 10px 0 25px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 26px;
+        margin: 10px 10px 0 25px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar .panel-title.large-title {
+        font-size: 28px;
+        margin: 10px 10px 0 25px;
+    }
+}
+
+.panel-header.avatar p {
+    position: relative;
+    font-size: 12px;
+    margin: 35px 10px 0 30px;
+}
+
+.panel-header.avatar p.charts-subtitle {
+    font-size: 9px;
+    margin: 47px 10px 0 20px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar p.charts-subtitle {
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar p.charts-subtitle {
+        margin: 43px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 9px;
+        margin: 61px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 12px;
+        margin: 75px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 12px;
+        margin: 77px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 14px;
+        margin: 81px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 16px;
+        margin: 45px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 16px;
+        margin: 35px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 17px;
+        margin: 35px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar p.charts-subtitle {
+        font-size: 18px;
+        margin: 35px 10px 0 20px;
+    }
+}
+
+.panel-header.avatar p.articles-subtitle {
+    font-size: 14px;
+    margin: 30px 10px 0 30px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 12px;
+        margin: 28px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 14px;
+        margin: 25px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar p.articles-subtitle {
+        margin: 32px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 14px;
+        margin: 35px 10px 0 9px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 16px;
+        margin: 37px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 17px;
+        margin: 36px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 17px;
+        margin: 35px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 20px;
+        margin: 35px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 20px;
+        margin: 35px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar p.articles-subtitle {
+        font-size: 20px;
+        margin: 35px 10px 0 30px;
+    }
+}
+
+.panel-header.avatar p.shows-subtitle {
+    font-size: 14px;
+    margin: 40px 10px 0 20px;
+}
+
+@media only screen and (max-width: 250px) {
+    .panel-header.avatar p.shows-subtitle {
+        display: none;
+        font-size: 9px;
+        margin: 28px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 251px) and (max-width: 300px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 12px;
+        margin: 25px 10px 0 10px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 15px;
+        margin: 28px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 301px) and (max-width: 349px) {
+    .panel-header.avatar p.shows-subtitle {
+        margin: 28px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 16px;
+        margin: 31px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 17px;
+        margin: 37px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 568px) and (max-width: 599px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 15px;
+        margin: 35px 10px 0 20px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 14px;
+        margin: 38px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 20px;
+        margin: 35px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-header.avatar p.shows-subtitle {
+        font-size: 20px;
+        margin: 40px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .panel-header.avatar p {
+        font-size: 10px;
+        margin: 50px 0 0 30px;
+    }
+}
+
+@media only screen and (min-width: 374px) and (max-width: 379px) {
+    .panel-header.avatar p {
+        font-size: 12px;
+        margin: 70px 10px 0 30px;
+    }
+}
+
+@media only screen and (min-width: 380px) and (max-width: 567px) {
+    .panel-header.avatar p {
+        margin: 75px 0 0 30px;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-header.avatar p {
+        font-size: 15px;
+        margin: 35px 0 0 30px;
+    }
+}
+
+.panel-header.avatar .secondary-content {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.panel-heading {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.panel-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.panel-body.jocks-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.panel-body p.subtitle {
+    text-align: center;
+    font-size: 17px;
+    margin: 0;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-body p.subtitle {
+        font-size: 22px;
+        padding: 18px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-body p.subtitle {
+        font-size: 25px;
+        padding: 25px;
+    }
+}
+
+.panel-body.description {
+    line-height: 25px;
+    font-size: 18px;
+    padding: 15px;
+    margin: 0;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .panel-body.description {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .panel-body.description {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .panel-body.description {
+        font-size: 15px;
+    }
+}
+
+.panel-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
+    border-bottom-right-radius: subtract(0.3rem, 1px);
+    border-bottom-left-radius: subtract(0.3rem, 1px);
+}
+
+.panel-footer > * {
+    margin: 0.25rem;
+}
+
+.panel-scrollbar-measure {
+    position: absolute;
+    top: -9999px;
+    width: 50px;
+    height: 50px;
+    overflow: scroll;
+}
+
+@media (min-width: 576px) {
+    .panel-dialog {
+        max-width: 500px;
+        margin: 1.75rem auto;
+    }
+
+    .panel-dialog-scrollable {
+        max-height: subtract(100%, 3.5rem);
+    }
+
+    .panel-dialog-scrollable .panel-content {
+        max-height: subtract(100vh, 3.5rem);
+    }
+
+    .panel-dialog-centered {
+        min-height: subtract(100%, 3.5rem);
+    }
+
+    .panel-dialog-centered::before {
+        height: subtract(100vh, 3.5rem);
+    }
+
+    .panel-sm {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 992px) {
+    .panel-lg,
+    .panel-xl {
+        max-width: 800px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .panel-xl {
+        max-width: 1140px;
+    }
+}
+
+.podcast-card {
+    position: relative;
+    margin: 0.5rem 0 1rem 0;
+    background-color: #fff;
+    transition: box-shadow 0.25s;
+    border-radius: 2px;
+    display: flex;
+}
+
+.podcast-card .podcast-title {
+    font-size: 16px;
+}
+
+.podcast-card .podcast-title.activator {
+    cursor: pointer;
+    z-index: -1;
+}
+
+.podcast-card .podcast-card-image {
+    overflow: visible;
+}
+
+.podcast-card .podcast-card-image img {
+    height: 100%;
+}
+
+.podcast-card .podcast-card-image {
+    max-width: 30%;
+    max-height: 40%;
+    height: 30%;
+    width: 30%;
+}
+
+.podcast-card .podcast-card-image img {
+    border-radius: 2px 0 0 2px;
+    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
+    height: auto;
+}
+
+@media only screen and (min-width: 350px) and (max-width: 373px) {
+    .podcast-card .podcast-card-image {
+        max-width: 35%;
+    }
+}
+
+.podcast-card .podcast-card-stacked {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    background-color: #e9ecef;
+}
+
+.podcast-card .podcast-card-stacked .horizontal-card-content {
+    flex-grow: 1;
+}
+
+.podcast-card .podcast-content {
+    padding: 24px 35px 24px 15px;
+    border-radius: 0 0 2px 2px;
+}
+
+.podcast-card .podcast-content .podcast-content > h1,
+.podcast-card .podcast-content h2,
+.podcast-card .podcast-content h3,
+.podcast-card .podcast-content h4,
+.podcast-card .podcast-content h5,
+.podcast-card .podcast-content h6,
+p .podcast-card .podcast-content .title {
+    margin: 0;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.podcast-card .podcast-content p {
+    margin: 0;
+}
+
+.podcast-card .podcast-content .podcast-title {
+    display: block;
+    font-weight: bold;
+    line-height: 20px;
+    color: #000;
+}
+
+.podcast-card .podcast-content .podcast-title i {
+    line-height: 20px;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .podcast-card .podcast-content .podcast-title {
+        font-size: 24px;
+        line-height: 40px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .podcast-card .podcast-content .podcast-title {
+        font-size: 24px;
+        line-height: 40px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .podcast-card .podcast-content .podcast-title {
+        font-size: 24px;
+        line-height: 40px;
+    }
+}
+
+.podcast-card .podcast-content .podcast-date {
+    font-size: 14px;
+    line-height: 20px;
+    color: #adb5bd;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .podcast-card .podcast-content .podcast-date {
+        font-size: 18px;
+        line-height: 30px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .podcast-card .podcast-content .podcast-date {
+        font-size: 22px;
+        line-height: 40px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .podcast-card .podcast-content .podcast-date {
+        font-size: 24px;
+        line-height: 40px;
+    }
+}
+
+.podcast-card .podcast-content .podcast-play {
+    position: absolute;
+    top: 45px;
+    right: 16px;
+    color: #6c757d;
+}
+
+.podcast-card .podcast-content .podcast-play .material-icons {
+    font-size: 30px;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 992px) {
+    .podcast-card .podcast-content .podcast-play .material-icons {
+        font-size: 55px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .podcast-card .podcast-content .podcast-play .material-icons {
+        font-size: 55px;
+    }
+}
+
+@media only screen and (min-width: 1201px) {
+    .podcast-card .podcast-content .podcast-play .material-icons {
+        font-size: 55px;
+    }
+}
+
+.podcast-card iframe {
+    width: 100%;
+    height: 80px;
+}
+
+.charts-header {
+    background-color: #def5c5;
+}
+
+.articles-header {
+    background-color: #bfd6ee;
+}
+
+.podcast-header {
+    background-color: #fcf5c4;
+}
+
+.youtube {
+    background-color: #f97c7c;
+}
+
+.aboutApp {
+    background-color: #d1e6fc;
+}
+
+.aboutMonster {
+    background-color: #28385a;
+    color: #ffffff;
+}
+
+.plainHeader {
+    background-color: #c4c4c4;
+}
+
+table.spaced {
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+table.spaced thead > tr {
+    font-family: "Open Sans", sans-serif;
+}
+
+table.spaced tbody > tr {
+    font-weight: 400;
+    background-color: #dedede;
+    border-radius: 15px;
+}
+
+table.spaced td,
+table.spaced th {
+    padding: 10px 5px;
+}
+
+table.spaced th {
+    display: table-cell;
+}
+
+table.spaced td {
+    border: 1px solid #dee2e6;
+}
+
+.square {
+    border-radius: unset;
+}
+
+.header {
+    font-family: "Open Sans", sans-serif;
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+}
+
+.body {
+    margin: 0;
+    line-height: 20px;
+}

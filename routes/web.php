@@ -23,6 +23,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndieController;
 use App\Http\Controllers\JockController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MobileAppAssetController;
+use App\Http\Controllers\MobileAppTitleController;
 use App\Http\Controllers\OutbreakController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PodcastController;
@@ -231,5 +233,22 @@ Route::middleware('auth')->group(function() {
     Route::post('/socials/add', [SocialController::class, 'store'])->name('socials.store');
     Route::patch('/socials/update/{id}', [SocialController::class, 'update'])->name('socials.update');
     Route::delete('/socials/delete/{id}', [SocialController::class, 'destroy'])->name('socials.destroy');
+
+    Route::prefix('assets')->group(function() {
+        Route::get('', [MobileAppAssetController::class, 'index'])->name('asset.index');
+        Route::get('/show/{id}', [MobileAppAssetController::class, 'show'])->name('asset.show');
+        Route::post('/store', [MobileAppAssetController::class, 'store'])->name('asset.store');
+        Route::put('/update/{id}', [MobileAppAssetController::class, 'update'])->name('asset.update');
+        Route::delete('/delete/{id}', [MobileAppAssetController::class, 'destroy'])->name('asset.destroy');
+        Route::post('/upload', [MobileAppAssetController::class, 'uploadImage'])->name('asset.upload-image');
+    });
+
+    Route::prefix('titles')->group(function() {
+        Route::get('', [MobileAppTitleController::class, 'index'])->name('title.index');
+        Route::get('/show/{id}', [MobileAppTitleController::class, 'show'])->name('title.show');
+        Route::post('/store', [MobileAppTitleController::class, 'store'])->name('title.store');
+        Route::put('/update/{id}', [MobileAppTitleController::class, 'update'])->name('title.update');
+        Route::delete('/delete/{id}', [MobileAppTitleController::class, 'destroy'])->name('title.destroy');
+    });
 });
 

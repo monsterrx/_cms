@@ -1,0 +1,156 @@
+/* Modes */
+:root {
+    --root-color: #fff !important;
+    --bg-color: #fff !important;
+    --font-color: #000 !important;
+}
+
+[data-theme="dark"] {
+    --root-color: #3d3d3d !important;
+    --bg-color: #000 !important;
+    --font-color: #fff !important;
+}
+
+[data-theme="light"] {
+    --root-color: #fff !important;
+    --bg-color: #fff !important;
+    --font-color: #000 !important;
+}
+/* End */
+
+/* main components */
+#mainBody {
+    background-color: var(--root-color);
+}
+
+#containerBody {
+    background-color: var(--bg-color);
+}
+
+#containerText {
+    color: var(--font-color);
+}
+
+#containerPanel {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
+
+#nowPlaying {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
+
+#queryDom {
+    color: var(--font-color);
+}
+/* end */
+
+/* navigation */
+.nav-wrapper,.sidenav,.mobile-app-icon-bar{
+    background-color: #1a1a1a;
+}
+/* end */
+
+#audio {
+    max-width: 100%;
+}
+
+#playButton {
+    font-size: 50px;
+    cursor: pointer;
+}
+
+.mobile-app-icon-bar {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: space-around;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.mobile-app-icon-bar a {
+    padding: 1.25rem;
+    cursor: pointer;
+}
+
+.mobile-app-icon-bar a svg,
+.mobile-app-icon-bar a i,
+.mobile-app-icon-bar a img {
+    font-size: 2rem;
+    max-height: 2rem;
+    max-width: 2rem;
+}
+
+/* media */
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+/* end */
+
+/* YouTube Embed */
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+    border-radius: 8px;
+}
+/* End */
+
+/* Parallax */
+.parallax-container {
+    height: 250px;
+}
+/* End */
+
+/* Typography */
+.text-justify {
+    text-align: justify;
+    text-justify: inter-word;
+}
+.text-center {
+    text-align: center;
+}
+/* End */
+
+/* Other Custom CSS' */
+.flow-text img {
+    width: 100%;
+    height: auto;
+}
+
+.flow-text iframe {
+    width: 100%;
+}
+
+.flow-text div {
+    width: 100%;
+    height: 100%;
+}
+
+.flow-text p {
+    max-width: 100%;
+    width: 100%;
+}
+/* End */

@@ -978,7 +978,7 @@
                 $('#indie-name, #delete-indie-header').empty().append(result.indieground.artist.name);
                 $('#delete-indie-body').empty().append('<p class="h5 text-center">Are you sure to delete '+result.indieground.artist.name+' from indiegrounds?</p>')
                 $('#indie_artist_id, #artist_id').val(result.indieground.artist_id);
-                $('#image-container').empty().append('<div class="text-center"><img src="{{ asset('images/indie') }}/'+result.indieground.image+'" alt="'+result.indieground.artist.name+'" width="200px"></div>');
+                $('#image-container').empty().append('<div class="text-center"><img src="'+result.indieground.image+'" alt="'+result.indieground.artist.name+'" width="200px"></div>');
                 tinymce.get('update-content').setContent('<p>'+result.indieground.introduction+'</p>');
                 let content = tinymce.get('update-content').getContent();
 
@@ -1541,7 +1541,7 @@
                 $('#view_albums').append('<option value='+album.id+'>'+album.name+'</option>');
             });
 
-            $('#artistImage').attr('src', '/images/artists/'+result.image);
+            $('#artistImage').attr('src', result.image);
             $('#update_artist_id').val(result.id);
             $('#update_artist_name').val(result.name);
             $('#update_artist_country').val(result.country);
@@ -1688,7 +1688,7 @@
             $('#update_date').val(result.podcast.date);
             $('#update_link').val(result.podcast.link);
             $('#update_show_id').val(result.podcast.show_id);
-            $('#update_podcast_image').attr('src', '/images/podcasts/' + result.podcast.image).attr('alt', result.podcast.episode);
+            $('#update_podcast_image').attr('src', result.podcast.image).attr('alt', result.podcast.episode);
             $('#update_podcast_audio').attr('src', result.podcast.link)
 
             $('#delete_podcast_form_text').empty().append('<div class="lead">Are you sure to delete a podcast from <b>'+result.podcast.show.title+'</b> called <b>'+result.podcast.episode+'</b>?</div>');
@@ -1867,7 +1867,7 @@
 
                 $('[name="jock_id"]').val(result.image.jock.id);
 
-                $('#view_image').attr('src', '{{ url('images/jocks') }}' + '/' + result.image.file);
+                $('#view_image').attr('src', result.image.file);
                 $('#view_image').attr('alt', result.image.name);
 
                 $('#image_name').val(result.image.name);
@@ -1965,8 +1965,8 @@
                     $('#country, #update_artist_country').val(sessionStorage.getItem('artist_country'));
                     $('#type, #update_artist_type').val(sessionStorage.getItem('artist_type'));
                     $('#ArtistImage, #update_artist_image').val(sessionStorage.getItem('image'));
-                    $('#artistImage').attr('src', '{{ asset('images/artists') }}' + '/' + sessionStorage.getItem('image'));
-                    $('#image-container').empty().append('<img src="{{ asset('images/indie') }}/'+sessionStorage.getItem('image')+'" width="200px">');
+                    $('#artistImage').attr('src', sessionStorage.getItem('image'));
+                    $('#image-container').empty().append('<img src="'+sessionStorage.getItem('image')+'" width="200px">');
 
                     active_modal = sessionStorage.getItem('active_modal');
 
@@ -2225,7 +2225,7 @@
             $('#update_date').val(result.podcast.date);
             $('#update_link').val(result.podcast.link);
             $('#update_show_id').val(result.podcast.show_id);
-            $('#update_podcast_image').attr('src', '/images/podcasts/' + result.podcast.image).attr('alt', result.podcast.episode);
+            $('#update_podcast_image').attr('src', result.podcast.image).attr('alt', result.podcast.episode);
             $('#update_podcast_audio').attr('src', result.podcast.link)
 
             $('#delete_podcast_form_text').empty().append('<div class="lead">Are you sure to delete a podcast from <b>'+result.podcast.show.title+'</b> called <b>'+result.podcast.episode+'</b>?</div>');

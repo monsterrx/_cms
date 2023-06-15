@@ -127,6 +127,7 @@ class JockController extends Controller {
         }
 
         $jock['profile_image'] = $this->verifyPhoto($jock['profile_image'], 'jocks');
+
         $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', true);
         $jock['main_image'] = $this->verifyPhoto($jock['main_image'], 'jocks');
 
