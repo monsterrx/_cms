@@ -268,7 +268,7 @@
                         @foreach($data['podcasts'] as $podcast)
                             <div class="col-md-4">
                                 <div class="card zoom ml-2 mr-2" id="podcast_card" data-target="#update_podcast_modal" data-toggle="modal" data-id="{{ $podcast->id }}">
-                                    <img src="{{ asset('images/podcasts/'. $podcast->image) }}" alt="{{ $podcast->episode }}">
+                                    <img src="{{ $podcast->image }}" alt="{{ $podcast->episode }}">
                                     <div class="card-body">
                                         <div class="card-text text-center">
                                             <div class="font-weight-bold">{{ $podcast->Show->title }}</div>

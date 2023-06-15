@@ -47,7 +47,9 @@ class HomeController extends Controller
                 ->get()
                 ->take(10);
 
-            $chart->first()->Song->Album->AlbumImage = $this->verifyPhoto($chart->first()->Song->Album->AlbumImage, 'albums');
+            foreach ($chart as $c) {
+                $c->Song->Album->image = $this->verifyPhoto($c->Song->Album->image, 'albums');
+            }
 
             //
             $employees = Employee::whereNull('deleted_at')
