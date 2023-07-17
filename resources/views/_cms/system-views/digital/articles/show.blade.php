@@ -325,8 +325,13 @@
                             <label for="heading" class="label lead">Content</label>
                             <textarea id="heading" name="heading" class="form-control">{{ $article->heading }}</textarea>
                         </div>
-                        <br><br>
-                        <button type="submit" class="btn btn-outline-dark float-right"><i class="fas fa-save"></i>  Save</button>
+                        <div class="form-group">
+                            <label for="published_at" class="label lead">Publish Date: </label>
+                            <input type="date" id="published_at" name="published_at" class="form-control" value="{{ date('Y-m-d', strtotime($article->published_at)) }}">
+                        </div>
+                        <div class="my-4">
+                            <button type="submit" class="btn btn-outline-dark float-right"><i class="fas fa-save"></i>  Save</button>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
