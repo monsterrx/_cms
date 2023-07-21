@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2' || Auth::user()->Employee->Designation->level === '3' || Auth::user()->Employee->Designation->level === '6'|| Auth::user()->Employee->Designation->level === '7')
+            @if(Auth::user()->Employee->Designation->level === 1 || Auth::user()->Employee->Designation->level === 2 || Auth::user()->Employee->Designation->level === 3 || Auth::user()->Employee->Designation->level === 6 || Auth::user()->Employee->Designation->level === 7)
                 <div class="row my-4">
                     <div class="col-12">
                         <a href="#new-student" data-toggle="modal" class="btn btn-outline-dark fa-pull-right">New Student Jock</a>
