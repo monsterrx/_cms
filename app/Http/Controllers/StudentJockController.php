@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use App\Models\School;
+use App\Models\Social;
 use App\Models\Student;
 use App\Models\StudentJock;
 use App\Models\StudentJockBatch;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -43,6 +46,48 @@ class StudentJockController extends Controller
         }
 
         return view('_cms.system-views.radioOne.studentJocks.index', compact('studentJocks', 'school'));
+    }
+
+    public function showStudentJock($id, Request $request) {
+        $student = StudentJock::with('Batch', "Social", "Photo")
+            ->findOrFail($id);
+
+        $student->image = $this->verifyPhoto($student['image'], 'studentJocks');
+
+        $schools = School::with('Student')
+            ->whereNull('deleted_at')
+            ->where('id', '!=', $student['school_id'])
+            ->get();
+
+        // for the datatables
+        if ($request->ajax()) {
+            if ($request['type'] == 'socials') {
+                foreach ($student->Social as $social) {
+                    $social->options = '' .
+                        '<div class="btn-group">
+                            <a href="#view-r1-social" data-toggle="modal" data-id="'.$social->id.'" data-link="'.route('radioOne.view.social', $social->id).'" data-open="radio1.jocks.social" class="btn btn-outline-dark"><i class="fa fa-eye"></i></a>
+                            <a href="#delete-r1-social" data-toggle="modal" data-id="'.$social->id.'" data-link="'.route('radioOne.view.social', $social->id).'" data-open="radio1.jocks.social" class="btn btn-outline-dark"><i class="fa fa-trash"></i></a>
+                        </div>';
+                }
+
+                return response()->json($student);
+            } elseif ($request['type'] == 'photos') {
+                foreach ($student->Photo as $photo) {
+                    $photo->date_created = Carbon::createFromFormat('Y-m-d H:i:s', $photo->created_at)->format('F d, Y h:i A');
+
+                    $photo->options = '' .
+                        '<div class="btn-group">
+                            <a href="#view-r1-photo" data-toggle="modal" data-id="'.$photo->id.'" data-link="'.route('radioOne.view.photo', $photo->id).'" data-open="radio1.jocks.photo" class="btn btn-outline-dark"><i class="fa fa-eye"></i></a>
+                            <a href="#delete-r1-photo" data-toggle="modal" data-id="'.$photo->id.'" data-link="'.route('radioOne.view.photo', $photo->id).'" data-open="radio1.jocks.photo" class="btn btn-outline-dark"><i class="fa fa-trash"></i></a>
+                        </div>';
+                }
+                return response()->json($student);
+            } else {
+                return response()->json($student);
+            }
+        }
+
+        return view('_cms.system-views.radioOne.studentJocks.show', compact('student', 'schools'));
     }
 
     public function storeJock(Request $request)
@@ -151,5 +196,21 @@ class StudentJockController extends Controller
 
         session()->flash('success', 'A student jock has been removed to the batch');
         return redirect()->route('radioOne.batch', $id);
+    }
+
+    public function showImage($id) {
+        $photo = Photo::with('StudentJock')
+            ->findOrFail($id);
+
+        $photo->file = $this->verifyPhoto($photo->file, 'studentJocks');
+
+        return response()->json($photo);
+    }
+
+    public function viewSocial($id) {
+        $social = Social::with('StudentJock')
+            ->findOrFail($id);
+
+        return response()->json($social);
     }
 }

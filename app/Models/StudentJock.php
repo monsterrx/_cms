@@ -17,6 +17,7 @@ class StudentJock extends Model
         'last_name',
         'nickname',
         'image',
+        'description',
         'position',
     ];
 
@@ -26,5 +27,13 @@ class StudentJock extends Model
 
     public function School() {
         return $this->belongsTo(School::class);
+    }
+
+    public function Social() {
+        return $this->hasMany(Social::class);
+    }
+
+    public function Photo() {
+        return $this->hasMany(Photo::class);
     }
 }

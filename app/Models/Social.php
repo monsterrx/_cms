@@ -15,6 +15,7 @@ class Social extends Model
         'jock_id',
         'show_id',
         'article_id',
+        'student_jock_id',
         'website',
         'url'
     ];
@@ -29,5 +30,9 @@ class Social extends Model
 
     public function Article() {
         return $this->belongsTo(Article::class);
+    }
+
+    public function StudentJock() {
+        return $this->belongsTo(StudentJock::class);
     }
 }

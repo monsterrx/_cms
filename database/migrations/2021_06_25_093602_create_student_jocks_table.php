@@ -20,6 +20,7 @@ class CreateStudentJocksTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('nickname');
+            $table->longText('description')->nullable();
             $table->string('image')->nullable()->default('default.png');
             $table->integer('position');
             $table->softDeletes();

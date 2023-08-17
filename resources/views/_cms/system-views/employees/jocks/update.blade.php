@@ -482,7 +482,6 @@
                             <div class="modal-body">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <input type="hidden" name="jock_id" value="{{ $jock->id }}">
                                         <div class="form-group">
                                             <label for="website" class="lead">Website</label>
                                             <select id="website" name="website" class="custom-select">
@@ -638,7 +637,7 @@
                     },
                 },
                 columns: [
-                    { data: 'created_at' },
+                    { data: 'date_created' },
                     { data: 'name' },
                     { data: 'options' }
                 ],

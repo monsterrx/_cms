@@ -41,7 +41,7 @@
                                 <td>{{ $students->School->name }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="#edit-{{ $students->id }}" data-toggle="modal" class="btn btn-outline-dark"><i class="fa fa-eye"></i>  View</a>
+                                        <a href="{{ route('radioOne.jocks.show', $students->id) }}" class="btn btn-outline-dark"><i class="fa fa-eye"></i>  View</a>
                                         <a href="#delete-{{ $students->id }}" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-trash-alt"></i>  Delete</a>
                                     </div>
                                 </td>

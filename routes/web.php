@@ -199,12 +199,15 @@ Route::middleware('auth')->group(function() {
     Route::delete('/radio_one/batch/delete/{id}', [RadioOneController::class, 'deleteBatch'])->name('radioOne.batches.delete');
 
     Route::get('/radio_one/jocks', [StudentJockController::class, 'studentJocks'])-> name('radioOne.jocks');
+    Route::get('/radio_one/jocks/view/{id}', [StudentJockController::class, 'showStudentJock'])-> name('radioOne.jocks.show');
     Route::post('/radio_one/jocks/store', [StudentJockController::class, 'storeJock'])-> name('radioOne.jocks.store');
     Route::match(['put', 'patch'], '/radio_one/jocks/update/{id}', [StudentJockController::class, 'updateStudentJock'])-> name('radioOne.jocks.update');
     Route::delete('/radio_one/jocks/{id}', [StudentJockController::class, 'deleteJock'])-> name('radioOne.jocks.delete');
 
     Route::post('/radio_one/add/student_jock/{id}', [StudentJockController::class, 'addStudentToBatch'])->name('radioOne.add.student');
     Route::delete('/radio_one/remove/student_jock/{id}', [StudentJockController::class, 'removeStudentFromBatch'])->name('radioOne.remove.student');
+    Route::get('/radio_one/view/photo/{id}', [StudentJockController::class, 'showImage'])->name('radioOne.view.photo');
+    Route::get('/radio_one/view/social/{id}', [StudentJockController::class, 'viewSocial'])->name('radioOne.view.social');
 
     Route::resource('/wallpapers', WallpapersController::class);
 

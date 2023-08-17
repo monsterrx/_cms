@@ -16,6 +16,7 @@ class Photo extends Model
         'article_id',
         'show_id',
         'batch_id',
+        'student_jock_id',
         'file',
         'name',
     ];
@@ -34,5 +35,9 @@ class Photo extends Model
 
     public function Batch() {
         return $this->belongsTo(Batch::class);
+    }
+
+    public function StudentJock() {
+        return $this->belongsTo(StudentJock::class);
     }
 }

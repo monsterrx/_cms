@@ -6,6 +6,7 @@ use App\Models\Photo;
 use App\Models\Social;
 use App\Models\User;
 use App\Models\Employee;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +104,8 @@ class JockController extends Controller {
 		$level = Auth::user()->Employee->Designation->level;
 
         foreach ($jock->Image as $image) {
+            // Todo: this is how we convert created_at, updated_at and deleted_at
+            $image->date_created = Carbon::createFromFormat('Y-m-d H:i:s', $image->created_at)->format('F d, Y h:i A');
             $image->options = '' .
                 '<div class="btn-group">' .
                 '    <a href="#view-jock-image-modal" data-toggle="modal" data-id="'.$image->id.'" data-link="'.route('jocks.show.image').'" data-open="jocks.image" class="btn btn-outline-dark"><i class="fas fa-eye"></i></a>' .
@@ -259,6 +262,8 @@ class JockController extends Controller {
 
 	public function showImage(Request $request) {
         $image = Photo::with('Jock')->findOrFail($request['id']);
+
+        $image->file = $this->verifyPhoto($image->file, 'jocks');
 
         return response()->json(['image' => $image]);
     }

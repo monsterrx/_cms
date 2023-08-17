@@ -19,6 +19,7 @@ class CreatePhotosTable extends Migration
             $table->unsignedBigInteger('article_id')->nullable();
             $table->unsignedBigInteger('show_id')->nullable();
             $table->unsignedBigInteger('batch_id')->nullable();
+            $table->unsignedBigInteger('student_jock_id')->nullable();
             $table->string('file');
             $table->string('name')->nullable();
             $table->softDeletes();

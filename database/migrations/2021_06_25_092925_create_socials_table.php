@@ -18,6 +18,7 @@ class CreateSocialsTable extends Migration
             $table->unsignedBigInteger('jock_id')->nullable();
             $table->unsignedBigInteger('article_id')->nullable();
             $table->unsignedBigInteger('show_id')->nullable();
+            $table->unsignedBigInteger('student_jock_id')->nullable();
             $table->string('website');
             $table->string('url');
             $table->softDeletes();

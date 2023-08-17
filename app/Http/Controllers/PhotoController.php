@@ -24,9 +24,10 @@ class PhotoController extends Controller
         $show_id = $request->show_id;
         $jock_id = $request->jock_id;
         $batch_id = $request->batch_id;
+        $student_jock_id = $request->student_jock_id;
 
         if ($batch_id) {
-            $request['file'] = $this->storePhoto($request, 'images/scholarBatch', 'batch', false);
+            $request['file'] = $this->storePhoto($request, 'images/scholarBatch', 'batch');
             $request['name'] = $this->IdGenerator(4);
 
             $photo = new Photo($request->all());
@@ -52,16 +53,28 @@ class PhotoController extends Controller
 
             session()->flash('success', 'Added a jock\'s photo!');
             return redirect()->route('jocks.show', $jock_id);
+        } elseif ($student_jock_id) {
+            $request['file'] = $this->storePhoto($request, 'images/studentJocks', 'studentJocks', true);
+            $request['name'] = $this->IdGenerator(4);
+
+            $photo = new Photo($request->all());
+            $photo->save();
+
+            session()->flash('success', 'Added a student jock\'s photo!');
+            return redirect()->route('radioOne.jocks.show', $student_jock_id);
+        } elseif ($article_id) {
+            $request['file'] = $this->storePhoto($request, 'images/articles', 'articles');
+            $request['name'] = $this->IdGenerator(4);
+
+            $photo = new Photo($request->all());
+            $photo->save();
+
+            session()->flash('success', 'Added an article\'s image!');
+            return redirect()->route('articles.show', $article_id);
         }
 
-        $request['file'] = $this->storePhoto($request, 'images/articles', 'articles', false);
-        $request['name'] = $this->IdGenerator(4);
-
-        $photo = new Photo($request->all());
-        $photo->save();
-
-        session()->flash('success', 'Added an article\'s image!');
-        return redirect()->route('articles.show', $article_id);
+        session()->flash('error', 'Id not found nor registered, please contact your it developer');
+        return redirect()->back();
     }
 
     public function update($id, Request $request) {
