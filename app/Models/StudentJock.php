@@ -29,11 +29,11 @@ class StudentJock extends Model
         return $this->belongsTo(School::class);
     }
 
-    public function Social() {
+    public function Link() {
         return $this->hasMany(Social::class);
     }
 
-    public function Photo() {
+    public function Image() {
         return $this->hasMany(Photo::class);
     }
 }

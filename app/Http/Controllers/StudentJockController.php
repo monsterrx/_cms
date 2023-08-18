@@ -49,7 +49,7 @@ class StudentJockController extends Controller
     }
 
     public function showStudentJock($id, Request $request) {
-        $student = StudentJock::with('Batch', "Social", "Photo")
+        $student = StudentJock::with("Batch", "Link", "Image")
             ->findOrFail($id);
 
         $student->image = $this->verifyPhoto($student['image'], 'studentJocks');
@@ -62,7 +62,7 @@ class StudentJockController extends Controller
         // for the datatables
         if ($request->ajax()) {
             if ($request['type'] == 'socials') {
-                foreach ($student->Social as $social) {
+                foreach ($student->Link as $social) {
                     $social->options = '' .
                         '<div class="btn-group">
                             <a href="#view-r1-social" data-toggle="modal" data-id="'.$social->id.'" data-link="'.route('radioOne.view.social', $social->id).'" data-open="radio1.jocks.social" class="btn btn-outline-dark"><i class="fa fa-eye"></i></a>
@@ -72,7 +72,7 @@ class StudentJockController extends Controller
 
                 return response()->json($student);
             } elseif ($request['type'] == 'photos') {
-                foreach ($student->Photo as $photo) {
+                foreach ($student->Image as $photo) {
                     $photo->date_created = Carbon::createFromFormat('Y-m-d H:i:s', $photo->created_at)->format('F d, Y h:i A');
 
                     $photo->options = '' .

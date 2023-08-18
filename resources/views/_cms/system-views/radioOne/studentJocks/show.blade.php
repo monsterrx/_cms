@@ -88,7 +88,7 @@
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="content" class="lead">Student Bio</label>
-                                                    <textarea id="content" name="description" class="form-control" maxlength="250">{{ $student->description }}</textarea>
+                                                    <textarea id="content" name="description" class="form-control" maxlength="250">{!! $student->description !!}</textarea>
                                                 </div>
                                             </div>
                                         </div>
