@@ -383,7 +383,7 @@
         let radio1socials = $('#radio1SocialsTable').DataTable({
             ajax: {
                 url: '{{ route('radioOne.jocks.show', $student->id) }}?type=socials',
-                dataSrc: 'social',
+                dataSrc: 'link',
             },
             columns: [
                 {
@@ -400,7 +400,7 @@
         let radio1photos = $('#radio1PhotosTable').DataTable({
             ajax: {
                 url: '{{ route('radioOne.jocks.show', $student->id) }}?type=photos',
-                dataSrc: 'photo',
+                dataSrc: 'image',
             },
             columns: [
                 {
