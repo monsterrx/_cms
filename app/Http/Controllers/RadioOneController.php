@@ -33,7 +33,7 @@ class RadioOneController extends Controller {
 
         foreach ($batch->Student as $studentJock)
         {
-            $studentJock['image'] = $this->verifyPhoto($studentJock['image'], 'students');
+            $studentJock['image'] = $this->verifyPhoto($studentJock['image'], 'studentJocks');
         }
 
         return view('_cms.system-views.radioOne.batches.show', compact('batch', 'jocks'));
