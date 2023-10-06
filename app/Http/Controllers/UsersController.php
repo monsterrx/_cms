@@ -120,7 +120,7 @@ class UsersController extends Controller {
         $jock->save();
 
         Session::flash('success', 'Profile picture has been successfully saved!');
-        if ($level === '1' || $level === '2') {
+        if ($level === 1 || $level === 2) {
             return redirect()->route('jocks.show', $jock['id']);
         }
 
