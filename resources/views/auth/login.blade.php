@@ -52,13 +52,13 @@
 
                         <div class="form-group row">
                             <div class="col-6 text-center">
-                                <a href="#" class="text-dark" onclick="event.preventDefault(); document.getElementById('loginForm').submit();">
+                                <a href="#" class="btn btn-outline-secondary btn-block" onclick="event.preventDefault(); document.getElementById('loginForm').submit();">
                                     Login
                                 </a>
                             </div>
 
                             <div class="col-6 text-center">
-                                <a href="{{ route('register') }}" class="text-dark">Register</a>
+                                <a href="{{ route('register') }}" class="btn btn-outline-secondary btn-block">Register</a>
                             </div>
 
                             <div class="col-12 text-center mt-3 mb-3">
