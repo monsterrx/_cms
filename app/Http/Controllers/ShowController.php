@@ -43,6 +43,7 @@ class ShowController extends Controller
 
         if ($request['is_special'] === 2 || $request['is_special'] === '2') {
             $request['slug_string'] = Str::studly($request['title']);
+            $request['location'] = $this->getStationCode();
 
             $show = new Show($request->all());
             $show->save();
