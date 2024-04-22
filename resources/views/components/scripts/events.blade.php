@@ -2212,4 +2212,21 @@
         }
     });
     /* End */
+
+    // 20240419
+    $(document).on('change', '#designation_id', function(e) {
+        e.preventDefault();
+
+        let designation_id = $(this).val();
+        let pinchHittersDropdown = $('#pinch_hitters_dropdown');
+        let jockType = $('#jock_type');
+
+        if (designation_id !== '9') {
+            pinchHittersDropdown.attr('hidden', 'hidden');
+            jockType.removeAttr('required', 'required');
+        } else {
+            pinchHittersDropdown.removeAttr('hidden');
+            jockType.attr('required', 'required');
+        }
+    });
 </script>

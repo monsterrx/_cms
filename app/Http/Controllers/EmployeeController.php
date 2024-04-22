@@ -41,7 +41,7 @@ class EmployeeController extends Controller {
 		        $employee->location = '<div class="badge badge-dark">Davao</div>';
             }
 
-		    $employee->options = '' .
+		    $employee->options =
                 '<div class="btn-group">' .
                 '   <a href="#update_employee_modal" id="update-employee-modal" data-route="'.route('employees.show', $employee->id).'" data-update-route="'.route('employees.update', $employee->id).'" data-delete-route="'.route('employees.destroy', $employee->id).'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-user-edit"></i></a>' .
                 '   <a href="#delete_employee_modal" id="delete-employee-modal" data-route="'.route('employees.show', $employee->id).'" data-update-route="'.route('employees.update', $employee->id).'" data-delete-route="'.route('employees.destroy', $employee->id).'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-trash-alt"></i></a>' .
@@ -75,24 +75,25 @@ class EmployeeController extends Controller {
             $request['employee_number'] = $employee_number;
             $request['location'] = $this->getStationCode();
 
-            Employee::create($request->all());
-
-            $employee = Employee::where('employee_number', $employee_number)->first();
+            $employee = Employee::create($request->all());
 
             // Jock and Jock Admin
             if($request->designation_id === 9 || $request->designation_id === 19 || $request->designation_id === '9' || $request->designation_id === '19')
             {
                 $jockName = $request['first_name'] . ' ' . $request['last_name'];
 
-                $jock = new Jock([
-                    'employee_id' => Employee::latest()->first()->id,
+                $data = [
+                    'employee_id' => $employee->id,
                     'slug_string' => Str::studly($jockName),
                     'name' => $jockName,
                     'profile_image' => 'default.png',
                     'background_image' => 'default-banner-sm.png',
                     'moniker' => '',
+                    'jock_type' => $request->jock_type,
                     'is_active' => '1'
-                ]);
+                ];
+
+                $jock = new Jock($data);
 
                 $jock->save();
 
@@ -167,7 +168,9 @@ class EmployeeController extends Controller {
 	{
         $employee = Employee::findOrfail($id);
 
-		$userId  = User::where('employee_number', $employee['employee_number'])->first();
+		$userId  = User::query()
+            ->where('employee_number', $employee['employee_number'])
+            ->first();
 
 		if ($userId) {
 			$user = User::findOrfail($userId->id);

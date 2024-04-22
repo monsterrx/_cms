@@ -68,7 +68,7 @@
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="dropdownMenu" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->Employee->first_name }}&nbsp;</a>
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
-                        <a href="{{ route('users.profile', Auth()->user()->Employee->employee_number) }}" class="dropdown-item"><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Me</a>
+                        <a href="{{ route('users.profile', Auth::user()->Employee->employee_number) }}" class="dropdown-item"><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Me</a>
                         <a href="#reportBug" class="dropdown-item" data-toggle="modal"><i class="fas fa-bug"></i>&nbsp;&nbsp;Report a Bug</a>
                         <a href="{{ route('messages.index') }}" class="dropdown-item"><i class="fas fa-paper-plane"></i>&nbsp;&nbsp;Messages</a>
                         <a href="{{ route('logout') }}" id="logout" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Sign Out</a>

@@ -1,5 +1,5 @@
 {{-- Developer --}}
-@if(Auth()->user()->Employee->Designation->level === 1)
+@if(Auth::user()->Employee->Designation->level === 1)
     <li class="nav-item">
         <a class="nav-link" id="Dashboard" href="{{ route('home') }}">
             <i class="fas fa-home"></i>&nbsp;&nbsp;Dashboard <span class="sr-only">(current)</span>
@@ -114,7 +114,7 @@
         </div>
     </li>
     {{-- Admin --}}
-@elseif(Auth()->user()->Employee->Designation->level === 2)
+@elseif(Auth::user()->Employee->Designation->level === 2)
     <li class="nav-item">
         <a class="nav-link" id="Dashboard" href="{{ route('home') }}">
             <i class="fas fa-home"></i>&nbsp;&nbsp;Dashboard <span class="sr-only">(current)</span>
@@ -228,7 +228,7 @@
         </div>
     </li>
     {{-- Digital Content Specialist --}}
-@elseif(Auth()->user()->Employee->Designation->level === 3)
+@elseif(Auth::user()->Employee->Designation->level === 3)
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="employeesDropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-diagnoses"></i>&nbsp;&nbsp;Employees</a>
         <div class="dropdown-menu" aria-labelledby="employeesDropdown">
@@ -280,7 +280,7 @@
     </li>
 
     {{-- Graphics Artist --}}
-@elseif(Auth()->user()->Employee->Designation->level === 4)
+@elseif(Auth::user()->Employee->Designation->level === 4)
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="EmployeesDropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-diagnoses"></i>&nbsp;&nbsp;Employees</a>
 
@@ -312,7 +312,7 @@
         </div>
     </li>
     {{-- Receptionist --}}
-@elseif(Auth()->user()->Employee->Designation->level === 6)
+@elseif(Auth::user()->Employee->Designation->level === 6)
     <li class="nav-item">
         <a class="nav-link" id="Dashboard" href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;Dashboard <span class="sr-only">(current)</span></a>
     </li>
@@ -351,7 +351,7 @@
         </div>
     </li>
     {{-- On Job Trainee --}}
-@elseif(Auth()->user()->Employee->Designation->level === 7)
+@elseif(Auth::user()->Employee->Designation->level === 7)
     <li class="nav-item dropdown">
         <a href="#" class="nav-link dropdown-toggle" id="musicManagerDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-music"></i>&nbsp;&nbsp;Music
@@ -389,7 +389,7 @@
         </div>
     </li>
     {{-- Plain User --}}
-@elseif(Auth()->user()->Employee->Designation->level === 9)
+@elseif(Auth::user()->Employee->Designation->level === 9)
     <li class="nav-item">
         <a class="nav-link" id="Dashboard" href="{{ route('home') }}"><i class="fas fa-tachometer-alt"></i>&nbsp;&nbsp;Dashboard <span class="sr-only">(current)</span></a>
     </li>

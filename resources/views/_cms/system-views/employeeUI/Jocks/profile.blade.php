@@ -45,12 +45,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card mb-5">
-                    <img id="headerPic" src="{{ url('images/jocks/'.$jock->background_image) }}" class="card-img img-fluid" alt="{{ Auth()->user()->Employee->Jock->first()->background_image }}">
+                    <img id="headerPic" src="{{ url('images/jocks/'.$jock->background_image) }}" class="card-img img-fluid" alt="{{ Auth::user()->Employee->Jock->first()->background_image }}">
                     <div class="card-body-modified">
                         <div class="card-profile">
                             <div class="row">
                                 <div class="col-4">
-                                    <img id="profilePic" src="{{ url('images/jocks/'.$jock->profile_img) }}" class="profilePic img-fluid rounded-circle img-thumbnail" width="300px" alt="{{ Auth()->user()->Employee->Jock->first()->profile_img }}">
+                                    <img id="profilePic" src="{{ url('images/jocks/'.$jock->profile_img) }}" class="profilePic img-fluid rounded-circle img-thumbnail" width="300px" alt="{{ Auth::user()->Employee->Jock->first()->profile_img }}">
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -60,10 +60,10 @@
                             <div class="col-md-12">
                                 <div class="profileName lead">
                                     <div class="d-block d-sm-block d-lg-none d-md-block d-xl-none">
-                                        <div class="h5" id="name">{{ Auth()->user()->Employee->FirstName }} {{ Auth()->user()->Employee->LastName }}</div>
+                                        <div class="h5" id="name">{{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}</div>
                                     </div>
                                     <div class="d-none d-lg-block d-sm-none d-xl-block d-md-none">
-                                        <div class="h3" id="name1">{{ Auth()->user()->Employee->FirstName }} {{ Auth()->user()->Employee->LastName }}</div>
+                                        <div class="h3" id="name1">{{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}</div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -93,12 +93,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead">
-                                                                <div class="h5">Jock Name:</div> {{ Auth()->user()->Employee->Jock->first()->jock_name }}
+                                                                <div class="h5">Jock Name:</div> {{ Auth::user()->Employee->Jock->first()->jock_name }}
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="lead">
-                                                                <div class="h5">Contact:</div> <p id="contactNumber">{{ Auth()->user()->Employee->ContactNo }}</p>
+                                                                <div class="h5">Contact:</div> <p id="contactNumber">{{ Auth::user()->Employee->ContactNo }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -110,12 +110,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead">
-                                                                <div class="h5">Moniker:</div> @if(Auth()->user()->Employee->Jock->first()->moniker === null || Auth()->user()->Employee->Jock->first()->moniker === '') No Moniker @else Auth()->user()->Employee->Jock->first()->moniker @endif
+                                                                <div class="h5">Moniker:</div> @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') No Moniker @else Auth::user()->Employee->Jock->first()->moniker @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="lead">
-                                                                <div class="h5">Email:</div> <p id="email">{{ Auth()->user()->email }}</p>
+                                                                <div class="h5">Email:</div> <p id="email">{{ Auth::user()->email }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -125,7 +125,7 @@
                                             <div class="lead">
                                                 Description:
                                                 <p class="h5 text-center">
-                                                    {!! Auth()->user()->Employee->Jock->first()->description ? Auth()->user()->Employee->Jock->first()->description : 'Get the audience to know who you are by writing your description' !!}
+                                                    {!! Auth::user()->Employee->Jock->first()->description ? Auth::user()->Employee->Jock->first()->description : 'Get the audience to know who you are by writing your description' !!}
                                                 </p>
                                             </div>
                                         </div>
@@ -136,12 +136,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Jock Name:</div> {{ Auth()->user()->Employee->Jock->first()->jock_name }}
+                                                                <div class="h5">Jock Name:</div> {{ Auth::user()->Employee->Jock->first()->jock_name }}
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Contact:</div> <p id="contactNumber1">{{ Auth()->user()->Employee->ContactNo }}</p>
+                                                                <div class="h5">Contact:</div> <p id="contactNumber1">{{ Auth::user()->Employee->ContactNo }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -153,12 +153,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Moniker:</div> @if(Auth()->user()->Employee->Jock->first()->moniker === null || Auth()->user()->Employee->Jock->first()->moniker === '') No Moniker @else Auth()->user()->Employee->Jock->first()->moniker @endif
+                                                                <div class="h5">Moniker:</div> @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') No Moniker @else Auth::user()->Employee->Jock->first()->moniker @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Email:</div> <p id="email">{{ Auth()->user()->email }}</p>
+                                                                <div class="h5">Email:</div> <p id="email">{{ Auth::user()->email }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -168,7 +168,7 @@
                                             <div class="lead ml-5">
                                                 Description:
                                                 <p class="h5 text-center">
-                                                    {!! Auth()->user()->Employee->Jock->first()->description ? Auth()->user()->Employee->Jock->first()->description : 'Get the audience to know who you are by writing your description' !!}
+                                                    {!! Auth::user()->Employee->Jock->first()->description ? Auth::user()->Employee->Jock->first()->description : 'Get the audience to know who you are by writing your description' !!}
                                                 </p>
                                             </div>
                                         </div>

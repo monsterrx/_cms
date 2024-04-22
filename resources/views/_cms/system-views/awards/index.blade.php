@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            @if(Auth()->user()->Employee->Designation->level === '1')
+            @if(Auth::user()->Employee->Designation->level === '1')
                 <div class="row my-4">
                     <div class="col-md-12 col-sm-12 col-12 col-lg-12">
                         <a href="#new-award" data-toggle="modal" class="btn btn-outline-dark fa-pull-right">New Award</a>

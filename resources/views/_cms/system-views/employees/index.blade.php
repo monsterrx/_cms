@@ -14,7 +14,7 @@
                 </div>
             </div>
 
-            @if(Auth()->user()->Employee->Designation->level === 1)
+            @if(Auth::user()->Employee->Designation->level === 1)
                 <div class="row my-4">
                     <div class="col-md-12 col-sm-12 col-12 col-lg-12">
                         @if(Auth::user()->Employee->Designation->level === 1 || Auth::user()->Employee->Designation->level === 2)
@@ -110,6 +110,14 @@
                                             <option value="{{ $designations->id }}">{{ $designations->name }}</option>
                                         @empty
                                         @endforelse
+                                    </select>
+                                </div>
+                                <div id="pinch_hitters_dropdown" class="form-group" hidden>
+                                    <label for="jock_type" class="label">Jock Type</label>
+                                    <select name="jock_type" id="jock_type" class="custom-select">
+                                        <option value selected>--</option>
+                                        <option value="jock">Jock</option>
+                                        <option value="pinch_hitters">Pinch Hitters</option>
                                     </select>
                                 </div>
                             </div>
