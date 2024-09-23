@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJockTimeslotTable extends Migration
+class CreateWallpapersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateJockTimeslotTable extends Migration
      */
     public function up()
     {
-        Schema::create('jock_timeslot', function (Blueprint $table) {
-            $table->unsignedBigInteger('jock_id');
-            $table->unsignedBigInteger('timeslot_id');
+        Schema::create('wallpapers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('location');
+            $table->string('device')->default('web');
+            $table->string('image')->default('default.png');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +31,6 @@ class CreateJockTimeslotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jock_timeslot');
+        Schema::dropIfExists('wallpapers');
     }
 }

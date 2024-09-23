@@ -36,6 +36,7 @@ use App\Http\Controllers\SoftDeletesController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\SouthsidesController;
 use App\Http\Controllers\SponsorController;
+use App\Http\Controllers\StreamLinkController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentJockController;
 use App\Http\Controllers\TimeslotController;
@@ -43,6 +44,7 @@ use App\Http\Controllers\UserLogsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\WallpapersController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -252,6 +254,14 @@ Route::middleware('auth')->group(function() {
         Route::post('/store', [MobileAppTitleController::class, 'store'])->name('title.store');
         Route::put('/update/{id}', [MobileAppTitleController::class, 'update'])->name('title.update');
         Route::delete('/delete/{id}', [MobileAppTitleController::class, 'destroy'])->name('title.destroy');
+    });
+
+    Route::prefix('streaming')->group(function () {
+        Route::get('', [StreamLinkController::class, 'index'])->name('streaming.index');
+        Route::get('/show/{id}', [StreamLinkController::class, 'show'])->name('streaming.show');
+        Route::post('/store', [StreamLinkController::class, 'store'])->name('streaming.store');
+        Route::put('/update/{id}', [StreamLinkController::class, 'update'])->name('streaming.update');
+        Route::delete('/delete/{id}', [StreamLinkController::class, 'destroy'])->name('streaming.destroy');
     });
 });
 

@@ -70,6 +70,7 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
                         <a href="{{ route('users.profile', Auth::user()->Employee->employee_number) }}" class="dropdown-item"><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Me</a>
                         <a href="#reportBug" class="dropdown-item" data-toggle="modal"><i class="fas fa-bug"></i>&nbsp;&nbsp;Report a Bug</a>
+                        <a href="#changeStreamingLinks" class="dropdown-item" data-toggle="modal"><i class="fas fa-volume-up"></i>&nbsp;Streaming Links</a>
                         <a href="{{ route('messages.index') }}" class="dropdown-item"><i class="fas fa-paper-plane"></i>&nbsp;&nbsp;Messages</a>
                         <a href="{{ route('logout') }}" id="logout" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>&nbsp;&nbsp;Sign Out</a>
 
@@ -110,6 +111,47 @@
             </div>
         </div>
     </div>
+
+<div class="modal fade" id="changeStreamingLinks" tabindex="-2" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Streaming links</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="" method="" id="streamingLinksForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="streamingName">Name</label>
+                                <input type="text" id="streamingName" name="name" class="form-control" placeholder="Name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="streamingUrl">Url Link</label>
+                                <input type="text" id="streamingUrl" name="url" class="form-control" placeholder="Url Link Eg: https://in-icecast.eradioportal.com:8443/monsterrrx" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <button id="streamingSubmitBtn" type="submit" class="btn btn-outline-dark">Save</button>
+                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <!-- Modal -->
     <div class="modal fade" id="reportBug" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">

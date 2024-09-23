@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJockTimeslotTable extends Migration
+class CreateContentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateJockTimeslotTable extends Migration
      */
     public function up()
     {
-        Schema::create('jock_timeslot', function (Blueprint $table) {
-            $table->unsignedBigInteger('jock_id');
-            $table->unsignedBigInteger('timeslot_id');
+        Schema::create('sub_contents', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('article_id');
+            $table->text('content');
+            $table->string('image')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +30,6 @@ class CreateJockTimeslotTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jock_timeslot');
+        Schema::dropIfExists('sub_contents');
     }
 }

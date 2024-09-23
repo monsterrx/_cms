@@ -2229,4 +2229,31 @@
             jockType.attr('required', 'required');
         }
     });
+
+    // 20240924
+    $(document).on('submit', '#streamingLinksForm', function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+        let url = $(this).attr('action');
+
+        postAsync(url, formData, 'JSON', beforeSend, onSuccess);
+
+        function beforeSend() {
+            manualToast.fire({
+                icon: 'info',
+                title: 'Processing request please wait'
+            });
+        }
+
+        function onSuccess(result) {
+            $('button[type="submit"]').removeAttr('disabled');
+            $('button[type="submit"]').html('Save');
+            $('#changeStreamingLinks').modal('hide');
+            Toast.fire({
+                icon: result.status,
+                title: result.message
+            });
+        }
+    });
 </script>

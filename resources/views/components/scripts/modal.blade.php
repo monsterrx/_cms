@@ -58,9 +58,40 @@
         $('#croppingImage').croppie('destroy');
     });
 
-    // for clossing the current modal that's opened or active.
+    // for closing the current modal that's opened or active.
     $(document).on('show.bs.modal', '.modal', function () {
         $('.modal').modal('hide');
+    });
+
+    $(document).on('show.bs.modal', '#changeStreamingLinks', function() {
+        let id = $(this).attr('data-id');
+
+        getAsync('{{ route('streaming.index') }}', '', 'JSON', beforeSend, onSuccess);
+
+        function beforeSend() {
+            $('#streamingLinksForm').trigger('reset');
+        }
+
+        function onSuccess(result) {
+            let form = $('#streamingLinksForm');
+            let submitBtn = $('#streamingSubmitBtn');
+
+            if (result.length > 0) {
+                let { id, name, url } = result[0];
+
+                form.attr('method', 'POST');
+                form.attr('action', '{{ route('streaming.update', '') }}' + '/' + id);
+                // create a hidden input field for the method
+                form.append('<input type="hidden" name="_method" value="PUT">');
+                $('#streamingName').val(name);
+                $('#streamingUrl').val(url);
+                submitBtn.text('Update');
+            } else {
+                form.attr('method', 'POST');
+                form.attr('action', '{{ route('streaming.store') }}');
+                submitBtn.text('Save');
+            }
+        }
     });
     /* End */
 </script>

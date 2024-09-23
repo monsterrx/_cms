@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Show;
+use App\Models\StreamLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Hash;
@@ -28,13 +29,11 @@ trait SystemFunctions {
     public function getStream() {
         $station_code = $this->getStationCode();
 
-        if ($station_code === 'cbu') {
-            return 'https://sg-icecast.eradioportal.com:8443/rxcebu';
-        } else if ($station_code === 'dav') {
-            return 'https://sg-icecast.eradioportal.com:8443/monsterrx_davao';
-        } else {
-            return 'https://ph-icecast-win.eradioportal.com:8443/monsterrx';
-        }
+        $streamingLink = StreamLink::query()
+            ->where('location', $station_code)
+            ->first();
+
+        return $streamingLink->url;
     }
 
     public function getAppUrl() {
@@ -62,8 +61,9 @@ trait SystemFunctions {
         return Env::get('APP_CODE');
     }
 
+    // TODO: Always update the app version
     public function getAppVersion() {
-        return Env::get('APP_VERSION');
+        return "2.2";
     }
 
     public function IdGenerator($length) : string
