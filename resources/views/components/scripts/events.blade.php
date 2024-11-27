@@ -705,6 +705,8 @@
             $('#update_gender').val(result.gender);
             $('#update_birthday').val(result.birthday);
             $('#update_designation_id').val(result.designation_id);
+            $('#update_is_active').val(result.is_active);
+            $('#update_jock_type').val(result.jock_type);
 
             $('#update_employee_form').attr('action', update_url);
             $('#delete_employee_form').attr('action', delete_url);

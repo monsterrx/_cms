@@ -20,6 +20,7 @@
             {data: 'name'},
             {data: 'designation.name'},
             {data: 'location'},
+            {data: 'is_active'},
             {data: 'options'},
         ],
         order: [

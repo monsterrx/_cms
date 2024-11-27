@@ -35,6 +35,7 @@
                                     <th>Name</th>
                                     <th>Designation</th>
                                     <th>Location</th>
+                                    <th>User Status</th>
                                     <th>Options</th>
                                 </tr>
                                 </thead>
@@ -190,6 +191,14 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="is_active" class="label">User Status</label>
+                                    <select id="update_is_active" name="is_active" class="custom-select">
+                                        <option value selected>--</option>
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="update_designation_id" class="label">Designation</label>
                                     <select id="update_designation_id" name="designation_id" class="custom-select">
                                         <option value selected>--</option>
@@ -197,6 +206,14 @@
                                             <option value="{{ $designations->id }}">{{ $designations->name }}</option>
                                         @empty
                                         @endforelse
+                                    </select>
+                                </div>
+                                <div id="pinch_hitters_dropdown" class="form-group" hidden>
+                                    <label for="update_jock_type" class="label">Jock Type</label>
+                                    <select name="update_jock_type" id="jock_type" class="custom-select">
+                                        <option value selected>--</option>
+                                        <option value="jock">Jock</option>
+                                        <option value="pinch_hitters">Pinch Hitters</option>
                                     </select>
                                 </div>
                             </div>

@@ -41,6 +41,12 @@ class EmployeeController extends Controller {
 		        $employee->location = '<div class="badge badge-dark">Davao</div>';
             }
 
+            if ($employee->is_active == 1) {
+                $employee->is_active = '<div class="badge badge-success">Active</div>';
+            } else {
+                $employee->is_active = '<div class="badge badge-danger">Inactive</div>';
+            }
+
 		    $employee->options =
                 '<div class="btn-group">' .
                 '   <a href="#update_employee_modal" id="update-employee-modal" data-route="'.route('employees.show', $employee->id).'" data-update-route="'.route('employees.update', $employee->id).'" data-delete-route="'.route('employees.destroy', $employee->id).'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-user-edit"></i></a>' .
