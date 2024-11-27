@@ -2056,6 +2056,8 @@
         }
 
         function onSuccess(result) {
+            $(':button[type="submit"]').removeAttr('disabled');
+            $(':button[type="submit"]').html('Save');
             employeesTable.ajax.reload(null, false);
             $('.modal').modal('hide');
             Toast.fire({
