@@ -19,6 +19,7 @@ class Employee extends Model
         'birthday',
         'contact_number',
         'address',
+        'is_active',
         'location'
     ];
 

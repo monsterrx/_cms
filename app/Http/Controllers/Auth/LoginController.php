@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -36,6 +38,68 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->attemptLogin($request)) {
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', time());
+            }
+
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        // Check if the user is active in the database
+        $user = $this->guard()->getProvider()->retrieveByCredentials($this->credentials($request));
+
+
+        if ($user->Employee->is_active === 0) {
+            $request['errorType'] = 'inactive';
+
+            return false;
+        }
+
+        return $this->guard()->attempt(
+            $this->credentials($request), $request->filled('remember')
+        );
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $error = $request['errorType'];
+
+        if ($error == 'inactive') {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.inactive')],
+                ]);
+        } else {
+            throw ValidationException::withMessages([
+                $this->username() => [trans('auth.failed')],
+            ]);
+        }
     }
 
     public function showLoginForm()
