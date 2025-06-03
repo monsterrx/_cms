@@ -50,8 +50,8 @@
                     <form id="createCategoryForm" action="{{ route('categories.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label for="categoryName" class="label">Category Name</label>
-                            <input type="text" id="categoryName" name="categoryName" class="form-control">
+                            <label for="name" class="label">Category Name</label>
+                            <input type="text" id="name" name="name" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="description" class="label">Description</label>
@@ -81,8 +81,8 @@
                             @csrf
                             @method('PATCH')
                             <div class="form-group">
-                                <label for="categoryName" class="label">Category Name</label>
-                                <input type="text" id="categoryName" name="categoryName" class="form-control" value="{{ $category->name }}">
+                                <label for="name" class="label">Category Name</label>
+                                <input type="text" id="name" name="name" class="form-control" value="{{ $category->name }}">
                             </div>
                             <div class="form-group">
                                 <label for="description" class="label">Description</label>
