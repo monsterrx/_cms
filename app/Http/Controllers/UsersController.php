@@ -67,8 +67,18 @@ class UsersController extends Controller {
 
         $employee = Employee::where('employee_number', '=', $employeeNumber)->get()->first();
         $designation = Designation::where('id', '!=', Auth::user()->Employee->Designation->id)->orderBy('level')->get();
+        $websites = [
+            0 => 'Facebook',
+            1 => 'Twitter / X',
+            2 => 'Instagram',
+            3 => 'Youtube',
+            4 => 'Tumblr',
+            5 => 'Spotify',
+            6 => 'Tiktok',
+            7 => 'Other'
+        ];
 
-        return view('_cms.system-views.employeeUI.profile', compact('employee', 'designation'));
+        return view('_cms.system-views.employeeUI.profile', compact('employee', 'designation', 'websites'));
     }
 
     public function changeHeader($jock_id) {
@@ -107,7 +117,9 @@ class UsersController extends Controller {
         try {
             $jock = Jock::findOrFail($request['jock_id']);
         } catch (ModelNotFoundException $modelNotFoundException) {
-            return response()->json('error', 404);
+            return response()->json([
+                'error' => 'Jock not found'
+            ], 404);
         }
 
         $imageName = $request['imageName'];

@@ -67,10 +67,10 @@ class JockController extends Controller {
                 ->first();
 
             if (!$jock) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Restricted Access'
-                ], 400);
+                // logs out user if no jock is found
+                Auth::logout();
+
+                return redirect()->route('login')->withErrors('You are not a jock. Please contact your administrator.');
             }
 
             return view('_cms.system-views.employeeUI.Jocks.index', compact('jock'));
@@ -131,7 +131,7 @@ class JockController extends Controller {
 
         $jock['profile_image'] = $this->verifyPhoto($jock['profile_image'], 'jocks');
 
-        $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', true);
+        $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', false, true);
         $jock['main_image'] = $this->verifyPhoto($jock['main_image'], 'jocks');
 
         if ($level >= 1 && $level <= 4) {
@@ -229,32 +229,48 @@ class JockController extends Controller {
         $employee = Employee::findOrFail(Auth::user()->Employee->id);
 		$jock = Jock::findOrfail($jock_id);
 
-        $show = DB::table('jock_show')
+        $shows = DB::table('jock_show')
             ->join('jocks', 'jock_show.jock_id', '=', 'jocks.id')
             ->join('shows', 'jock_show.show_id', '=', 'shows.id')
             ->select('title', 'shows.id')
             ->where('jock_show.jock_id', $jock_id)
             ->get();
 
-		$link = Social::whereNull('deleted_at')
+		$links = Social::whereNull('deleted_at')
             ->where('jock_id', $jock_id)
             ->get();
 
-		$fact = Fact::whereNull('deleted_at')
+		$facts = Fact::whereNull('deleted_at')
             ->where('jock_id', $jock_id)
             ->get();
 
-        $image = Photo::whereNull('deleted_at')
+        $images = Photo::whereNull('deleted_at')
             ->where('jock_id', $jock_id)
             ->get();
+
+        foreach ($images as $image) {
+            $image->file = $this->verifyPhoto($image->file, 'jocks');
+        }
 
         $jock['profile_image'] = $this->verifyPhoto($jock['profile_image'], 'jocks');
-        $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', true);
+        $jock['background_image'] = $this->verifyPhoto($jock['background_image'], 'jocks', false, true);
+        $jock['main_image'] = $this->verifyPhoto($jock['main_image'], 'jocks');
+
+        $websites = [
+            0 => 'Facebook',
+            1 => 'Twitter / X',
+            2 => 'Instagram',
+            3 => 'Youtube',
+            4 => 'Tumblr',
+            5 => 'Spotify',
+            6 => 'Tiktok',
+            7 => 'Other'
+        ];
 
 		// Getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
 		if ($level === 5 || $level === 8) {
-			return  view('_cms.system-views.employeeUI.Jocks.profile', compact('jock','employee', 'jock_id', 'image','link', 'fact', 'show'));
+			return  view('_cms.system-views.employeeUI.Jocks.profile', compact('jock', 'employee', 'images', 'links', 'facts', 'shows', 'websites'));
 		}
 
         return redirect()->back()->withErrors('Restricted Access!');
@@ -272,11 +288,11 @@ class JockController extends Controller {
 	public function addImage(Request $request) {
 
 		$this->validate($request, [
-			'file' => ['image', 'required', 'file|size:2048'],
+			'file' => ['image', 'required', 'max:2048'],
 			'name' => 'required'
         ]);
 
-		$img = $request->file('image');
+		$img = $request->file('file');
 		$path = 'images/jocks';
         $image = new Photo($request->all());
 

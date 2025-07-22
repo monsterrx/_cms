@@ -113,7 +113,7 @@ Route::middleware('auth')->group(function() {
     Route::get('/filter_chart', [ChartController::class, 'filter'])->name('filter.chart');
     Route::post('drop', [ChartController::class, 'DropChart'])->name('charts.drop');
     Route::post('/new_chart', [ChartController::class, 'NewChart'])->name('charts.new');
-    Route::get('/daily', [ChartController::class, 'dailyCharts'])->name('charts.daily');
+    Route::get('/tdsTop5', [ChartController::class, 'dailyCharts'])->name('charts.daily');
     Route::get('/chart_dates', [ChartController::class, 'create'])->name('get.chart.dates');
     Route::post('/remove_daily', [ChartController::class, 'removeDailyChart'])->name('charts.daily.remove');
 

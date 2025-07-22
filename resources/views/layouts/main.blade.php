@@ -3,11 +3,11 @@
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="Monster RX93.1 Employee Dashboard">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>RX 93.1 &mdash; Employee</title>
+    <title>Monster RX93.1 &mdash; Employee</title>
 
     @include('components.links')
     @include('components.sweetalert')
@@ -37,51 +37,7 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/starter-template.css') }}" rel="stylesheet">
-    <script data-dapp-detection="">
-        (function() {
-            let alreadyInsertedMetaTag = false;
-
-            function __insertDappDetected() {
-                if (!alreadyInsertedMetaTag) {
-                    const meta = document.createElement('meta')
-                    meta.name = 'dapp-detected'
-                    document.head.appendChild(meta)
-                    alreadyInsertedMetaTag = true
-                }
-            }
-
-            if (window.hasOwnProperty('web3')) {
-                // Note a closure can't be used for this var because some sites like
-                // www.wnyc.org do a second script execution via eval for some reason.
-                window.__disableDappDetectionInsertion = true
-                // Likely oldWeb3 is undefined and it has a property only because
-                // we defined it. Some sites like wnyc.org are evaling all scripts
-                // that exist again, so this is protection against multiple calls.
-                if (window.web3 === undefined) {
-                    return
-                }
-                if (!window.web3.currentProvider ||
-                    !window.web3.currentProvider.isMetaMask) {
-                    __insertDappDetected()
-                }
-            } else {
-                var oldWeb3 = window.web3;
-                Object.defineProperty(window, 'web3', {
-                    configurable: true,
-                    set: function (val) {
-                        if (!window.__disableDappDetectionInsertion)
-                            __insertDappDetected();
-                        oldWeb3 = val
-                    },
-                    get: function () {
-                        if (!window.__disableDappDetectionInsertion)
-                            __insertDappDetected();
-                        return oldWeb3
-                    }
-                })
-            }
-        })()
-    </script>
+    @include('components.scripts.starter-template')
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -237,10 +193,9 @@
                             title: response.message
                         });
 
-                        $('#name').html(formData.get('FirstName')+' '+formData.get('LastName'));
-                        $('#name1').html(formData.get('FirstName')+' '+formData.get('LastName'));
-                        $('#contactNumber').html(formData.get('ContactNo'))
-                        $('#contactNumber1').html(formData.get('ContactNo'))
+                        $('#first_name').html(formData.get('first_name')+' '+formData.get('last_name'));
+                        $('#last_name').html(formData.get('first_name')+' '+formData.get('last_name'));
+                        $('#contact_number').html(formData.get('contact_number'));
 
                         $('#update-employee').modal('hide');
                         $('#submit-button').removeAttr('disabled');
@@ -251,7 +206,8 @@
                             title: 'Check the Console for Errors'
                         });
 
-                        console.log(error);
+                        console.error("Error Occurred: ", error);
+
                         $('#update-employee').modal('hide');
                         $('#submit-button').removeAttr('disabled');
                     },

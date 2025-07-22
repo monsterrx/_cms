@@ -166,9 +166,13 @@
 
         let action = $(this).attr('id');
         let payload = $(this).attr('data-payload');
+        // For southside charts; value is 1 ?? null.
         let type = $(this).attr('data-local');
+        // For the daily survey top 5
+        let chart = $(this).attr('data-chart') ?? 'countdown';
 
-        console.log([action, payload, type]);
+        console.log([action, payload, type, chart]);
+
         if (action === 'post') {
             DialogAlert.fire({
                 'icon': 'question',
@@ -180,7 +184,8 @@
                     getAsync('{{ route('charts.index') }}', {
                         "action": action,
                         "dated": payload,
-                        "data-local": type
+                        "data-local": type,
+                        "chart-type": chart
                     }, 'JSON', onSend, onSuccess)
 
                     function onSend() {
@@ -205,17 +210,18 @@
         if (action === 'official') {
             $('#chart-subtitle').empty();
             $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
-            $('#chartDates').attr('data-chart-type', action);
+            $('#chartDates, #surveyDate').attr('data-chart-type', action);
 
             getAsync('{{ route('charts.index') }}', {
                 "action": action,
                 "date": payload,
-                "data-local": type
+                "data-local": type,
+                "chart-type": chart
             }, "HTML", onSend, onSuccess);
 
             function onSend() {
-                $('#monsterCharts').empty();
-                $('#monsterCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
+                $('#monsterCharts, #dailyCharts').empty();
+                $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
                 manualToast.fire({
                     icon: 'info',
                     title: 'Loading ' + action + ' charts ...',
@@ -228,25 +234,35 @@
                     title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
                 });
 
-                $('#monsterCharts').empty();
-                $('#monsterCharts').append(result);
+                $('#monsterCharts, #dailyCharts').empty();
+                $('#monsterCharts, #dailyCharts').append(result);
+
+                // disable the post chart button since it's already in the official charts.
+                $('#post').attr('disabled', true);
+                $('#official').attr('disabled', true);
+                $('#draft').removeAttr('disabled');
+
+                setTimeout(() => {
+                    createDailySurveyDataTable(payload, action);
+                }, 800);
             }
         }
 
         if (action === 'draft') {
             $('#chart-subtitle').empty();
             $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts');
-            $('#chartDates').attr('data-chart-type', action);
+            $('#chartDates, #surveyDate').attr('data-chart-type', action);
 
             getAsync('{{ route('charts.index') }}', {
                 "action": action,
                 "date": payload,
-                "data-local": type
+                "data-local": type,
+                "chart-type": chart
             }, "HTML", onSend, onSuccess);
 
             function onSend() {
-                $('#monsterCharts').empty();
-                $('#monsterCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
+                $('#monsterCharts, #dailyCharts').empty();
+                $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
                 manualToast.fire({
                     icon: 'info',
                     title: 'Loading ' + action + ' charts ...',
@@ -259,11 +275,18 @@
                     title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
                 });
 
-                $('#monsterCharts').empty();
-                $('#monsterCharts').append(result);
-            }
-        } else {
+                $('#monsterCharts, #dailyCharts').empty();
+                $('#monsterCharts, #dailyCharts').append(result);
 
+                // Remove the disabled status of the post chart button since it's in the draft charts.
+                $('#post').removeAttr('disabled');
+                $('#draft').attr('disabled', true);
+                $('#official').removeAttr('disabled');
+
+                setTimeout(() => {
+                    createDailySurveyDataTable(payload, action);
+                }, 800);
+            }
         }
     })
     $(document).on('click', '#timeslot-days li a', function (event) {
@@ -1323,30 +1346,7 @@
 
         readFile(this);
     });
-    $(document).on('change', '#surveyDate', function (e) {
-        e.preventDefault();
 
-        let date = $(this).find(':selected').val();
-        let daily = $(this).attr('data-chart');
-
-        getAsync('{{ route('charts.daily') }}', {"date": date, "daily": daily}, 'JSON', beforeSend, onSuccess);
-
-        function beforeSend() {
-            $('#dailyCharts').empty();
-            manualToast.fire({
-                icon: 'info',
-                title: 'Loading Daily Charts'
-            });
-        }
-
-        function onSuccess(result) {
-            $('#dailyCharts').append(result);
-            Toast.fire({
-                icon: 'success',
-                title: 'Daily Top 5 has been loaded',
-            });
-        }
-    });
     $(document).on('change', '#view_albums', function () {
         let album_id = $(this).val();
 
@@ -1406,30 +1406,36 @@
         }
     });
     // Change Dates in Charts
-    $(document).on('change', '#chartDates', function () {
+    $(document).on('change', '#chartDates, #surveyDate', function () {
         let date = $(this).val();
         let chart_type = $(this).attr('data-chart-type');
+        let daily = $(this).attr('data-chart') === 'daily';
 
         getAsync('{{ route('filter.chart') }}', {
             "date": date,
-            "chart_type": chart_type
+            "chart_type": chart_type,
+            "daily": daily
         }, 'HTML', beforeSend, onSuccess);
 
         function beforeSend() {
-            $('#monsterCharts').empty();
-            $('#monsterCharts').append('<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
+            $('#monsterCharts, #dailyCharts').empty();
+            $('#monsterCharts, #dailyCharts').append('<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
             $('#loader').append('<div class="d-flex justify-content-center"><div class="spinner-border text-dark" role="status" style="width: 3rem; height: 3rem;"><span class="sr-only">Loading...</span></div></div>')
         }
 
         function onSuccess(result) {
             $('#loader').empty();
-            $('#monsterCharts').empty();
-            $('#monsterCharts').append(result);
+            $('#monsterCharts, #dailyCharts').empty();
+            $('#monsterCharts, #dailyCharts').append(result);
             $('#post, #official, #draft').attr('data-payload', date);
 
             $('*[data-href]').on('click', function () {
                 window.location = $(this).data("href");
             });
+
+            setTimeout(() => {
+                createDailySurveyDataTable(date, chart_type);
+            }, 800);
         }
     });
     // Select Awardee
@@ -2167,14 +2173,18 @@
             if (formData.has('local')) {
                 loadLocalCharts();
                 loadLocalDates();
-            } else {
+            }
+            else if (formData.has('daily')) {
                 loadDailyCharts();
+                loadDailyDates();
+            } 
+            else {
                 loadChartData();
                 loadDates();
             }
 
-            $('#newEntry').modal('hide');
-            $('#Positions, #dated, #name, #song_id').val('');
+            $('#newEntry, #new-entry').modal('hide');
+            $('#position, #dated, #name, #song_id').val('');
             $('button[type="submit"]').removeAttr('disabled');
             $('button[type="submit"]').html('Save');
 
@@ -2259,5 +2269,20 @@
                 title: result.message
             });
         }
+    });
+
+    // 20250711
+    $(document).on('click', 'a[href="#update-chart"]', function(e) {
+        e.preventDefault();
+
+        let position = $(this).attr('data-position');
+        let chart_id = $(this).attr('data-value');
+        let date = $(this).attr('data-date');
+        let url = '{{ url('charts') }}';
+        let update_date = $('#update_dated');
+
+        $('#updateChartedSongForm, #deleteChartedSongForm, #updateDailyChartedSongForm').attr('action', url + '/' + chart_id);
+        update_date.val(date);
+        update_date.attr('readonly', true);
     });
 </script>

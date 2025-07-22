@@ -31,7 +31,6 @@ services:
 
 networks:
   rx931:
-    driver: bridge
 
 volumes:
   dbdata:

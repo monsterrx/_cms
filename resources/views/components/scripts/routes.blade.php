@@ -7,19 +7,20 @@
     @endif
 
     if (window.location.href === '{{ route('charts.daily') }}') {
+        loadDailyDates();
         loadDailyCharts();
         loadArtists();
 
         $(document).on('click', '#newDailyChart, #updateDailyChart, #deleteDailyChart', function () {
             let id = $(this).attr('data-id');
 
-            getAsync('{{ route('charts.daily') }}', {"song_id": id}, 'JSON', beforeSend, onSuccess);
+            getAsync('{{ route('charts.daily') }}', { "song_id": id }, 'JSON', beforeSend, onSuccess);
 
-            function beforeSend() {
+            const beforeSend = () => {
 
             }
 
-            function onSuccess(result) {
+            const onSuccess = (result) => {
                 $('#new_song_id, #update_song_id, #delete_song_id').empty();
 
                 $('#update_song_id').val(result.song.id);

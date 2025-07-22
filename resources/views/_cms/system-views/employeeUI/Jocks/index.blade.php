@@ -11,7 +11,8 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             @foreach($jock->Show as $shows)
-                @if($shows->id === 4) {{-- The Daily Survey --}}
+                @if($shows->id === 4)
+                    {{-- The Daily Survey --}}
                     <li class="nav-item">
                         <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
                     </li>
@@ -22,7 +23,7 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}
+                    {{ Auth::user()->Employee->first_name }} {{ Auth::user()->Employee->last_name }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
                     <a class="dropdown-item" href="{{ route('jocks.profile', $jock->id) }}">Profile</a>
@@ -41,38 +42,42 @@
 @endsection
 
 @section('employee.content')
-    <div class="row">
-        @include('_cms.system-views.employeeUI.Jocks.modals.shows')
-    </div>
-    <hr class="my-4">
-    <div class="row">
-        @include('_cms.system-views.employeeUI.Jocks.modals.facts')
-        @include('_cms.system-views.employeeUI.Jocks.modals.links')
-    </div>
-    <hr class="my-4">
-    <div class="row">
-        <div class="col-md-12 mb-5">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title">Your Photos</h3>
-                </div>
-                <div class="modal-body">
-                    @if($image->isNotEmpty())
-                        <div class="owl-carousel">
-                            @foreach($image as $images)
-                                <div class="card my-3 mx-5 zoom" data-toggle="modal" data-target="#edit-photo-{{ $images->id }}">
-                                    <img src="/images/images_DJ/{{ $images->file }}" width="50px" alt="{{ $images->name }}">
-                                    <div class="card-body">
-                                        <div class="card-text">{{ $images->name }}</div>
-                                    </div>
+    <div class="container-fluid">
+        <div class="my-4">
+            <div class="row">
+                @include('_cms.system-views.employeeUI.Jocks.modals.shows', ['show' => $jock->Show])
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                @include('_cms.system-views.employeeUI.Jocks.modals.facts', ['fact' => $jock->Fact])
+                @include('_cms.system-views.employeeUI.Jocks.modals.links', ['link' => $jock->Link])
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-12 mb-5">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Your Photos</h3>
+                        </div>
+                        <div class="modal-body">
+                            @if($jock->Image->isNotEmpty())
+                                <div class="owl-carousel">
+                                    @foreach($jock->Image as $images)
+                                        <div class="card my-3 mx-5 zoom" data-toggle="modal" data-target="#edit-photo-{{ $images->id }}">
+                                            <img src="/images/images_DJ/{{ $images->file }}" width="50px" alt="{{ $images->name }}">
+                                            <div class="card-body">
+                                                <div class="card-text">{{ $images->name }}</div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            @else
+                                <div class="alert alert-secondary text-center alert mt-1">
+                                    <p class="h6 m-0">You can post your pictures in clicking your name then profile!</p>
+                                </div>
+                            @endif
                         </div>
-                    @else
-                        <div class="alert alert-secondary text-center alert mt-1">
-                            <p class="h6 m-0">You can post your pictures in clicking your name then profile!</p>
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>

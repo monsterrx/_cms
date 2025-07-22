@@ -3,6 +3,8 @@
 @section('content')
 <div class="container">
     <div class="row">
+        @include('_cms.system-views._feedbacks.success')
+        @include('_cms.system-views._feedbacks.error')
         <div class="col"></div>
         <div class="col-md-6">
             <div class="mt-5"></div>

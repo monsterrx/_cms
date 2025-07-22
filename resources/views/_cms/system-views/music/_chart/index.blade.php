@@ -6,7 +6,9 @@
             <div id="chart-title" class="display-4">
                 {{ env('STATION_CHART') }}
             </div>
-            <p id="chart-subtitle" class="h4 mb-0">{{ $chart_type }} Charts</p>
+            @if(isset($chart_type))
+                <p id="chart-subtitle" class="h4 mb-0">{{ $chart_type }} Charts</p>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     @include('_cms.system-views._feedbacks.success')
@@ -21,8 +23,7 @@
                     </select>
                 </div>
             </div>
-            <br>
-            <div class="row">
+            <div class="row my-4">
                 <div class="col-md-12 col-sm-12 col-lg-12">
                     <div class="fa-pull-right">
                         <div class="btn-group">
@@ -31,12 +32,10 @@
                         <a href="#newEntry" class="btn btn-outline-dark" data-toggle="modal">New Entry</a>
                     </div>
 
-                    <button id="official" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
-                    <button id="draft" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
+                    <button id="official" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark" {{ isset($chart_type) && $chart_type == 'Official' ? 'disabled' : '' }} data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
+                    <button id="draft" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark" {{ isset($chart_type) && $chart_type == 'Draft' ? 'disabled' : '' }} data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
                 </div>
             </div>
-            <br>
-
             <div id="monsterCharts">
                 <div class="alert alert-warning h5 text-center">
                     No chart data found
@@ -290,45 +289,51 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        $('body').on('click', 'td div a', function() {
-            let chart_id = $(this).attr('data-value');
-            let date = $(this).attr('data-date');
-            let url = '{{ url('charts') }}';
+<script type="text/javascript">
+    $('body').on('click', 'td div a', function() {
+        let chart_id = $(this).attr('data-value');
+        let date = $(this).attr('data-date');
+        let url = '{{ url('charts') }}';
 
-            if (chart_id) {
-                $('button[type="submit"]').attr('disabled', 'disabled');
+        if (chart_id) {
+            $('button[type="submit"]').attr('disabled', 'disabled');
 
-                $.ajax({
-                    url: '{{ route('charts.index') }}',
-                    type: 'GET',
-                    data: {
-                        "chart_id": chart_id,
-                    },
-                    dataType: 'JSON',
-                    success: (response) => {
-                        console.log(response);
-                        $('#song, #song_id, #dated, #update_song_id, #delete_song_id, #update_dated').empty();
-                        $('#song_id, #update_song_id, #delete_song_id').val(response.chart.song.id);
-                        $('#song').val(response.chart.song.name);
-                        $('#dated, #update_dated').val(response.latestDate);
-                        $('#update-modal-title').text('Update ' + response.chart.song.name);
-                        $('#delete-modal-title').text('Delete ' + response.chart.song.name);
+            $.ajax({
+                url: '{{ route('charts.index') }}',
+                type: 'GET',
+                data: {
+                    "chart_id": chart_id,
+                },
+                dataType: 'JSON',
+                success: (response) => {
+                    console.log(response);
+                    $('#song, #song_id, #dated, #update_song_id, #delete_song_id, #update_dated').empty();
+                    $('#song_id, #update_song_id, #delete_song_id').val(response.chart.song.id);
+                    $('#song').val(response.chart.song.name);
+                    $('#dated, #update_dated').val(response.latestDate);
+                    $('#update-modal-title').text('Update ' + response.chart.song.name);
+                    $('#delete-modal-title').text('Delete ' + response.chart.song.name);
 
-                        $('#updateChartedSongForm, #deleteChartedSongForm').attr('action', url + '/' + response.chart.id);
+                    $('#updateChartedSongForm, #deleteChartedSongForm, #updateDailyChartedSongForm').attr('action', url + '/' + response.chart.id);
 
-                        $('button[type="submit"]').removeAttr('disabled');
-                    },
-                    error: (error) => {
-                        Toast.fire({
-                            icon: 'error',
-                            title: error.status + ' ' + error.statusText
-                        });
-                    }
-                });
-            } else {
-                console.log('song id not found');
-            }
-        });
-    </script>
+                    $('button[type="submit"]').removeAttr('disabled');
+                },
+                error: (error) => {
+                    Toast.fire({
+                        icon: 'error',
+                        title: error.status + ' ' + error.statusText
+                    });
+                }
+            });
+        } else {
+            console.log('Song id not found');
+
+            Toast.fire({
+                icon: 'error',
+                title: error.status + ' ' + error.statusText,
+                message: 'Song ID is not found.'
+            });
+        }
+    });
+</script>
 @endsection

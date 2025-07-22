@@ -22,6 +22,7 @@ class CreateChartsTable extends Migration
             $table->boolean('re_entry');
             $table->boolean('daily');
             $table->boolean('local');
+            $table->boolean('throwback');
             $table->boolean('is_dropped')->default(0);
             $table->string('location')->default('mnl');
             $table->integer('votes')->default(0);

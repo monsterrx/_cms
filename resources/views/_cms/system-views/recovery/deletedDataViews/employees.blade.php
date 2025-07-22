@@ -15,8 +15,8 @@
         <tr>
             <td>{{ $employee->id }}</td>
             <td>{{ $employee->employee_number }}</td>
-            <td>{{ $employee->FirstName }} {{ $employee->LastName }}</td>
-            <td>{{ $employee->Designation->DesignationName }}</td>
+            <td>{{ $employee->first_name }} {{ $employee->last_name }}</td>
+            <td>{{ $employee->Designation->name }}</td>
             <td>{{ $employee->deleted_at }}</td>
             <td>
                 <form action="{{ route('recover.employees', $employee->id) }}" method="POST">

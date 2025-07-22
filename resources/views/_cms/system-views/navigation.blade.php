@@ -44,6 +44,7 @@
                 <a class="dropdown-item" href="{{ route('outbreaks.index') }}">Monster Outbreaks</a>
                 <a class="dropdown-item" href="{{ route('southsides.index') }}">Southside Sounds</a>
             @else
+                <a class="dropdown-item" href="{{ route('charts.daily') }}">The Daily Survey Top 5</a>
                 <a class="dropdown-item" href="{{ route('survey.votes') }}">Votes</a>
             @endif
             <a class="dropdown-item" href="{{ route('dropouts.index') }}">Dropouts</a>

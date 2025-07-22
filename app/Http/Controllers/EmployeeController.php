@@ -167,7 +167,9 @@ class EmployeeController extends Controller {
             return response()->json(['status' => 'success', 'message' => 'An employee\'s data has been updated!']);
         }
 
-		return response()->json(['errors' => $validator->errors()->all()], 404);
+		return response()->json([
+            'errors' => $validator->errors()->all()]
+        , 404);
 	}
 
 	public function destroy($id, Request $request)

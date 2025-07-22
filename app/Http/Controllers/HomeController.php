@@ -28,6 +28,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $level = Auth::user()->Employee->Designation->level;
+
         if ($level === 1 || $level === 2 || $level === 6 || $level === 7 || $level === 9) {
             $where = DB::table('charts')
                 ->whereNull('deleted_at')

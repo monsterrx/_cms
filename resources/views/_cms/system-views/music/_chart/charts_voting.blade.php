@@ -25,8 +25,8 @@
                             <td>{{ $charts->social_votes }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" id="voteButton" data-id="{{ $charts->id }}" data-device="phone" class="btn btn-outline-dark"><i class="fas fa-phone-alt"></i>  Phone Call</button>
-                                    <button type="button" id="voteButton" data-id="{{ $charts->id }}" data-device="socmed" class="btn btn-outline-dark"><i class="fas fa-globe"></i>  Social Media</button>
+                                    <button type="button" id="voteButton" data-id="{{ $charts->id }}" data-device="phone" class="btn btn-outline-dark"><i class="fas fa-phone-alt"></i>  Call</button>
+                                    <button type="button" id="voteButton" data-id="{{ $charts->id }}" data-device="socmed" class="btn btn-outline-dark"><i class="fas fa-globe"></i>  Online</button>
                                 </div>
                             </td>
                         </tr>

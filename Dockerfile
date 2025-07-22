@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.3-apache
 
 # Set working directory
 WORKDIR /var/www/html/cms

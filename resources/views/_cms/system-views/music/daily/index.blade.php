@@ -1,98 +1,52 @@
-@extends('layouts.main')
+@extends('layouts.base')
 
-@section('employee.nav')
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobileNav" aria-controls="mobileNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="mobileNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-            </li>
-            @foreach($show as $shows)
-                @if($shows->id === 4)
-                    {{-- The Daily Survey --}}
-                    <li class="nav-item">
-                        <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
-                    </li>
-                @endif
-            @endforeach
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('survey.votes') }}">Hit List Votes</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ Auth::user()->Employee->first_name }} {{ Auth::user()->Employee->last_name }}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="{{ route('jocks.profile', $jock_id) }}">Profile</a>
-                    <a href="#reportBug" class="dropdown-item" data-toggle="modal">Report a Bug</a>
-                    <a href="{{ route('logout') }}" id="logoutJock" class="dropdown-item">
-                        Sign Out
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-            </li>
-        </ul>
-    </div>
-@endsection
-
-@section('employee.content')
+@section('content')
     <div class="container">
+        @include('_cms.system-views._feedbacks.success')
+        @include('_cms.system-views._feedbacks.error')
         <div class="mt-md-4 mt-lg-4 mt-sm-0 mb-5">
-            <div class="h3">The Daily Survey Top 5</div>
-            <br>
-
-            <div class="m-3"></div>
-
+            <div class="display-4">The Daily Survey Top 5</div>
+            @if(isset($data['chart_type']))
+                <p id="chart-subtitle" class="h4 mb-0">{{ $data['chart_type'] }} Charts</p>
+            @endif
             <div class="row">
                 <div class="col-md-4">
-                    <select name="dated" id="surveyDate" data-chart="1" class="form-control">
+                    <select name="dated" id="surveyDate" data-chart="daily" data-chart-type="{{ (isset($data['chart_type']) && $data['chart_type'] === 'Draft') ? 'draft' : 'official' }}" class="form-control">
                         <option value>--</option>
                     </select>
                 </div>
                 <div class="col"></div>
             </div>
-
-            <div class="m-3"></div>
-
-            <div class="row">
+            <div class="row my-4">
                 <div class="col-md-12 col-sm-12 col-lg-12">
-                    <div class="btn-group fa-pull-left">
-                        <a href="#dataList" data-toggle="modal" class="btn btn-outline-dark" data-help="tooltip" data-placement="bottom" title="Verify if the artist/album/song exists in our database">Songs Database</a>
+                    <div class="fa-pull-right">
+                        <div class="btn-group">
+                            <button id="post" disabled data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="Make a chart visible in the website">Post Charts</button>
+                        </div>
+                        <a id="new" href="#new-entry" class="btn btn-outline-dark" data-toggle="modal">New Entry</a>
                     </div>
-                    <div class="btn-group fa-pull-right">
-                        <a href="#newEntry" data-toggle="modal" class="btn btn-outline-dark" data-help="tooltip" data-placement="bottom" title="Create an entry for the daily survey top 5">New Entry</a>
-                    </div>
+
+                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" {{ (isset($data['chart_type']) && $data['chart_type'] == 'Official') || !$data['latestSurveyDate'] ? 'disabled' : '' }} data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
+                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" {{ isset($data['chart_type']) && $data['chart_type'] == 'Draft' ? 'disabled' : '' }} data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
                 </div>
             </div>
-            <br>
-            <table class="table table-hover mb-5">
-                <thead>
-                    <tr>
-                        <th scope="col">Spot</th>
-                        <th scope="col">Song</th>
-                        <th scope="col">Artist</th>
-                        <th scope="col">Album</th>
-                        <th scope="col">Dated</th>
-                        <th>Options</th>
-                    </tr>
-                </thead>
-                <tbody id="dailyCharts">
-                    <tr>
-                        <td colspan="6" style="color: red;"><div class="text-center">No Data Found</div></td>
-                    </tr>
-                </tbody>
-            </table>
+            
+            <div id="dailyCharts">
+                <div class="alert alert-warning h5 text-center">
+                    No chart data found
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="loader"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="newEntry" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="new-entry" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -169,7 +123,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="newChart" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="new-chart" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -218,7 +172,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="updateChart" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="update-chart" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -238,7 +192,7 @@
                                     <input type="hidden" id="daily" name="daily" value="1">
                                     <div class="form-group">
                                         <label class="lead" for="update_positions">Position</label>
-                                        <select id="update_positions" name="Positions" class="custom-select">
+                                        <select id="update_positions" name="position" class="custom-select">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
@@ -387,7 +341,7 @@
                         <div class="form-group">
                             <select name="ArtistCountry" id="ArtistCountry" class="custom-select">
                                 <option selected disabled value>Artist Country</option>
-                                @foreach($country as $countries)
+                                @foreach($data['country'] as $countries)
                                     <option value="{{ $countries }}">{{ $countries }}</option>
                                 @endforeach
                             </select>
@@ -401,7 +355,7 @@
                             </select>
                         </div>
                         <div class="custom-file">
-                            <label for="artistImage" class="custom-file-label">Artist Image. Tip: a ratio of 1:1 for the image.</label>
+                            <label for="image" class="custom-file-label">Artist Image. Tip: a ratio of 1:1 for the image.</label>
                             <input type="file" class="custom-file-input" id="image" name="image">
                         </div>
                     </div>
@@ -469,7 +423,7 @@
                                     <label for="genre_id" class="col-form-label">Genre</label>
                                     <select id="genre_id" name="genre_id" class="custom-select">
                                         <option value="" disabled selected>--</option>
-                                        @forelse($genres as $genre)
+                                        @forelse($data['genres'] as $genre)
                                             <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                                         @empty
                                             <option value="" disabled selected>--</option>
@@ -843,7 +797,7 @@
                                     <div class="col-md-6">
                                         <label for="update_artist_id">Artist</label>
                                         <select id="update_artist_id" name="artist_id" class="custom-select" required>
-                                            @forelse($artists as $artist)
+                                            @forelse($data['artists'] as $artist)
                                                 <option value="{{ $artist->id }}">{{ $artist->Name }}</option>
                                             @empty
                                                 <option value="">No Data Found</option>
@@ -853,7 +807,7 @@
                                     <div class="col-md-6">
                                         <label for="update_genre_id">Genre</label>
                                         <select id="update_genre_id" name="genre_id" class="custom-select" required>
-                                            @forelse($genres as $genre)
+                                            @forelse($data['genres'] as $genre)
                                                 <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                                             @empty
                                                 <option value="">No Data Found</option>

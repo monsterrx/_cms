@@ -49,7 +49,7 @@ class VoteController extends Controller
 
         $userLevel = Auth::user()->Employee->Designation->level;
 
-        if($userLevel === '5' || $userLevel === '8') {
+        if($userLevel === 5 || $userLevel === 8) {
             return view('_cms.system-views.employeeUI.Jocks.survey', compact('chart', 'show', 'jock_id', 'latestChartDate'));
         }
 

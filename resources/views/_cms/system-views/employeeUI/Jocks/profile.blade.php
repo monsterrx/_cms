@@ -10,11 +10,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
-            @foreach($show as $shows)
-                @if($shows->id === 4) {{-- The Daily Survey --}}
-                <li class="nav-item">
-                    <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
-                </li>
+            @foreach($shows as $show)
+                @if($show->id === 4) {{-- The Daily Survey --}}
+                    <li class="nav-item">
+                        <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
+                    </li>
                 @endif
             @endforeach
             <li class="nav-item">
@@ -22,10 +22,10 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}
+                    {{ Auth::user()->Employee->first_name }} {{ Auth::user()->Employee->last_name }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="{{ route('jocks.profile', $jock_id) }}">Profile</a>
+                    <a class="dropdown-item" href="{{ route('jocks.profile', $jock->id) }}">Profile</a>
                     <a href="#reportBug" class="dropdown-item" data-toggle="modal">Report a Bug</a>
                     <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Sign Out
@@ -41,16 +41,16 @@
 @endsection
 
 @section('employee.content')
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row my-4">
             <div class="col-md-12">
                 <div class="card mb-5">
-                    <img id="headerPic" src="{{ url('images/jocks/'.$jock->background_image) }}" class="card-img img-fluid" alt="{{ Auth::user()->Employee->Jock->first()->background_image }}">
-                    <div class="card-body-modified">
+                    <img id="headerPic" src="{{ $jock->background_image }}" class="card-img-top" alt="{{ Auth::user()->Employee->Jock->first()->background_image }}" style="background-color: gray;">
+                    <div class="card-body-modified mx-4">
                         <div class="card-profile">
                             <div class="row">
                                 <div class="col-4">
-                                    <img id="profilePic" src="{{ url('images/jocks/'.$jock->profile_img) }}" class="profilePic img-fluid rounded-circle img-thumbnail" width="300px" alt="{{ Auth::user()->Employee->Jock->first()->profile_img }}">
+                                    <img id="profilePic" src="{{ $jock->profile_image }}" class="profilePic img-fluid rounded-circle img-thumbnail" width="300px" alt="{{ Auth::user()->Employee->Jock->first()->profile_image }}">
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -60,10 +60,10 @@
                             <div class="col-md-12">
                                 <div class="profileName lead">
                                     <div class="d-block d-sm-block d-lg-none d-md-block d-xl-none">
-                                        <div class="h5" id="name">{{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}</div>
+                                        <div class="h5" id="name">{{ Auth::user()->Employee->first_name }} {{ Auth::user()->Employee->last_name }}</div>
                                     </div>
                                     <div class="d-none d-lg-block d-sm-none d-xl-block d-md-none">
-                                        <div class="h3" id="name1">{{ Auth::user()->Employee->FirstName }} {{ Auth::user()->Employee->LastName }}</div>
+                                        <div class="h3" id="name1">{{ Auth::user()->Employee->first_name }} {{ Auth::user()->Employee->last_name }}</div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -73,14 +73,14 @@
                                             <a href="#update-employee" class="btn btn-outline-dark" data-toggle="modal">Employee Info&nbsp;&nbsp;<i class="fas fa-user"></i></a>
                                             <a href="#update-jock" class="btn btn-outline-dark" data-toggle="modal">Jock Info&nbsp;&nbsp;<i class="fas fa-pen"></i></a>
                                             <a href="#update-profile" class="btn btn-outline-dark" data-toggle="modal">Profile&nbsp;&nbsp;<i class="fas fa-user-circle"></i></a>
-                                            <a href="#update-header" class="btn btn-outline-dark" data-toggle="modal">Cover&nbsp;&nbsp;<i class="fas fa-image"></i></a>
+                                            <a href="{{ route('users.header', $jock->id) }}" class="btn btn-outline-dark">Cover&nbsp;&nbsp;<i class="fas fa-image"></i></a>
                                             <a href="#passwordModal" class="btn btn-outline-dark" data-toggle="modal">Password&nbsp;&nbsp;<i class="fas fa-user-lock"></i></a>
                                         </div>
                                         <div class="fa-pull-right d-sm-block d-md-none d-lg-none d-xl-none">
                                             <a href="#update-employee" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-user"></i></a>
                                             <a href="#update-jock" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-pen"></i></a>
                                             <a href="#update-profile" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-user-circle"></i></a>
-                                            <a href="#update-header" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-image"></i></a>
+                                            <a href="{{ route('users.header', $jock->id) }}" class="btn btn-outline-dark"><i class="fas fa-image"></i></a>
                                             <a href="#passwordModal" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-user-lock"></i></a>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="lead">
-                                                                <div class="h5">Contact:</div> <p id="contactNumber">{{ Auth::user()->Employee->ContactNo }}</p>
+                                                                <div class="h5">Contact:</div> <p id="contactNumber">{{ Auth::user()->Employee->contact_number }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -110,7 +110,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead">
-                                                                <div class="h5">Moniker:</div> @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') No Moniker @else Auth::user()->Employee->Jock->first()->moniker @endif
+                                                                <div class="h5">Moniker:</div> 
+                                                                @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') 
+                                                                    No Moniker 
+                                                                @else 
+                                                                    {{ Auth::user()->Employee->Jock->first()->moniker }} 
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
@@ -136,12 +141,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Jock Name:</div> {{ Auth::user()->Employee->Jock->first()->jock_name }}
+                                                                <div class="h5">Jock Name:</div> {{ Auth::user()->Employee->Jock->first()->name }}
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Contact:</div> <p id="contactNumber1">{{ Auth::user()->Employee->ContactNo }}</p>
+                                                                <div class="h5">Contact:</div> <p id="contactNumber1">{{ Auth::user()->Employee->contact_number }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -153,7 +158,12 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
-                                                                <div class="h5">Moniker:</div> @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') No Moniker @else Auth::user()->Employee->Jock->first()->moniker @endif
+                                                                <div class="h5">Moniker:</div> 
+                                                                @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') 
+                                                                    No Moniker 
+                                                                @else 
+                                                                    {{ Auth::user()->Employee->Jock->first()->moniker }} 
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
@@ -187,23 +197,25 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12 mx-1 my-1">
-                                        @if($link->isNotEmpty())
+                                        @if($links->isNotEmpty())
                                             <ul class="list-group">
-                                                @foreach($link as $links)
+                                                @foreach($links as $link)
                                                     <li class="list-group-item">
                                                         <div class="row">
-                                                            <div class="col-md-6">{{ $links->url }}</div>
-                                                            <div class="col-md-6">
-                                                                <form id="deleteLink" action="{{ route('jocks.delete.link', $links->id) }}" method="post">
-                                                                    <button type="submit" value="delete" class="btn btn-outline-dark fa-pull-right">
-                                                                        <i class="fas fa-trash-alt"></i>
-                                                                    </button>
+                                                            <div class="col-md-8">{{ $link->url }}</div>
+                                                            <div class="col-md-4">
+                                                                <form id="deleteLink" action="{{ route('jocks.delete.link', $link->id) }}" method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
+                                                                    <div class="btn-group fa-pull-right">
+                                                                        <a href="#edit-{{ $link->id }}" data-toggle="modal" class="btn btn-outline-dark">
+                                                                            <i class="fas fa-edit"></i>
+                                                                        </a>
+                                                                        <button type="submit" class="btn btn-outline-danger">
+                                                                            <i class="fas fa-trash-alt"></i>
+                                                                        </button>
+                                                                    </div>
                                                                 </form>
-                                                                <button href="#edit-{{ $links->id }}" data-toggle="modal" class="mx-2 btn btn-outline-dark fa-pull-right">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </button>
                                                             </div>
                                                         </div>
                                                     </li>
@@ -224,10 +236,10 @@
                                         <a href="#add-facts" class="btn btn-outline-dark fa-pull-right" data-toggle="modal"><i class="fas fa-plus"></i></a>
                                     </div>
                                 </div>
-                                @if($fact->isNotEmpty())
+                                @if($facts->isNotEmpty())
                                     <div class="list-group">
-                                        @foreach($fact as $facts)
-                                            <a href="#edit-fact-{{ $facts->id }}" data-toggle="modal" class="list-group-item list-group-item-action zoom">{{ str_limit($facts->facts, $limit = 15, $end = '...') }}</a>
+                                        @foreach($facts as $fact)
+                                            <a href="#edit-fact-{{ $fact->id }}" data-toggle="modal" class="list-group-item list-group-item-action zoom">{{ Str::limit($fact->content, $limit = 15, $end = '...') }}</a>
                                         @endforeach
                                     </div>
                                 @else
@@ -248,17 +260,17 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        @if($image->isNotEmpty())
+                                        @if($images->isNotEmpty())
                                             <div class="owl-carousel">
-                                                @foreach($image as $images)
-                                                    <div class="card my-3 mx-5 zoom" data-toggle="modal" data-target="#edit-photo-{{ $images->id }}">
-                                                        <img src="{{ asset('images/jocks/'.$images->main_image) }}" width="50px" class="card-img" alt="{{ $images->image_name }}">
+                                                @foreach($images as $image)
+                                                    <div class="card my-3 mx-5 zoom" data-toggle="modal" data-target="#edit-photo-{{ $image->id }}">
+                                                        <img src="{{ $image->file }}" width="50px" class="card-img" alt="{{ $image->name }}">
                                                         <div class="card-body">
                                                             <div class="hidden-xs hidden-sm">
-                                                                <div class="card-text">{{ $images->image_name }}</div>
+                                                                <div class="card-text">{{ $image->name }}</div>
                                                             </div>
                                                             <div class="hidden-md hidden-lg">
-                                                                <div class="card-text">{{ str_limit($images->image_name, $limit = '1', $end = '...') }}</div>
+                                                                <div class="card-text">{{ Str::limit($image->name, $limit = '1', $end = '...') }}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -294,34 +306,36 @@
                         @method('PUT')
                         <div class="form-group row">
                             <div class="col-md-6">
-                                <label for="FirstName">First Name</label>
-                                <input type="text" class="form-control" id="FirstName" name="FirstName" placeholder="First Name" required value="{{ $employee->FirstName }}">
+                                <label for="first_name">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" required value="{{ $employee->first_name }}">
                             </div>
 
                             <div class="col-md-6">
-                                <label for="LastName">Last Name</label>
-                                <input type="text" id="LastName" name="LastName" class="form-control" placeholder="Last Name" required value="{{ $employee->LastName }}">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name" required value="{{ $employee->last_name }}">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="Address">Address</label>
-                            <input type="text" id="Address" name="Address" class="form-control" placeholder="Address" required value="{{ $employee->Address }}">
+                            <label for="address">Address</label>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Address" required value="{{ $employee->address }}">
                         </div>
 
                         <div class="form-group">
-                            <label for="Birthday">Birthday</label>
-                            <input type="date" id="Birthday" name="Birthday" class="form-control" required value="{{ $employee->Birthday }}">
+                            <label for="birthday">Birthday</label>
+                            <input type="date" id="birthday" name="birthday" class="form-control" required value="{{ $employee->birthday }}">
                         </div>
 
                         <div class="form-group">
-                            <label for="ContactNo">Contact Number</label>
-                            <input type="text" id="ContactNo" name="ContactNo" class="form-control" placeholder="Contact Number" required value="{{ $employee->ContactNo }}">
+                            <label for="contact_number">Contact Number</label>
+                            <input type="text" id="contact_number" name="contact_number" class="form-control" placeholder="Contact Number" required value="{{ $employee->contact_number }}">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" id="submit-button" class="btn btn-outline-dark">Update</button>
-                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                        <div class="btn-group" role="group" aria-label="Action Buttons">
+                            <button type="submit" id="submit-button" class="btn btn-outline-dark">Update</button>
+                            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -481,14 +495,13 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="hidden" name="jock_id" id="jock_id" value="{{ $jock_id }}">
+                                <input type="hidden" name="jock_id" id="jock_id" value="{{ $jock->id }}">
                                 <div class="form-group">
                                     <label for="website" class="lead">Website</label>
                                     <select id="website" name="website" class="custom-select">
                                         <option value selected>--</option>
-                                        <?php $website = array(0 => 'Facebook', 1 => 'Twitter', 2 => 'Instagram', 3 => 'Youtube', 4 => 'Tumblr', 5 => 'Spotify', 6 => 'Tiktok', 7 => 'Other'); ?>
-                                        @foreach($website as $websites)
-                                            <option value="{{ $websites }}">{{ $websites }}</option>
+                                        @foreach($websites as $website)
+                                            <option value="{{ $website }}">{{ $website }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -521,10 +534,10 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12">
-                                <input type="hidden" name="jock_id" id="jock_id" value="{{ $jock_id }}">
+                                <input type="hidden" name="jock_id" id="jock_id" value="{{ $jock->id }}">
                                 <div class="form-group">
                                     <label for="facts" class="lead">Fact</label>
-                                    <input type="text" id="facts" name="facts" class="form-control" placeholder="Facts About You">
+                                    <input type="text" id="facts" name="content" class="form-control" placeholder="Facts About You">
                                 </div>
                             </div>
                         </div>
@@ -550,17 +563,17 @@
                     <form action="{{ route('jocks.store.image') }}" enctype="multipart/form-data" method="post">
                         @csrf
                         <div class="row">
-                            <input type="hidden" name="id" value="{{ $jock_id }}">
+                            <input type="hidden" name="jock_id" value="{{ $jock->id }}">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="image_name" class="lead">Name</label>
-                                    <input type="text" id="image_name" name="image_name" class="form-control" placeholder="Image Name">
+                                    <label for="name" class="lead">Name</label>
+                                    <input type="text" id="name" name="name" class="form-control" placeholder="Image Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="formLabel" class="lead">Image</label>
                                     <div class="custom-file" id="formLabel">
-                                        <input type="file" id="image" name="image" class="custom-file-input">
-                                        <label for="image" class="custom-file-label">Image max size is 2MB</label>
+                                        <input type="file" id="file" name="file" class="custom-file-input">
+                                        <label for="file" class="custom-file-label">Image max size is 2MB</label>
                                     </div>
                                 </div>
                             </div>
@@ -579,8 +592,8 @@
         </div>
     </div>
 
-    @foreach($image as $images)
-        <div id="edit-photo-{{ $images->id }}" class="modal fade" role="dialog">
+    @foreach($images as $image)
+        <div id="edit-photo-{{ $image->id }}" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -589,17 +602,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="text-center">
-                            <img src="{{ asset('images/jocks/'.$images->main_image) }}" class="card-img" alt="{{ $images->image_name }}">
+                            <img src="{{ $image->file }}" class="card-img" alt="{{ $image->name }}">
                         </div>
                         <form method="post" action="{{ route('jocks.update.image') }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            <input type="text" name="id" value="{{ $images->id }}" style="display:none;">
+                            <input type="text" name="id" value="{{ $image->id }}" style="display:none;">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="image_name" class="lead">Name</label>
-                                        <input type="text" id="image_name" name="image_name" class="form-control" value="{{ $images->image_name }}" placeholder="Name">
+                                        <input type="text" id="image_name" name="image_name" class="form-control" value="{{ $image->name }}" placeholder="Name">
                                     </div>
                                 </div>
                             </div>
@@ -608,7 +621,7 @@
                                     <label for="custom" class="lead">Image</label>
                                     <div class="custom-file" id="custom">
                                         <input type="file" id="image" name="image" class="custom-file-input">
-                                        <label for="image" class="custom-file-label">{{ $images->main_image }}</label>
+                                        <label for="image" class="custom-file-label">{{ $image->file }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -624,54 +637,54 @@
                         <form method="post" action="{{ route('jocks.remove.image') }}">
                             @csrf
                             @method('DELETE')
-                            <input type="hidden" name="id" value="{{ $images->id }}">
-                            <button type="submit" class="btn btn-outline-dark">Delete</button>
+                            <input type="hidden" name="id" value="{{ $image->id }}">
+                            <div class="btn-group" role="group" aria-label="Action Buttons">
+                                <button type="submit" class="btn btn-outline-dark">Delete</button>
+                                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                            </div>
                         </form>
-                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
     @endforeach
 
-    @foreach($link as $links)
-        <div id="edit-{{ $links->id }}" class="modal fade" role="dialog">
+    @foreach($links as $link)
+        <div id="edit-{{ $link->id }}" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="h3">Edit {{ $links->website }} Link</h3>
+                        <h3 class="h3">Edit {{ $link->website }} Link</h3>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                    <div class="modal-body">
-                        <form method="post" action="{{ route('jocks.update.link', $links->id) }}">
+                    <form method="post" action="{{ route('jocks.update.link', $link->id) }}">
+                        <div class="modal-body">
                             @csrf
                             @method('PUT')
-                            <input type="text" id="jock_id" name="jock_id" value="{{ $jock_id }}" hidden>
+                            <input type="text" id="jock_id" name="jock_id" value="{{ $jock->id }}" hidden>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="url" class="lead">Edit {{ $links->website }} Link</label>
-                                        <input type="text" id="url" name="url" class="form-control" value="{{ $links->url }}" placeholder="Link">
+                                        <label for="url" class="lead">Edit {{ $link->website }} Link</label>
+                                        <input type="text" id="url" name="url" class="form-control" value="{{ $link->url }}" placeholder="Link">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn btn-outline-dark fa-pull-right"><i class="fas fa-file-import"></i>  Update</button>
-                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="btn-group fa-pull-right" role="group" aria-label="Action Buttons">
+                                <button type="submit" class="btn btn-outline-dark"><i class="fas fa-file-import"></i>  Update</button>
+                                <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     @endforeach
 
-    @foreach($fact as $facts)
-        <div id="edit-fact-{{ $facts->id }}" class="modal fade" role="dialog">
+    @foreach($facts as $fact)
+        <div id="edit-fact-{{ $fact->id }}" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -679,15 +692,15 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" action="{{ action('FactController@update', $facts->id) }}">
+                        <form method="post" action="{{ route('facts.update', $fact->id) }}">
                             @csrf
                             @method('PUT')
                             <div class="row">
                                 <div class="col-md-12">
-                                    <input type="hidden" name="jock_id" id="jock_id" value="{{ $jock_id }}">
+                                    <input type="hidden" name="jock_id" id="jock_id" value="{{ $jock->id }}">
                                     <div class="form-group">
                                         <label for="facts" class="lead">Fact</label>
-                                        <input type="text" id="facts" name="facts" class="form-control" value="{{ $facts->facts }}" placeholder="Facts about you">
+                                        <input type="text" id="facts" name="content" class="form-control" value="{{ $fact->content }}" placeholder="Facts about you">
                                     </div>
                                 </div>
                             </div>
@@ -701,7 +714,7 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-outline-dark" onclick="event.preventDefault(); document.getElementById('deleteForm').submit();">Delete</button>
 
-                        <form id="deleteForm" action="{{ action('FactController@destroy', $facts->id) }}" method="post">
+                        <form id="deleteForm" action="{{ route('facts.destroy', $fact->id) }}" method="post">
                             @csrf
                             @method('DELETE')
                         </form>

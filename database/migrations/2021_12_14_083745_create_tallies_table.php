@@ -17,6 +17,7 @@ class CreateTalliesTable extends Migration
             $table->id();
             $table->integer('result')->default(0);
             $table->integer('last_result')->default(0);
+            $table->string('chart_type');
             $table->unsignedBigInteger('chart_id');
             $table->date('dated');
             $table->timestamps();
