@@ -1,0 +1,1 @@
+0 14 * * 1-5 www-data php /var/www/html/cms/artisan charts:tally daily >> /var/log/cron.log 2>&1
