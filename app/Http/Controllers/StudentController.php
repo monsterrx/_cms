@@ -61,8 +61,6 @@ class StudentController extends Controller {
 		    'school_id' => 'required|integer',
             'first_name' => 'required',
             'last_name' => 'required',
-            'course' => 'required',
-            'year_level' => 'required',
             'image' => ['image', 'max:2048']
         ]);
 
@@ -128,8 +126,6 @@ class StudentController extends Controller {
 		    'school_id' => 'required|integer',
             'first_name' => 'required',
             'last_name' => 'required',
-            'course' => 'required',
-            'year_level' => 'required',
             'image' => ['image', 'file|size:2048']
         ]);
 
