@@ -18,8 +18,8 @@
                 </div>
                 <div class="col-6">
                     <div class="btn-group float-right">
-                        <a href="#new-sched" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-plus-circle"></i></a>
-                        <button type="button" id="switch_timeslots" switch="jock" day class="btn btn-outline-dark"><i class="fas fa-exchange-alt"></i></button>
+                        <a href="#new-sched" id="new_schedule" data-help="tooltip" data-placement="bottom" title="Add New Schedule" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-plus-circle"></i></a>
+                        <button type="button" id="switch_timeslots" switch="jock" day data-help="tooltip" data-placement="bottom" title="Switch to Jock Scheduling" class="btn btn-outline-dark"><i class="fas fa-exchange-alt"></i></button>
                     </div>
                 </div>
             </div>

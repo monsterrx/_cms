@@ -1128,10 +1128,15 @@
             $(this).attr('switch', 'jock');
             $('#timeslot-days li a').attr('type', 'show');
             $('#timeslot-subtitle').empty().append(day + ' ' + view + ' timeslots');
-        } else {
+            $(this).attr('title', 'Switch to Jock Scheduling');
+            $(this).attr('data-original-title', 'Switch to Jock Scheduling');
+        } 
+        else {
             $(this).attr('switch', 'show');
             $('#timeslot-days li a').attr('type', 'jock');
             $('#timeslot-subtitle').empty().append(day + ' ' + view + ' timeslots');
+            $(this).attr('title', 'Switch to Shows Scheduling');
+            $(this).attr('data-original-title', 'Switch to Shows Scheduling');
         }
 
         getAsync('{{ route('timeslots.select') }}', {'day': day, 'type': view}, "HTML", beforeSend, onSuccess);
@@ -1995,7 +2000,7 @@
         let formData = new FormData(this);
         let url = $(this).attr('action');
 
-        postAsync(url, formData, "HTML", beforeSend, onSuccess);
+        postAsync(url, formData, "JSON", beforeSend, onSuccess);
 
         function beforeSend() {
             $('button[type="submit"]').attr('disabled', 'disabled');
@@ -2009,6 +2014,7 @@
         function onSuccess(result) {
             $('button[type="submit"]').remove('disabled');
             $('button[type="submit"]').html('Save');
+            $(this).modal('hide');
         }
     });
     $(document).on('submit', '#update-timeslot-form, #delete-timeslot-form', function (event) {

@@ -17,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libonig-dev \
-    libzip-dev
+    libzip-dev \
+    cron
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -41,8 +42,20 @@ RUN a2enmod rewrite
 # Set proper permissions for the application files
 RUN chown -R www-data:www-data /var/www/html/cms
 
+# Copy crontab file
+COPY docker/crontab /etc/crontab
+
+# Give execution rights and register it
+RUN chmod 0644 /etc/crontab && \
+    crontab /etc/crontab && \
+    touch /var/log/cron.log
+
+# Copy a startup script to run both cron and apache
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Expose port 80
 EXPOSE 80
 
 # Start Apache server
-CMD ["apache2-foreground"]
+CMD ["/start.sh"]

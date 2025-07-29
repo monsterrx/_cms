@@ -2,8 +2,8 @@
 
 use App\Models\School;
 use App\Models\Student;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -13,7 +13,11 @@ class StudentController extends Controller {
 	{
 	    if($request->ajax()) {
             if($request['location']) {
-                $school = School::whereNull('deleted_at')->where('location', $request['location'])->get();
+                $school = School::query()
+					->whereNull('deleted_at')
+					->where('location', $request['location'])
+					->orderBy('name')
+					->get();
 
                 $options = "";
 
@@ -24,7 +28,10 @@ class StudentController extends Controller {
                 return response()->json($options);
             }
 
-            $student = Student::with('School')->whereNull('deleted_at')->where('location', $this->getStationCode())->get();
+            $student = Student::with('School')
+				->whereNull('deleted_at')
+				->where('location', $this->getStationCode())
+				->get();
 
             foreach ($student as $students) {
                 $students['name'] = $students['first_name'] . ' ' . $students['last_name'];
@@ -36,7 +43,9 @@ class StudentController extends Controller {
 
 		$student = Student::with('School', 'Batch')->whereNull('deleted_at')->get();
 
-		$data = array('student' => $student);
+		$data = [
+			'student' => $student
+		];
 
 		return view('_cms.system-views.education.monsterScholar.students.index', compact('data'));
 	}
@@ -48,14 +57,18 @@ class StudentController extends Controller {
 
 	public function store(Request $request)
 	{
-		$this->validate($request, [
+		$validator = Validator::make($request->all(), [
 		    'school_id' => 'required|integer',
             'first_name' => 'required',
             'last_name' => 'required',
             'course' => 'required',
             'year_level' => 'required',
-            'image' => ['image', 'file|size:2048']
+            'image' => ['image', 'max:2048']
         ]);
+
+		if ($validator->fails()) {
+			return redirect()->back()->withErrors($validator->errors()->all());
+		}
 
 		$img = $request->file('image'); // file for Student Image
 		$path = 'images/schools';
@@ -111,7 +124,7 @@ class StudentController extends Controller {
 			return redirect()->back()->withErrors(['Model Error','Data not Found!']);
 		}
 
-		$this->validate($request, [
+		$validator = Validator::make($request->all(), [
 		    'school_id' => 'required|integer',
             'first_name' => 'required',
             'last_name' => 'required',
@@ -119,6 +132,13 @@ class StudentController extends Controller {
             'year_level' => 'required',
             'image' => ['image', 'file|size:2048']
         ]);
+
+		if ($validator->fails()) {
+			return response()->json([[
+				'status' => 'error',
+				'message' => $validator->errors()->all(),
+			]]);
+		}
 
 		$img = $request->file('image'); // file for Student Image
 		$path = 'images/schools';
