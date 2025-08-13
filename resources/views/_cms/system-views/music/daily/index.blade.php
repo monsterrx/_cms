@@ -26,8 +26,9 @@
                         <a id="new" href="#new-entry" class="btn btn-outline-dark" data-toggle="modal">New Entry</a>
                     </div>
 
-                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" {{ (isset($data['chart_type']) && $data['chart_type'] == 'Official') || !$data['latestSurveyDate'] ? 'disabled' : '' }} data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
-                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" {{ isset($data['chart_type']) && $data['chart_type'] == 'Draft' ? 'disabled' : '' }} data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
+                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
+                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
+                    <button id="throwback" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" data-is-throwback="true" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are shown every wednesday">Throwback Charts</button>
                 </div>
             </div>
             
@@ -46,11 +47,11 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="new-entry" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="new-entry" tabindex="-1" role="dialog" aria-labelledby="New Throwback Entry" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">New Entry</h5>
+                    <h5 class="modal-title">New Throwback Entry</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -59,11 +60,12 @@
                     @csrf
                     <div class="modal-body">
                         <input type="text" value="1" id="daily" name="daily" style="display: none;">
+                        <input type="text" value="1" id="throwback" name="throwback" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="position">Chart Position</label>
-                                    <select name="position" id="position" class="form-control">
+                                    <label for="throwback_position">Chart Position</label>
+                                    <select name="position" id="throwback_position" class="form-control">
                                         @for($i = 1; $i <= 5; $i++)
                                             <option value="{{ $i }}">{{ $i }}</option>
                                         @endfor
@@ -74,20 +76,16 @@
                                 <div id="newChartDateInput" class="form-group">
                                     <label for="newEntryChartsDate">Chart Date</label>
                                     <input type="date" id="newEntryChartsDate" name="dated" class="form-control">
-                                    <select id="newEntryChartDate" name="dated" class="form-control" hidden disabled>
-                                        <option value="">--</option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-md-12">
                                 <label for="song_id">Please select the song in the table</label>
                                 <input type="text" id="song_id" name="song_id" class="form-control" style="display: none;">
                                 <input type="text" id="song_name" name="song_name" readonly class="form-control">
                             </div>
                         </div>
-                        <br>
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-outline-dark fa-pull-right"><i class="fas fa-save"></i>  Save</button>
@@ -141,8 +139,8 @@
                                     <input type="hidden" id="new_song_id" name="song_id">
                                     <input type="hidden" id="daily" name="daily" value="1">
                                     <div class="form-group">
-                                        <label class="lead" for="Positions">Position</label>
-                                        <select id="Positions" name="Positions" class="custom-select">
+                                        <label class="lead" for="position">Position</label>
+                                        <select id="position" name="position" class="custom-select">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
@@ -191,8 +189,8 @@
                                     <input type="hidden" id="update_song_id" name="song_id">
                                     <input type="hidden" id="daily" name="daily" value="1">
                                     <div class="form-group">
-                                        <label class="lead" for="update_positions">Position</label>
-                                        <select id="update_positions" name="position" class="custom-select">
+                                        <label class="lead" for="update_position">Position</label>
+                                        <select id="update_position" name="position" class="custom-select">
                                             @for($i = 1; $i <= 5; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor

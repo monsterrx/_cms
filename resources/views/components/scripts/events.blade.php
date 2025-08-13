@@ -161,7 +161,7 @@
             }
         }
     });
-    $(document).on('click', '#post, #official, #draft', function (event) {
+    $(document).on('click', '#post, #official, #draft, #throwback', function (event) {
         event.preventDefault();
 
         let action = $(this).attr('id');
@@ -170,6 +170,7 @@
         let type = $(this).attr('data-local');
         // For the daily survey top 5
         let chart = $(this).attr('data-chart') ?? 'countdown';
+        let throwback = $(this).attr('data-is-throwback') ?? false;
 
         console.log([action, payload, type, chart]);
 
@@ -196,12 +197,16 @@
                     }
 
                     function onSuccess(result) {
+                        // console.log(result);
+
                         Toast.fire({
                             icon: result.status,
                             title: result.message
                         });
 
-                        $('button#official').click();
+                        setTimeout(() => {
+                            $('button#official').click();
+                        }, 2000);
                     }
                 }
             });
@@ -211,12 +216,14 @@
             $('#chart-subtitle').empty();
             $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
+            $('#chartDates, #surveyDate').removeAttr('data-is-throwback');
 
             getAsync('{{ route('charts.index') }}', {
                 "action": action,
                 "date": payload,
                 "data-local": type,
-                "chart-type": chart
+                "chart-type": chart,
+                "throwback": throwback
             }, "HTML", onSend, onSuccess);
 
             function onSend() {
@@ -236,14 +243,13 @@
 
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
-
-                // disable the post chart button since it's already in the official charts.
                 $('#post').attr('disabled', true);
-                $('#official').attr('disabled', true);
-                $('#draft').removeAttr('disabled');
+
+                loadDailyDates(payload);
 
                 setTimeout(() => {
-                    createDailySurveyDataTable(payload, action);
+                    createRefreshingDataTable(payload, action, throwback, 'tdsTable');
+                    $('#chartDates, #surveyDate').val(payload);
                 }, 800);
             }
         }
@@ -252,12 +258,14 @@
             $('#chart-subtitle').empty();
             $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts');
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
+            $('#chartDates, #surveyDate').removeAttr('data-is-throwback');
 
             getAsync('{{ route('charts.index') }}', {
                 "action": action,
                 "date": payload,
                 "data-local": type,
-                "chart-type": chart
+                "chart-type": chart,
+                "throwback": throwback
             }, "HTML", onSend, onSuccess);
 
             function onSend() {
@@ -278,17 +286,65 @@
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
 
-                // Remove the disabled status of the post chart button since it's in the draft charts.
-                $('#post').removeAttr('disabled');
-                $('#draft').attr('disabled', true);
-                $('#official').removeAttr('disabled');
+                loadDailyDates(payload);
 
                 setTimeout(() => {
-                    createDailySurveyDataTable(payload, action);
+                    createRefreshingDataTable(payload, action, throwback, 'dailyChartSongsTable');
+                    $('#chartDates, #surveyDate').val(payload);
+                    $('#surveyDates').attr('data-chart-type', 'throwback');
                 }, 800);
             }
         }
-    })
+
+        if (action === 'throwback') {
+            $('#chart-subtitle').empty();
+            $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts');
+            $('#chartDates, #surveyDate').attr('data-chart-type', action);
+            $('#chartDates, #surveyDate').attr('data-is-throwback', true);
+
+            getAsync('{{ route('charts.index') }}', {
+                "action": action,
+                "date": payload,
+                "data-local": type,
+                "chart-type": chart,
+                "throwback": throwback
+            }, "HTML", onSend, onSuccess);
+
+            function onSend() {
+                $('#monsterCharts, #dailyCharts').empty();
+                $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
+                manualToast.fire({
+                    icon: 'info',
+                    title: 'Loading ' + action + ' charts ...',
+                });
+            }
+
+            function onSuccess(result) {
+                Toast.fire({
+                    icon: 'success',
+                    title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
+                });
+
+                $('#monsterCharts, #dailyCharts').empty();
+                $('#monsterCharts, #dailyCharts').append(result);
+
+                loadDailyDates(payload, true);
+                
+                setTimeout(() => {
+                    createRefreshingDataTable(payload, action, throwback, 'tdsTable');
+                    // $('#chartDates, #surveyDate').val(payload);
+                }, 800);
+            }
+        }
+
+        setTimeout(() => {
+            $(this).tooltip('hide');
+        }, 1200);
+    });
+    $('.chart-btn').on('click', function() {
+        $(this).addClass('active btn-dark').removeClass('btn-outline-dark')
+            .siblings('.chart-btn').removeClass('active btn-dark').addClass('btn-outline-dark');
+    });
     $(document).on('click', '#timeslot-days li a', function (event) {
         event.preventDefault();
         let day = $(this).text();
@@ -317,7 +373,7 @@
         getAsync('{{ route('timeslots.index') }}' + '/' + timeslot_id, {'type': timeslot_type}, 'JSON', beforeSend, onSuccess);
 
         function beforeSend() {
-            console.log(timeslot_type);
+            // console.log(timeslot_type);
         }
 
         function onSuccess(result) {
@@ -630,7 +686,7 @@
         }
 
         function onSuccess(result) {
-            console.log(result);
+            // console.log(result);
             // for outbreaks
             $('#delete-outbreak-song-body').empty();
             $('#update_outbreak_song_id').val(result.song_id);
@@ -779,7 +835,7 @@
         let data_id = $(this).attr('data-id');
         let data_open = $(this).attr('data-open');
 
-        console.log("Type: ", data_open);
+        console.log("Data Open Type: ", data_open);
 
         getAsync(url, {"id": data_id}, 'JSON', beforeSend, onSuccess);
 
@@ -1414,12 +1470,14 @@
     $(document).on('change', '#chartDates, #surveyDate', function () {
         let date = $(this).val();
         let chart_type = $(this).attr('data-chart-type');
+        let throwback = (chart_type === 'throwback' ?? false);
         let daily = $(this).attr('data-chart') === 'daily';
 
         getAsync('{{ route('filter.chart') }}', {
             "date": date,
             "chart_type": chart_type,
-            "daily": daily
+            "daily": daily,
+            "throwback": throwback
         }, 'HTML', beforeSend, onSuccess);
 
         function beforeSend() {
@@ -1432,14 +1490,19 @@
             $('#loader').empty();
             $('#monsterCharts, #dailyCharts').empty();
             $('#monsterCharts, #dailyCharts').append(result);
-            $('#post, #official, #draft').attr('data-payload', date);
+            $('#post, #official, #draft, #throwback').attr('data-payload', date);
 
             $('*[data-href]').on('click', function () {
                 window.location = $(this).data("href");
             });
 
             setTimeout(() => {
-                createDailySurveyDataTable(date, chart_type);
+                if (chart_type === 'draft') {
+                    createRefreshingDataTable(date, chart_type, throwback, 'dailyChartSongsTable');
+                }
+                else {
+                    createRefreshingDataTable(date, chart_type, throwback, 'tdsTable');
+                }
             }, 800);
         }
     });
@@ -1474,7 +1537,7 @@
 
         let url = $(this).attr('data-url');
 
-        console.log(url);
+        // console.log(url);
     });
 
     // Music page functions
@@ -1542,7 +1605,7 @@
     }, 2500);
 
     setInterval(function () {
-        songsTable.ajax.reload(null, false);
+        // songsTable.ajax.reload(null, false);
     }, 5000);
     /* End */
 
@@ -1920,7 +1983,7 @@
         }
 
         function onSuccess(result) {
-            console.log(result);
+            // console.log(result);
             $('#delete-chart, #deleteChart').modal('hide');
             $('button[type="submit"]').removeAttr('disabled');
             $('button[type="submit"]').html('Save');
@@ -1951,7 +2014,7 @@
         }
 
         function onSuccess(result) {
-            console.log(result);
+            // console.log(result);
             $('#delete-chart, #deleteChart').modal('hide');
             $('button[type="submit"]').removeAttr('disabled');
             $('button[type="submit"]').html('Save');

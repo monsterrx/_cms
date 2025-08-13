@@ -19,6 +19,7 @@ class CreateSongsTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->string('track_link');
+            $table->integer('votes');
             $table->boolean('is_charted');
             $table->softDeletes();
             $table->timestamps();

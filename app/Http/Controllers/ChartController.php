@@ -29,12 +29,10 @@ class ChartController extends Controller {
                 $isSouthsideCharts = $request->has("data-local");
                 $chartType = $request->get('chart-type');
                 $chartDate = $request->get('date') ?? $request->get('dated');
+                $throwback = $request->get('throwback');
 
                 if (!isset($chartDate)) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'The chart date is required.'
-                    ], 400);
+                    $chartDate = date('Y-m-d');
                 }
 
                 if($isSouthsideCharts) {
@@ -88,25 +86,56 @@ class ChartController extends Controller {
                             ->whereNull('deleted_at')
                             ->where('local', 0)
                             ->where('daily', '=', 1)
+                            ->where('throwback', '=', 0)
                             ->where('is_posted', 1)
                             ->where('location', $this->getStationCode())
                             ->where('position', '>', 0)
                             ->orderBy('position')
                             ->get();
 
+                        if ($throwback) {
+                            $charts = Chart::where('dated', $chartDate)
+                            ->whereNull('deleted_at')
+                            ->where('local', 0)
+                            ->where('daily', '=', 1)
+                            ->where('throwback', '=', $throwback)
+                            ->where('is_posted', 1)
+                            ->where('location', $this->getStationCode())
+                            ->where('position', '>', 0)
+                            ->orderBy('position')
+                            ->get();
+                        }
+ 
                         foreach ($charts as $chart) {
-                            $chart->total_votes = (floatval($chart->online_votes) + floatval($chart->phone_votes) + floatval($chart->social_votes)) ?? 0;
+                            $chart->total_votes = $chart->LatestChartTally->results ?? 0;
+                            // $chart->total_votes = (floatval($chart->online_votes) + floatval($chart->phone_votes) + floatval($chart->social_votes)) ?? 0;
                         }
 
                         return view('_cms.system-views.music.daily.table', compact('charts'));
                     }
 
                     if($action === 'draft') {
+                        $songs = Song::query()
+                            ->with('Album.Artist')
+                            ->orderBy('votes', 'desc')
+                            ->orderBy('created_at', 'desc')
+                            ->get()
+                            ->take(5);
+
+                        foreach ($songs as $key => $song) {
+                            $song->position = $key + 1;
+                        }
+
+                        return view('_cms.system-views.music.daily.songs-table', compact('songs'));
+                    }
+
+                    if($action === 'throwback') {
                         $charts = Chart::where('dated', $chartDate)
                             ->whereNull('deleted_at')
                             ->where('local', 0)
                             ->where('daily', '=', 1)
-                            ->where('is_posted', 0)
+                            ->where('throwback', '=', 1)
+                            ->where('is_posted', '=', 0)
                             ->where('location', $this->getStationCode())
                             ->where('position', '>', 0)
                             ->orderBy('position')
@@ -120,26 +149,56 @@ class ChartController extends Controller {
                     }
 
                     if($action === 'post') {
-                        $verifyCharts = Chart::query()
-                        ->whereNull('deleted_at')
-                        ->where('daily', 1)
-                        ->where('local', 0)
-                        ->where('dated', $request['dated'])
-                        ->count();
-
-                        if ($verifyCharts < 5) {
-                            return redirect()
-                                ->back()
-                                ->withErrors('Insufficient number of charts.');
-                        }
-
-                        Chart::where('dated', $request['dated'])
+                        if ($throwback) {
+                            Chart::where('dated', $request['dated'])
                             ->whereNull('deleted_at')
                             ->where('local', 0)
                             ->where('daily', '=', 1)
+                            ->where('throwback', '=', 1)
                             ->where('is_posted', 0)
                             ->where('location', $this->getStationCode())
                             ->update(['is_posted' => 1]);
+
+                            return response()->json(['status' => 'success', 'message' => 'The throwback charts has been posted'], 202);
+                        }
+
+                        $songs = Song::query()
+                            ->where('votes', '>', 0)
+                            ->orderByDesc('votes')
+                            ->take(5)
+                            ->get();
+
+                        foreach ($songs as $key => $song) {
+                            // Create the charts based on the top 5 songs with high votes.
+                            $date = date('Y-m-d');
+
+                            $chartedSong = Chart::query()
+                                ->where('song_id', $song->id)
+                                ->get()
+                                ->first();
+
+                            $chart = [
+                                'song_id' => $song->id,
+                                'position' => $key + 1,
+                                'last_position' => $chartedSong ? $chartedSong->position : 0,
+                                're_entry' => 0,
+                                'dated' => $date,
+                                'is_dropped' => 0,
+                                'daily' => 1,
+                                'throwback' => 0,
+                                'local' => 0,
+                                'votes' => 0,
+                                'last_results' => 0,
+                                'phone_votes' => 0,
+                                'social_votes' => 0,
+                                'online_votes' => $song->votes,
+                                'voted_at' => Carbon::now(),
+                                'is_posted' => 1,
+                                'location' => $this->getStationCode()
+                            ];
+
+                            Chart::create($chart);
+                        }
 
                         return response()->json(['status' => 'success', 'message' => 'The daily survey has been posted'], 202);
                     }
@@ -156,7 +215,7 @@ class ChartController extends Controller {
                         ->orderBy('position')
                         ->get();
 
-                    return view('_cms.system-views.music._chart.charts', compact('chart'));
+                    return view('_cms.system-views.music._chart.charts', compact('charts'));
                 }
 
                 if($action === 'draft') {
@@ -170,7 +229,7 @@ class ChartController extends Controller {
                         ->orderBy('position')
                         ->get();
 
-                    return view('_cms.system-views.music._chart.charts', compact('chart'));
+                    return view('_cms.system-views.music._chart.charts', compact('charts'));
                 }
 
                 if($action === 'post') {
@@ -215,7 +274,7 @@ class ChartController extends Controller {
                 ->select('dated')
                 ->max('dated');
 
-            $chart = Chart::where('dated', $latestChartDate)
+            $charts = Chart::where('dated', $latestChartDate)
                 ->whereNull('deleted_at')
                 ->where('local', 0)
                 ->where('position', '>', 0)
@@ -223,7 +282,7 @@ class ChartController extends Controller {
                 ->orderBy('position')
                 ->get();
 
-            return view('_cms.system-views.music._chart.charts', compact('chart'));
+            return view('_cms.system-views.music._chart.charts', compact('charts'));
         }
 
         $chart_type = "";
@@ -500,6 +559,7 @@ class ChartController extends Controller {
                             ->whereNull('deleted_at')
                             ->where('local', 0)
                             ->where('daily', '=', 1)
+                            ->where('throwback', '=', 0)
                             ->where('is_posted', 1)
                             ->where('location', $this->getStationCode())
                             ->where('position', '>', 0)
@@ -510,11 +570,25 @@ class ChartController extends Controller {
                     }
 
                     if($chart_type === 'draft') {
+                        $songs = Song::query()
+                            ->orderBy('votes', 'desc')
+                            ->get()
+                            ->take(5);
+                        
+                        foreach ($songs as $key => $song) {
+                            $song->position = $key + 1;
+                        }
+
+                        return view('_cms.system-views.music.daily.songs-table', compact('songs'));
+                    }
+
+                    if($chart_type === 'throwback') {
                         $charts = Chart::where('dated', $chart_date)
                             ->whereNull('deleted_at')
                             ->where('local', 0)
                             ->where('daily', '=', 1)
-                            ->where('is_posted', 0)
+                            ->where('throwback', '=', 1)
+                            ->where('is_posted', '=', 0)
                             ->where('location', $this->getStationCode())
                             ->where('position', '>', 0)
                             ->orderBy('position')
@@ -570,7 +644,7 @@ class ChartController extends Controller {
                 }
             }
 
-            $chart = Chart::where('dated', $request['date'])
+            $charts = Chart::where('dated', $request['date'])
                 ->whereNull('deleted_at')
                 ->where('local', 0)
                 ->where('daily', 0)
@@ -581,7 +655,7 @@ class ChartController extends Controller {
                 ->orderBy('position')
                 ->get();
 
-            return view('_cms.system-views.music._chart.charts', compact('chart'));
+            return view('_cms.system-views.music._chart.charts', compact('charts'));
         }
 
         $chart = Chart::where('dated',$request['dates'])
@@ -621,39 +695,113 @@ class ChartController extends Controller {
         $charts = '';
         $chart_type = '';
         $is_posted = $request->get('is_posted') ?? 0;
+        $dated = $request->get('dated');
         $now = Carbon::now();
 
-        $latestSurveyDate = DB::table('charts')
+        $latestSurveyDate = Chart::query()
             ->select('dated')
             ->where('daily', 1)
+            ->where('local', 0)
+            ->where('throwback', 0)
+            ->whereNull('deleted_at')
+            ->max('dated');
+
+        $latestSurveyThrowbackDate = Chart::query()
+            ->select('dated')
+            ->where('daily', 1)
+            ->where('local', 0)
+            ->where('throwback', 1)
             ->whereNull('deleted_at')
             ->max('dated');
         
-        $surveyDates = DB::table('charts')
+        $surveyDates = Chart::query()
             ->where('daily', 1)
+            ->where('local', 0)
+            ->where('throwback', 0)
             ->select('dated')
             ->whereNull('deleted_at')
             ->groupBy('dated')
             ->orderBy('dated','desc')
             ->get();
 
+        // Get the date based from the request or load the latest survey date. 
         $dailyChartQuery = Chart::query()
             ->with('Song.Album.Artist')
             ->where('daily', 1)
-            ->where('dated', $latestSurveyDate)
+            ->where('local', 0)
+            ->where('throwback', 0)
+            ->where('dated', $dated ?? $latestSurveyDate)
             ->whereNull('deleted_at')
             ->orderBy('position')
             ->get();
 
+        $chartedSongCount = count($dailyChartQuery);
+
+        if ($chartedSongCount <= 0) {
+            $dailyChartQuery = Chart::query()
+                ->with('Song.Album.Artist')
+                ->where('daily', 1)
+                ->where('local', 0)
+                ->where('throwback', 0)
+                ->where('dated', $latestSurveyDate)
+                ->whereNull('deleted_at')
+                ->orderBy('position')
+                ->get();
+        }
+
         if($request->ajax())
         {
-            $isDaily = $request->get('isDaily');
             $daily = $request->get('daily');
+            $forSurveyDates = $request->get('surveyDates');
             $isPosted = $request->get('isPosted');
             $datatable = $request->get('datatable');
+            $chartType = $request->get('chartType');
+            $dated = $request->get('dated') ?? $latestSurveyDate;
+            $date = $request->get('date') ?? $latestSurveyThrowbackDate;
+            $type = $request->get('type');
+            $is_posted = $type === 'official' ? 1 : 0;
+            $throwback = $request->get('throwback');
 
-            if (isset($isDaily) && $isDaily) {
-                $charts = count($dailyChartQuery);
+            $charts = Chart::query()
+                ->with('Song.Album.Artist')
+                ->where('daily', 1)
+                ->where('local', 0)
+                ->where('throwback', 0)
+                ->where('dated', $dated)
+                ->where('is_posted', '=', $is_posted)
+                ->whereNull('deleted_at')
+                ->orderBy('position')
+                ->get();
+
+            $songs = Song::query()
+                ->with('Album.Artist')
+                ->orderBy('votes', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->take(5);
+
+            if (isset($daily) && $forSurveyDates) {
+                if (count($dailyChartQuery) > 0) {
+                    if ($dailyChartQuery->first()->dated !== date('Y-m-d')) {
+                        $isPosted = $dailyChartQuery->first()->is_posted;
+                    }
+                } else {
+                    $isPosted = 0;
+                }   
+
+                
+
+                if ($throwback) {
+                    $surveyDates = Chart::query()
+                        ->where('daily', 1)
+                        ->where('local', 0)
+                        ->where('throwback', 1)
+                        ->select('dated')
+                        ->whereNull('deleted_at')
+                        ->groupBy('dated')
+                        ->orderBy('dated','desc')
+                        ->get();
+                }
 
                 foreach ($surveyDates as $date) {
                     $options.= "<option value='".$date->dated."' data-value='daily'>".date('F d, Y', strtotime($date->dated))."</option>";
@@ -661,7 +809,8 @@ class ChartController extends Controller {
 
                 return response()->json([
                     'surveyDates' => $options,
-                    'chartCount' => $charts
+                    'chartCount' => $chartedSongCount,
+                    'isPosted' => $isPosted,
                 ]);
             }
 
@@ -703,49 +852,62 @@ class ChartController extends Controller {
                 $charts = $dailyChartQuery;
 
                 if (isset($datatable)) {
-                    $date = $request->get('dated') ?? $latestSurveyDate;
-                    $is_posted = $request->get('type') === 'official' ? 1 : 0;
-
-                    $charts = Chart::query()
-                        ->with('Song.Album.Artist')
-                        ->where('daily', 1)
-                        ->where('local', 0)
-                        ->where('dated', $date)
-                        ->where('is_posted', '=', $is_posted)
-                        ->whereNull('deleted_at')
-                        ->orderBy('position')
-                        ->get();
-
-                    foreach ($charts as $chart) {
-                        $options = '' .
-                            '<div class="btn-group">' .
-                                '<a href="#new-chart" data-toggle="modal" data-position="'.$chart->position.'" data-value="'.$chart->id.'" data-date="'.$chart->dated.'" class="btn btn-outline-dark"><i class="fa fa-edit"></i></a>' .
-                                '<a href="#update-chart" data-toggle="modal" data-position="'.$chart->position.'" data-value="'.$chart->id.'" data-date="'.$chart->dated.'" class="btn btn-outline-dark"><i class="fa fa-search"></i></a>' .
-                            '</div>';
-                    }
-
-                    foreach ($charts as $chart) {
-                        $existingTally = Tally::query()
-                            ->where('chart_id', $chart->id)
-                            ->whereDate('dated', $chart->dated)
-                            ->exists();
-
-                        if ($existingTally) {
-                            // Use stored tally result
-                            $chart->total_votes = $chart->LatestDailyTally->result ?? 0;
-                        } else {
-                            // Use calculated total votes
-                            $chart->total_votes = floatval($chart->online_votes) + floatval($chart->phone_votes) + floatval($chart->social_votes);
+                    if ($type === 'draft') {
+                        foreach ($songs as $key => $song) {
+                            $song->position = $key + 1;
+                            $song->votes = $song->votes ?? 0;
                         }
 
-                        // $chart->total_votes = (floatval($chart->online_votes) + floatval($chart->phone_votes) + floatval($chart->social_votes)) : $chart->Tally->latest('dated')->result;
-                        $chart->dated = '<div class="text-danger font-weight-bold">'.date('M d Y', strtotime($chart->dated)).'</div>';
-                        $chart->options = $options;
+                        return response()->json([
+                            'songs' => $songs
+                        ]);
+                    }
+
+                    if ($type === 'throwback') {
+                        $throwbacks = Chart::query()
+                            ->with('Song.Album.Artist')
+                            ->where('daily', 1)
+                            ->where('local', 0)
+                            ->where('throwback',1)
+                            ->where('is_posted', 0)
+                            ->where('dated', $date)
+                            ->orderBy('position')
+                            ->get();
+
+                        foreach ($throwbacks as $chart) {
+                            $existingTally = Tally::query()
+                                ->where('chart_id', $chart->id)
+                                ->whereDate('dated', $chart->dated)
+                                ->exists();
+
+                            if ($existingTally) {
+                                // Use stored tally result
+                                $chart->total_votes = $chart->LatestDailyTally->result ?? 0;
+                            } else {
+                                // Use calculated total votes
+                                $chart->total_votes = floatval($chart->online_votes) + floatval($chart->phone_votes) + floatval($chart->social_votes);
+                            }
+
+                            // $chart->total_votes = (floatval($chart->online_votes) + floatval($chart->phone_votes) + floatval($chart->social_votes)) : $chart->Tally->latest('dated')->result;
+                            $chart->options = '' .
+                                '<div class="btn-group">' .
+                                    '<a href="#new-chart" data-toggle="modal" data-position="'.$chart->position.'" data-value="'.$chart->id.'" data-date="'.$chart->dated.'" class="btn btn-outline-dark"><i class="fa fa-edit"></i></a>' .
+                                    '<a href="#update-chart" data-toggle="modal" data-position="'.$chart->position.'" data-value="'.$chart->id.'" data-date="'.$chart->dated.'" class="btn btn-outline-dark"><i class="fa fa-search"></i></a>' .
+                                '</div>';
+                        }
+
+                        return response()->json([
+                            'charts' => $throwbacks
+                        ]);
                     }
 
                     return response()->json([
                         'charts' => $charts
                     ]);
+                }
+
+                if ($chartType === 'draft') {
+                    return view('_cms.system-views.music.daily.songs-table', compact('songs'));
                 }
 
                 return view('_cms.system-views.music.daily.table', compact('charts'));

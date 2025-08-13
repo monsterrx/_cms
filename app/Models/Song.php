@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $album_id
  * @property string|null $track_link
  * @property string|null $type
+ * @property int $votes
  * @property int $is_charted
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
@@ -45,6 +46,7 @@ class Song extends Model
         'name',
         'track_link',
         'type',
+        'votes',
         'is_charted',
     ];
 

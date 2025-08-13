@@ -32,8 +32,8 @@
                         <a href="#newEntry" class="btn btn-outline-dark" data-toggle="modal">New Entry</a>
                     </div>
 
-                    <button id="official" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark" {{ isset($chart_type) && $chart_type == 'Official' ? 'disabled' : '' }} data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
-                    <button id="draft" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark" {{ isset($chart_type) && $chart_type == 'Draft' ? 'disabled' : '' }} data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
+                    <button id="official" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
+                    <button id="draft" data-payload="{{ $latestChartDate }}" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
                 </div>
             </div>
             <div id="monsterCharts">

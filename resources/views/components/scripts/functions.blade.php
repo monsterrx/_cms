@@ -175,7 +175,7 @@
         }
 
         function onSuccess(result) {
-            console.log(result);
+            // console.log(result);
             $('#chartDates, #newEntryChartDate').empty();
             $('#chartDates, #newEntryChartDate').append(result.dates);
 
@@ -184,89 +184,127 @@
     }
 
     // Daily Charts
-    function loadDailyDates() {
-        getAsync('{{ route('charts.daily') }}', { 'isDaily': true }, 'JSON', beforeSend, onSuccess);
+    function loadDailyDates(date, throwback = false) {
+        getAsync(
+            '{{ route('charts.daily') }}',
+            { 
+                daily: true, 
+                surveyDates: true, 
+                throwback: throwback,
+                dated: date 
+            },
+            'JSON',
+            null, // No need for an empty beforeSend function
+            ({ surveyDates, chartCount, isPosted }) => {
+                console.log("Result:", { surveyDates, chartCount, isPosted });
 
-        function beforeSend() {
+                const $surveyDate = $('#surveyDate');
+                const $newEntryChartDate = $('#newEntryChartDate');
 
-        }
+                if (surveyDates) {
+                    $surveyDate.add($newEntryChartDate).empty().append(surveyDates);
+                } 
+                else {
+                    $surveyDate.empty().append(
+                        '<option value selected disabled>No available daily chart date</option>'
+                    );
+                }
 
-        function onSuccess(result) {
-            const { surveyDates, chartCount } = result;
-
-            if (!surveyDates) {
-                $('#surveyDate').empty();
-                $('#surveyDate').append('<option value selected disabled> No available daily chart date </option>');
-            } 
-            else {
-                $('#surveyDate, #newEntryChartDate').empty();
-                $('#surveyDate, #newEntryChartDate').append(surveyDates);
+                if (chartCount === 5 && isPosted === 1) {
+                    $('#post').prop('disabled', true);
+                } 
+                else {
+                    $('#post').removeAttr('disabled');
+                }
             }
-
-            if (chartCount === 5) {
-                $('#post').removeAttr('disabled');
-                // $('#new').addClass('disabled');
-            }
-            else {
-                $('#post').attr('disabled', 'disabled');
-                // $('#new').removeClass('disabled');
-            }
-        }
+        );
     }
 
-    // Store interval reference globally
-    let dailyChartReloadInterval = null;
 
-    function createDailySurveyDataTable(date, action) {
-        let dailyChartsTable = $('#tdsTable');
+    // Store interval reference globally
+    let refreshingDataTableInterval = null;
+
+    function createRefreshingDataTable(date, action, throwback = false, elementID) {
+        let targetDataTable = $(`#${elementID}`);
 
         // Destroy old DataTable instance if it exists
-        if ($.fn.DataTable.isDataTable(dailyChartsTable)) {
-            dailyChartsTable.DataTable().destroy();
+        if ($.fn.DataTable.isDataTable(targetDataTable)) {
+            targetDataTable.DataTable().destroy();
         }
 
-        // Create a new DataTable
-        let dailyChartsDataTable = dailyChartsTable.DataTable({
+        // console.log("Date: ", date, "Action: ", action, "Throwback: ", throwback, "ElementID: ", elementID);
+
+        // Decide config based on elementID
+        let tableConfigs = {
+            dailyChartSongsTable: {
+                dataSrc: 'songs',
+                columns: [
+                    { data: 'position' },
+                    { data: 'name' },
+                    { data: 'album.artist.name' },
+                    { data: 'album.name' },
+                    { data: 'votes' }
+                ],
+                extraParams: {
+                    daily: true,
+                    date: date,
+                    datatable: true,
+                    type: action
+                }
+            },
+            default: {
+                dataSrc: 'charts',
+                columns: [
+                    { data: 'position' },
+                    { data: 'song.name' },
+                    { data: 'song.album.artist.name' },
+                    { data: 'song.album.name' },
+                    { data: 'total_votes' }
+                ],
+                extraParams: {
+                    daily: true,
+                    datatable: true,
+                    throwback: throwback,
+                    date: date,
+                    type: action
+                }
+            }
+        };
+
+        // Pick configuration (fallback to default)
+        let config = tableConfigs[elementID] || tableConfigs.default;
+
+        // Initialize DataTable
+        let refreshingDataTable = targetDataTable.DataTable({
             ajax: {
                 url: '{{ route('charts.daily') }}',
-                data: {
-                    'daily': true,
-                    'datatable': true,
-                    'dated': date,
-                    'type': action
-                },
-                dataSrc: 'charts'
+                data: config.extraParams,
+                dataSrc: config.dataSrc
             },
-            columns: [
-                {data: 'position'},
-                {data: 'song.name'},
-                {data: 'song.album.artist.name'},
-                {data: 'song.album.name'},
-                {data: 'total_votes'},
-                {data: 'dated'},
-                {data: 'options'},
-            ],
+            columns: config.columns
         });
 
         // Prevent multiple intervals from stacking
-        if (dailyChartReloadInterval) {
-            clearInterval(dailyChartReloadInterval);
+        if (refreshingDataTableInterval) {
+            clearInterval(refreshingDataTableInterval);
         }
 
         // Set up one consistent interval to reload
-        dailyChartReloadInterval = setInterval(() => {
-            dailyChartsDataTable.ajax.reload(null, false);
+        refreshingDataTableInterval = setInterval(() => {
+            refreshingDataTable.ajax.reload(null, false);
         }, 2000); // 2 seconds
     }
 
 
     function loadDailyCharts() {
-        let date = $('#surveyDate').attr('data-payload') ?? $('#surveyDate').val();
-        let action = $('#surveyDate').attr('data-chart-type');
+        const $surveyDate = $('#surveyDate');
 
-        console.log('loadDailyCharts(): ', [date, action]);
+        let date = $surveyDate.attr('data-payload') ?? $surveyDate.val();
+        let action = $surveyDate.attr('data-chart-type');
+        let chart_type = $surveyDate.attr('data-chart-type') === 'draft' ? 'draft' : 'official';
+        let $table = chart_type === 'draft' ? 'dailyChartSongsTable' : 'tdsTable';
 
-        getAsync('{{ route('charts.daily') }}', { 'daily': true }, 'HTML', beforeSend, onSuccess);
+        getAsync('{{ route('charts.daily') }}', { 'daily': true, 'chartType': chart_type }, 'HTML', beforeSend, onSuccess);
 
         function beforeSend() {
 
@@ -277,9 +315,17 @@
             $('#dailyCharts').append(result);
 
             setTimeout(() => {
-                createDailySurveyDataTable(date, action);
+                if (chart_type === 'draft') {
+                    $('#post').removeAttr('disabled');
+                }
+                else {
+                    $('#post').prop('disabled', true);
+                }
+                createRefreshingDataTable(date, action, false, $table);
             }, 800);
         }
+
+        // console.log('loadDailyCharts(): ', [date, action]);
     }
 
     function loadChartData() {

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $dated
  * @property string|null $location
  * @property int $daily
+ * @property int $throwback
  * @property int $local
  * @property int|null $is_dropped
  * @property string|null $votes
@@ -71,6 +72,7 @@ class Chart extends Model
         'dated',
         'is_dropped',
         'daily',
+        'throwback',
         'local',
         'votes',
         'last_results',
