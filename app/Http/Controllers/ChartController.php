@@ -149,6 +149,8 @@ class ChartController extends Controller {
                     }
 
                     if($action === 'post') {
+                        $currentDate = date('Y-m-d');
+
                         if ($throwback) {
                             Chart::where('dated', $request['dated'])
                             ->whereNull('deleted_at')
@@ -162,45 +164,63 @@ class ChartController extends Controller {
                             return response()->json(['status' => 'success', 'message' => 'The throwback charts has been posted'], 202);
                         }
 
+                        $dailyCharts = Chart::query()
+                            ->where('dated', $currentDate)
+                            ->where('daily', '=', 1)
+                            ->where('throwback', '=', 0)
+                            ->where('is_posted', '=', 1)
+                            ->get();
+
                         $songs = Song::query()
                             ->where('votes', '>', 0)
                             ->orderByDesc('votes')
                             ->take(5)
                             ->get();
 
-                        foreach ($songs as $key => $song) {
-                            // Create the charts based on the top 5 songs with high votes.
-                            $date = date('Y-m-d');
+                        // If there is an existing chart by the same date, return an error to avoid duplicate entries.
+                        if (count($dailyCharts) > 0) {
+                            return response()->json([
+                                'status' => 'error',
+                                'message' => 'Daily charts have already been posted for today.'
+                            ], 400);
+                        } else {
+                            foreach ($songs as $key => $song) {
+                                // Create the charts based on the top 5 songs with high votes.
+                                $date = date('Y-m-d');
 
-                            $chartedSong = Chart::query()
-                                ->where('song_id', $song->id)
-                                ->get()
-                                ->first();
+                                $chartedSong = Chart::query()
+                                    ->where('song_id', $song->id)
+                                    ->get()
+                                    ->first();
 
-                            $chart = [
-                                'song_id' => $song->id,
-                                'position' => $key + 1,
-                                'last_position' => $chartedSong ? $chartedSong->position : 0,
-                                're_entry' => 0,
-                                'dated' => $date,
-                                'is_dropped' => 0,
-                                'daily' => 1,
-                                'throwback' => 0,
-                                'local' => 0,
-                                'votes' => 0,
-                                'last_results' => 0,
-                                'phone_votes' => 0,
-                                'social_votes' => 0,
-                                'online_votes' => $song->votes,
-                                'voted_at' => Carbon::now(),
-                                'is_posted' => 1,
-                                'location' => $this->getStationCode()
-                            ];
+                                $chart = [
+                                    'song_id' => $song->id,
+                                    'position' => $key + 1,
+                                    'last_position' => $chartedSong ? $chartedSong->position : 0,
+                                    're_entry' => 0,
+                                    'dated' => $date,
+                                    'is_dropped' => 0,
+                                    'daily' => 1,
+                                    'throwback' => 0,
+                                    'local' => 0,
+                                    'votes' => 0,
+                                    'last_results' => 0,
+                                    'phone_votes' => 0,
+                                    'social_votes' => 0,
+                                    'online_votes' => $song->votes,
+                                    'voted_at' => Carbon::now(),
+                                    'is_posted' => 1,
+                                    'location' => $this->getStationCode()
+                                ];
 
-                            Chart::create($chart);
+                                Chart::create($chart);
+                            }
+
+                            return response()->json([
+                                'status' => 'success', 
+                                'message' => 'The daily survey has been posted'
+                            ], 202);
                         }
-
-                        return response()->json(['status' => 'success', 'message' => 'The daily survey has been posted'], 202);
                     }
                 }
 
@@ -719,7 +739,6 @@ class ChartController extends Controller {
             ->where('local', 0)
             ->where('throwback', 0)
             ->select('dated')
-            ->whereNull('deleted_at')
             ->groupBy('dated')
             ->orderBy('dated','desc')
             ->get();
@@ -730,13 +749,13 @@ class ChartController extends Controller {
             ->where('daily', 1)
             ->where('local', 0)
             ->where('throwback', 0)
-            ->where('dated', $dated ?? $latestSurveyDate)
+            ->where('dated', $dated)
             ->whereNull('deleted_at')
             ->orderBy('position')
             ->get();
 
         $chartedSongCount = count($dailyChartQuery);
-
+        
         if ($chartedSongCount <= 0) {
             $dailyChartQuery = Chart::query()
                 ->with('Song.Album.Artist')
@@ -787,11 +806,9 @@ class ChartController extends Controller {
                     }
                 } else {
                     $isPosted = 0;
-                }   
-
+                }
                 
-
-                if ($throwback) {
+                if ($throwback === 'true') {
                     $surveyDates = Chart::query()
                         ->where('daily', 1)
                         ->where('local', 0)
