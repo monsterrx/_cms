@@ -5,6 +5,8 @@ namespace App\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+use Exception;
 
 trait AssetProcessors {
     use SystemFunctions;
@@ -25,9 +27,23 @@ trait AssetProcessors {
 
     public function storePhoto(Request $request, string $path, string $directory, $universal = false, $profile_pic = false, $header_pic = false, $main_pic = false): string
     {
-        $image = $request->file('image');
+        if ($request->exists('image')) {
+            $image = $request->file('image');
 
-        $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+            $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+        } else if ($request->exists('background_image')) {
+            $image = $request->file('background_image');
+
+            $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+        } else if ($request->exists('icon')) {
+            $image = $request->file('icon');
+
+            $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+        } else if ($request->exists('header_image')) {
+            $image = $request->file('header_image');
+
+            $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+        }
 
         $image->move($path, $image_name);
 

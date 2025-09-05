@@ -133,26 +133,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="label" for="header">Background Image</label>
-                                    <div id="header" class="custom-file">
-                                        <label class="custom-file-label" for="background_image">Background photo is the show's main photo</label>
-                                        <input type="file" id="background_image" name="background_image" class="custom-file-input">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="label" for="header">Header Image</label>
-                                    <div id="header" class="custom-file">
-                                        <label class="custom-file-label" for="header_image">Header photo is the long photo of the show.</label>
-                                        <input type="file" id="header_image" name="header_image" class="custom-file-input">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <div class="btn-group">

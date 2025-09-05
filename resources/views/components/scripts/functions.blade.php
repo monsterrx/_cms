@@ -28,10 +28,7 @@
                 });
             }
         } else {
-            manualToast.fire({
-                icon: 'warning',
-                title: 'Sorry - you\'re browser doesn\'t support the FileReader API',
-            });
+            console.log("Sorry - you're browser doesn't support the FileReader API");
         }
     }
 

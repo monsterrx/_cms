@@ -59,38 +59,48 @@ class ShowController extends Controller
             'is_special' => 'required',
         ]);
 
-        if ($validator->passes()) {
-            $img = $request->file('background_image');
-            $path = 'images/shows';
-            $request['location'] = $this->getStationCode();
-            $request['slug_string'] = Str::studly($request['title']);
-            $request['is_active'] = 0;
-
-            $show = new Show($request->all());
-
-            if ($img) {
-                $show->background_image = $this->storePhoto($request, $path, 'shows', true, false, true);
-                $show->save();
-            } else {
-                if ($request['is_special'] === '2' || $request['is_special'] === 2) {
-                    $show->icon = $this->storePhoto($request, $path, 'shows', true);
-                    $show->save();
-
-                    Session::flash('success', 'Show successfully added');
-                    return redirect()->back();
-                }
-
-                return redirect()->back()->withErrors('There is no provided header picture');
-            }
-            $show->save();
-
-            $show = Show::latest()->first();
-
-            Session::flash('success', 'Show has been successfully added');
-            return redirect()->route('shows.show', $show->id);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors()->all());
         }
 
-        return redirect()->back()->withErrors($validator->errors()->all());
+        $path = 'images/shows';
+
+        $request['location'] = $this->getStationCode();
+        $request['slug_string'] = Str::studly($request['title']);
+        $request['is_active'] = 0;
+
+        $icon_name = $this->storePhoto($request, $path, 'shows', true);
+
+        $request['header_image'] = 'default-long.png';
+        $request['background_image'] = 'default.png';
+
+        $show = new Show($request->all());
+        $show->icon = $icon_name;
+        
+        // If header_image is not present
+        if ($request['is_special'] === '2') {
+            if ($request->exists('background_image')) {
+                $background_image = $this->storePhoto($request, $path, 'shows', true, false, false, true);
+
+                $show->background_image = $background_image;
+
+                $show->save();
+
+                $show = Show::latest()->first();
+
+                Session::flash('success', 'Show has been successfully added');
+                return redirect()->route('shows.show', $show->id);
+            }
+
+            return redirect()->back()->withErrors('There is no provided show picture');   
+        }
+
+        $show->save();
+
+        $show = Show::latest()->first();
+
+        Session::flash('success', 'Show has been successfully added, please add the necessary images.');
+        return redirect()->route('shows.show', $show->id);
     }
 
     public function show($id)
