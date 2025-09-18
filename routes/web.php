@@ -111,7 +111,7 @@ Route::middleware('auth')->group(function() {
     Route::resource('/charts', ChartController::class);
     Route::get('/chart_song',  [ChartController::class, 'selectSongInTable'])->name('charts.select.song');
     Route::get('/filter_chart', [ChartController::class, 'filter'])->name('filter.chart');
-    Route::post('drop', [ChartController::class, 'DropChart'])->name('charts.drop');
+    Route::post('drop', [ChartController::class, 'dropChart'])->name('charts.drop');
     Route::post('/new_chart', [ChartController::class, 'NewChart'])->name('charts.new');
     Route::get('/tdsTop5', [ChartController::class, 'dailyCharts'])->name('charts.daily');
     Route::get('/chart_dates', [ChartController::class, 'create'])->name('get.chart.dates');

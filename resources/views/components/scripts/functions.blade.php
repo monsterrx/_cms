@@ -188,7 +188,7 @@
                 daily: true, 
                 surveyDates: true, 
                 throwback: throwback,
-                dated: date 
+                dated: date
             },
             'JSON',
             null, // No need for an empty beforeSend function
@@ -207,12 +207,12 @@
                     );
                 }
 
-                if (chartCount === 5 && isPosted === 1) {
-                    $('#post').prop('disabled', true);
-                } 
-                else {
-                    $('#post').removeAttr('disabled');
-                }
+                // if (chartCount === 5 && isPosted === 1) {
+                //     $('#post').prop('disabled', true);
+                // } 
+                // else {
+                //     $('#post').removeAttr('disabled');
+                // }
             }
         );
     }
@@ -252,7 +252,7 @@
             default: {
                 dataSrc: 'charts',
                 columns: [
-                    { data: 'position' },
+                    { data: 'id' },
                     { data: 'song.name' },
                     { data: 'song.album.artist.name' },
                     { data: 'song.album.name' },
@@ -270,6 +270,8 @@
 
         // Pick configuration (fallback to default)
         let config = tableConfigs[elementID] || tableConfigs.default;
+
+        // console.log("Config: ", config);
 
         // Initialize DataTable
         let refreshingDataTable = targetDataTable.DataTable({
@@ -289,7 +291,7 @@
         // Set up one consistent interval to reload
         refreshingDataTableInterval = setInterval(() => {
             refreshingDataTable.ajax.reload(null, false);
-        }, 2000); // 2 seconds
+        }, 1800); // 1.8 seconds
     }
 
 
@@ -299,7 +301,8 @@
         let date = $surveyDate.attr('data-payload') ?? $surveyDate.val();
         let action = $surveyDate.attr('data-chart-type');
         let chart_type = $surveyDate.attr('data-chart-type') === 'draft' ? 'draft' : 'official';
-        let $table = chart_type === 'draft' ? 'dailyChartSongsTable' : 'tdsTable';
+        // Removed this permanently due to digital direction.
+        // let $table = chart_type === 'draft' ? 'dailyChartSongsTable' : 'tdsTable';
 
         getAsync('{{ route('charts.daily') }}', { 'daily': true, 'chartType': chart_type }, 'HTML', beforeSend, onSuccess);
 
@@ -312,17 +315,17 @@
             $('#dailyCharts').append(result);
 
             setTimeout(() => {
-                if (chart_type === 'draft') {
-                    $('#post').removeAttr('disabled');
-                }
-                else {
-                    $('#post').prop('disabled', true);
-                }
-                createRefreshingDataTable(date, action, false, $table);
+                // if (chart_type === 'draft') {
+                //     $('#post').removeAttr('disabled');
+                // }
+                // else {
+                //     $('#post').prop('disabled', true);
+                // }
+                createRefreshingDataTable(date, action, false, 'tdsTable');
             }, 800);
         }
 
-        // console.log('loadDailyCharts(): ', [date, action]);
+        console.log('loadDailyCharts(): ', [date, action]);
     }
 
     function loadChartData() {

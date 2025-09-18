@@ -214,9 +214,14 @@
 
         if (action === 'official') {
             $('#chart-subtitle').empty();
-            $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
             $('#chartDates, #surveyDate').removeAttr('data-is-throwback');
+
+            if (chart === 'daily') {
+                $('#chart-subtitle').append('Daily Charts')
+            } else {
+                $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
+            }
 
             getAsync('{{ route('charts.index') }}', {
                 "action": action,
@@ -229,21 +234,37 @@
             function onSend() {
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
-                manualToast.fire({
-                    icon: 'info',
-                    title: 'Loading ' + action + ' charts ...',
-                });
+                
+                if (chart === 'daily') {
+                    manualToast.fire({
+                        icon: 'info',
+                        title: 'Loading daily charts ...',
+                    });
+                } else {
+                    manualToast.fire({
+                        icon: 'info',
+                        title: 'Loading ' + action + ' charts ...',
+                    });
+                }
             }
 
             function onSuccess(result) {
-                Toast.fire({
-                    icon: 'success',
-                    title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
-                });
+                if (chart === 'daily') {
+                    $('#post').removeAttr('disabled');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Daily charts has been loaded'
+                    });
+                } else {
+                    $('#post').attr('disabled', true);
+                    Toast.fire({
+                        icon: 'success',
+                        title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
+                    });
+                }
 
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
-                $('#post').attr('disabled', true);
 
                 loadDailyDates(payload);
 
@@ -256,9 +277,14 @@
 
         if (action === 'draft') {
             $('#chart-subtitle').empty();
-            $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts');
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
             $('#chartDates, #surveyDate').removeAttr('data-is-throwback');
+
+            if (chart === 'daily') {
+                $('#chart-subtitle').append('Song List')
+            } else {
+                $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
+            }
 
             getAsync('{{ route('charts.index') }}', {
                 "action": action,
@@ -271,25 +297,46 @@
             function onSend() {
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
-                manualToast.fire({
-                    icon: 'info',
-                    title: 'Loading ' + action + ' charts ...',
-                });
+                
+                if (chart === 'daily') {
+                    manualToast.fire({
+                        icon: 'info',
+                        title: 'Loading song list ...',
+                    });
+                } else {
+                    manualToast.fire({
+                        icon: 'info',
+                        title: 'Loading ' + action + ' charts ...',
+                    });
+                }
             }
 
             function onSuccess(result) {
-                Toast.fire({
-                    icon: 'success',
-                    title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
-                });
+                if (chart === 'daily') {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Song list has been loaded'
+                    });
+                } else {
+                    Toast.fire({
+                        icon: 'success',
+                        title: action.charAt(0).toUpperCase() + action.slice(1) + ' charts has been loaded'
+                    });
+                }
 
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
 
+                if (chart === 'daily') {
+                    $('#post').attr('disabled', true);
+                } else if (chart === 'countdown') {
+                    $('#post').removeAttr('disabled');
+                }
+
                 loadDailyDates(payload);
 
                 setTimeout(() => {
-                    createRefreshingDataTable(payload, action, throwback, 'dailyChartSongsTable');
+                    createRefreshingDataTable(payload, action, throwback, 'tdsTable');
                     $('#chartDates, #surveyDate').val(payload);
                     $('#surveyDates').attr('data-chart-type', 'throwback');
                 }, 800);
@@ -328,10 +375,20 @@
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
 
+                if (chart === 'daily') {
+                    $('#post').attr('disabled', true);
+                }
+
                 loadDailyDates(payload, true);
                 
                 setTimeout(() => {
-                    createRefreshingDataTable(payload, action, throwback, 'tdsTable');
+                    // Get the first option value
+                    let firstDate = $('#surveyDate option:first').val();
+
+                    // Apply it to the selector's data-payload attribute
+                    $(this).attr('data-payload', firstDate);
+
+                    createRefreshingDataTable(firstDate, action, throwback, 'tdsTable');
                     // $('#chartDates, #surveyDate').val(payload);
                 }, 800);
             }
@@ -1497,12 +1554,14 @@
             });
 
             setTimeout(() => {
-                if (chart_type === 'draft') {
-                    createRefreshingDataTable(date, chart_type, throwback, 'dailyChartSongsTable');
-                }
-                else {
-                    createRefreshingDataTable(date, chart_type, throwback, 'tdsTable');
-                }
+                // if (chart_type === 'draft') {
+                //     createRefreshingDataTable(date, chart_type, throwback, 'dailyChartSongsTable');
+                // }
+                // else {
+                //     createRefreshingDataTable(date, chart_type, throwback, 'tdsTable');
+                // }
+
+                createRefreshingDataTable(date, chart_type, throwback, 'tdsTable');
             }, 800);
         }
     });
@@ -2239,6 +2298,9 @@
         }
 
         function onSuccess(result) {
+            console.log("DailyChartsForm / NewEntryChartsForm Result:", result);
+            
+
             if (formData.has('local')) {
                 loadLocalCharts();
                 loadLocalDates();
@@ -2253,7 +2315,7 @@
             }
 
             $('#newEntry, #new-entry').modal('hide');
-            $('#position, #dated, #name, #song_id').val('');
+            $('#position, #dated, #song_name, #song_id').val('');
             $('button[type="submit"]').removeAttr('disabled');
             $('button[type="submit"]').html('Save');
 
@@ -2353,5 +2415,22 @@
         $('#updateChartedSongForm, #deleteChartedSongForm, #updateDailyChartedSongForm').attr('action', url + '/' + chart_id);
         update_date.val(date);
         update_date.attr('readonly', true);
+    });
+
+    $('#type').on('change', function() {
+        let selected = $(this).val();
+
+        console.log("Selected:", selected);
+
+        if (selected === 'song') {
+            // Hide daily chart options and disable fields
+            $('#dailyChartsOptions').attr('hidden', true);
+            $('#dailyChartsOptions').find('select, input').prop('disabled', true);
+        } 
+        else if (selected === 'dailyChart') {
+            // Show daily chart options and enable fields
+            $('#dailyChartsOptions').removeAttr('hidden');
+            $('#dailyChartsOptions').find('select, input').prop('disabled', false);
+        }
     });
 </script>

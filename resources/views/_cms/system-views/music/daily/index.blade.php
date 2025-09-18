@@ -7,7 +7,7 @@
         <div class="mt-md-4 mt-lg-4 mt-sm-0 mb-5">
             <div class="display-4">The Daily Survey Top 5</div>
             @if(isset($data['chart_type']))
-                <p id="chart-subtitle" class="h4 mb-0">{{ $data['chart_type'] }} Charts</p>
+                <p id="chart-subtitle" class="h4 mb-0">{{ $data['chart_type'] === 'Draft' ? 'Songs List' : 'Daily Charts' }}</p>
             @endif
             <div class="row">
                 <div class="col-md-4">
@@ -21,13 +21,14 @@
                 <div class="col-md-12 col-sm-12 col-lg-12">
                     <div class="fa-pull-right">
                         <div class="btn-group">
-                            <button id="post" disabled data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="Make a chart visible in the website">Post Charts</button>
+                            <button id="post" disabled data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark" data-toggle="tooltip" data-placement="bottom" title="Make a throwback chart visible in the website">Post Charts</button>
                         </div>
-                        <a id="new" href="#new-entry" class="btn btn-outline-dark" data-toggle="modal">New Entry</a>
+                        <a id="new" href="#new-entry" class="btn btn-outline-dark" data-toggle="modal">Add Songs</a>
                     </div>
 
-                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Official Chart</button>
-                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Draft Chart</button>
+                    {{-- Commentted due to digital direction 09-15-2025 --}}
+                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Survey Charts</button>
+                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Songs List</button>
                     <button id="throwback" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" data-is-throwback="true" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are shown every wednesday">Throwback Charts</button>
                 </div>
             </div>
@@ -51,31 +52,51 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">New Throwback Entry</h5>
+                    <h5 class="modal-title">Add Songs</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form id="dailyChartsForm" action="{{ route('charts.store') }}" method="POST">
                     @csrf
+                    <input type="text" name="daily" value="1" style="display: none;">
                     <div class="modal-body">
-                        <input type="text" value="1" id="daily" name="daily" style="display: none;">
-                        <input type="text" value="1" id="throwback" name="throwback" style="display: none;">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="throwback_position">Chart Position</label>
-                                    <select name="position" id="throwback_position" class="form-control">
-                                        @for($i = 1; $i <= 5; $i++)
-                                            <option value="{{ $i }}">{{ $i }}</option>
-                                        @endfor
+                                    <label for="type">Type</label>
+                                    <select name="type" id="type" class="form-control">
+                                        <option value="song">Playlist</option>
+                                        <option value="dailyChart">Daily Chart</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div id="newChartDateInput" class="form-group">
-                                    <label for="newEntryChartsDate">Chart Date</label>
-                                    <input type="date" id="newEntryChartsDate" name="dated" class="form-control">
+                        </div>
+                        <div id="dailyChartsOptions" hidden>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="throwback_position">Chart Position</label>
+                                        <select name="position" id="throwback_position" class="form-control" disabled>
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <option value="{{ $i }}">{{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="newChartDateInput" class="form-group">
+                                        <label for="newEntryChartsDate">Chart Date</label>
+                                        <input type="date" id="newEntryChartsDate" name="dated" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input" id="is_throwback" name="throwback" value="1" disabled>
+                                        <label class="form-check-label" for="is_throwback">Make this chart appear as throwback charts</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
