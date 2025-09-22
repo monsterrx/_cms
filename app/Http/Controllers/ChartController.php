@@ -326,6 +326,8 @@ class ChartController extends Controller {
             $charts = Chart::where('dated', $latestChartDate)
                 ->whereNull('deleted_at')
                 ->where('local', 0)
+                ->where('daily', 0)
+                ->where('throwback', 0)
                 ->where('position', '>', 0)
                 ->where('location', $this->getStationCode())
                 ->orderBy('position')

@@ -20,7 +20,7 @@
                                 <td>{{ $chart->Song->name }}</td>
                                 <td>{{ $chart->Song->Album->Artist->name }}</td>
                                 <td>{{ $chart->Song->Album->name }}</td>
-                                <td>{{ $chart->LatestDailyTally->results ?? 0 }}</td>
+                                <td>{{ $chart->online_votes }}</td>
                                 {{-- <td>
                                     <div class="btn-group">
                                         <a href="#new-chart" data-toggle="modal" data-position="{{ $chart->position }}" data-value="{{ $chart->id }}" data-date="{{ $chart->dated }}" class="btn btn-outline-dark"><i class="fa fa-edit"></i></a>
