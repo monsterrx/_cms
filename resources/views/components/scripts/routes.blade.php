@@ -35,48 +35,6 @@
             }
         });
 
-        $(document).on('submit', '#deleteDailyChartedSongForm', function (event) {
-            event.preventDefault();
-            let url = $(this).attr('action');
-            let formData = new FormData(this);
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                dataType: 'JSON',
-                contentType: false,
-                processData: false,
-                cache: false,
-                beforeSend: () => {
-                    manualToast.fire({
-                        icon: 'info',
-                        title: 'Sending request ...'
-                    });
-                },
-                success: (response) => {
-                    $('#deleteChart').modal('hide');
-                    $('button[type="submit"]').removeAttr('disabled');
-
-                    loadDailyCharts();
-
-                    Toast.fire({
-                        icon: response.status,
-                        title: response.message
-                    });
-                },
-                error: (error) => {
-                    $('#deleteChart').modal('hide');
-                    $('button[type="submit"]').removeAttr('disabled');
-
-                    manualToast.fire({
-                        icon: 'error',
-                        title: error.status + ' ' + error.statusText
-                    });
-                }
-            });
-        });
-
         // On modal show, click the artist tab.
         $('#dataList').on('shown.bs.modal', function () {
             $('[data-name="artist"]').click();

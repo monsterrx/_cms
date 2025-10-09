@@ -241,19 +241,22 @@
         </div>
     </div>
 
-    <div class="modal fade" id="deleteChart" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal fade" id="delete-chart" tabindex="-1" role="dialog" aria-labelledby="removePlaylistSong" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Remove Charted Song?</h5>
+                    <h5 class="modal-title">Remove From Playlist?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <form id="deleteDailyChartedSongForm" method="POST" action="{{ route('charts.daily.remove') }}">
+                    @method('DELETE')
                     <input type="hidden" id="delete_song_id" name="delete_song_id">
+                    <input type="hidden" name="daily" id="daily" value="1">
+                    <input type="hidden" name="is_posted" id="is_posted" value="0">
                     <div id="modal-body" class="modal-body">
-                        Ajax not initialized.
+                        Ajax not initialized. 
                     </div>
                     <div class="modal-footer">
                         <div class="btn-group">

@@ -309,4 +309,19 @@
             [1, 'desc'],
         ]
     });
+    let mobileAppAssetTable = $('#mobileAppAssetTable').DataTable({
+        ajax: {
+            url: '{{ route('asset.index') }}',
+            dataSrc: '',
+        },
+        columns: [
+            {data: 'id'},
+            {data: 'is_dark_mode'},
+            {data: 'location'},
+            {data: 'options'},
+        ],
+        order: [
+            [0, 'desc'],
+        ]
+    });
 </script>

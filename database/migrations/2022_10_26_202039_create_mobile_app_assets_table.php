@@ -16,12 +16,14 @@ class CreateMobileAppAssetsTable extends Migration
     {
         Schema::create('mobile_app_assets', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('title_id');
             $table->string('logo')->default('logo.png');
             $table->string('chart_icon')->default('default.png');
             $table->string('article_icon')->default('default.png');
             $table->string('podcast_icon')->default('default.png');
             $table->string('article_page_icon')->default('default.png');
             $table->string('youtube_page_icon')->default('default.png');
+            $table->boolean('is_dark_mode')->default(0);
             $table->string('location')->default('mnl');
             $table->timestamps();
         });

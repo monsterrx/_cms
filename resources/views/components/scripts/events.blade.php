@@ -1691,7 +1691,7 @@
 
         function onSuccess(result) {
             $('button[type="submit"]').removeAttr('disabled');
-            $('button[type="submit"]').html('Save');
+            
             Toast.fire({
                 icon: result.status,
                 title: result.message
@@ -2026,7 +2026,7 @@
             });
         }
     });
-    $(document).on('submit', '#deleteChartedSongForm, #deleteDailyChartedSongForm', function (event) {
+    $(document).on('submit', '#deleteChartedSongForm', function (event) {
         event.preventDefault();
 
         let formData = new FormData(this);
@@ -2045,7 +2045,7 @@
             // console.log(result);
             $('#delete-chart, #deleteChart').modal('hide');
             $('button[type="submit"]').removeAttr('disabled');
-            $('button[type="submit"]').html('Save');
+            $('button[type="submit"]').html('Yes');
 
             loadDailyCharts();
             loadChartData();
@@ -2053,7 +2053,38 @@
 
             Toast.fire({
                 icon: 'success',
-                title: 'Charted song has been deleted'
+                title: 'Charted song has been deleted.'
+            });
+        }
+    });
+    $(document).on('submit', '#deleteDailyChartedSongForm', function (event) {
+        event.preventDefault();
+
+        let formData = new FormData(this);
+        let url = $(this).attr('action');
+
+        postAsync(url, formData, "HTML", beforeSend, onSuccess);
+
+        function beforeSend() {
+            manualToast.fire({
+                icon: 'info',
+                title: 'Deleting ...'
+            });
+        }
+
+        function onSuccess(result) {
+            // console.log(result);
+            $('#delete-chart, #deleteChart').modal('hide');
+            $('button[type="submit"]').removeAttr('disabled');
+            $('button[type="submit"]').html('Yes');
+
+            loadDailyCharts();
+            loadChartData();
+            loadDates();
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Selected song has been deleted.'
             });
         }
     });
@@ -2417,6 +2448,21 @@
         update_date.attr('readonly', true);
     });
 
+    // 20251009
+    $(document).on('click', 'a[href="#delete-chart"]', function(e) {
+        e.preventDefault();
+
+        let position = $(this).attr('data-position');
+        let chart_id = $(this).attr('data-value');
+        let date = $(this).attr('data-date');
+        let url = '{{ url('charts') }}';
+        let form = $('#deleteDailyChartedSongForm');
+
+        form.attr('action', url + '/' + chart_id);
+        form.children('#delete_song_id').val(chart_id);
+        form.children('#modal-body').html('Are you sure you want to delete the playlist song?');
+    });
+
     $('#type').on('change', function() {
         let selected = $(this).val();
 
@@ -2431,6 +2477,34 @@
             // Show daily chart options and enable fields
             $('#dailyChartsOptions').removeAttr('hidden');
             $('#dailyChartsOptions').find('select, input').prop('disabled', false);
+        }
+    });
+    $(document).on('submit', '#mobileAssetForm', function (event) {
+        event.preventDefault();
+
+        let formData = new FormData(this);
+        let url = $(this).attr('action');
+
+        postAsync(url, formData, 'JSON', beforeSend, onSuccess);
+
+        function beforeSend() {
+            manualToast.fire({
+                icon: 'info',
+                title: 'Creating new dynamic asset please wait ...'
+            });
+        }
+
+        function onSuccess(result) {
+            $('button[type="submit"]').removeAttr('disabled');
+            $('#new-asset').modal('hide');
+
+            manualToast.fire({
+                icon: result.status,
+                title: result.message,
+            });
+
+            $(':input').val();
+            mobileAppAssetTable.ajax.reload(null, false);
         }
     });
 </script>

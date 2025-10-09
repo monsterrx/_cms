@@ -42,16 +42,18 @@ class Asset extends Model
     protected $table = 'mobile_app_assets';
 
     protected $fillable = [
+        'title_id',
         'logo',
         'chart_icon',
         'article_icon',
         'podcast_icon',
         'article_page_icon',
         'youtube_page_icon',
+        'is_dark_mode',
         'location'
     ];
 
     public function Title() {
-        return $this->hasOne(Title::class);
+        return $this->belongsTo(Title::class, 'title_id');
     }
 }

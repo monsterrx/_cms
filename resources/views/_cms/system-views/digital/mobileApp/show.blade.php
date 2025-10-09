@@ -1,8 +1,7 @@
 @extends('layouts.base')
 
 @section('stylesheet')
-    <link rel="stylesheet" href="{{ asset('css/mobile.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/mobile.app.styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/website_app.css') }}">
 @endsection
 
 @section('scripts')
@@ -45,7 +44,7 @@
                 <a href="{{ route('asset.index') }}" class="btn btn-outline-dark float-left">
                     <i class="fas fa-arrow-left"></i> Back
                 </a>
-                <a href="{{ route('asset.show', [$monster_asset->id, 'refresh' => true]) }}" class="btn btn-outline-dark float-right">
+                <a href="{{ route('asset.show', [$title->id, 'refresh' => true]) }}" class="btn btn-outline-dark float-right">
                     Refresh <i class="fas fa-redo-alt"></i>
                 </a>
             </div>
@@ -67,14 +66,17 @@
                                     <div class="card-body">
                                         @csrf
                                         <div class="row justify-content-center">
-                                            <div class="col-6">
-                                                <img src="{{ $monster_asset->logo }}" alt="main-logo" width="300px">
-                                            </div>
+                                            @foreach($title->Asset as $asset)
+                                                <div class="col-6 {{ $asset->is_dark_mode === 0 ? '' : 'bg-dark text-white' }}">
+                                                    <p class="lead">{{ $asset->is_dark_mode === 0 ? 'Light' : 'Dark' }}</p>
+                                                    <img src="{{ $asset->logo }}" alt="main-logo" width="300px">
+                                                </div>
+                                            @endforeach
                                         </div>
                                         <div class="my-4"></div>
                                         <div class="row justify-content-center">
                                             <div class="col-6">
-                                                <input type="hidden" name="id" value="{{ $monster_asset->id }}">
+                                                <input type="hidden" name="id" value="{{ $title->id }}">
                                                 <input type="hidden" name="asset_type" value="main logo">
                                                 <input type="file" id="main-logo" name="image" accept="image/*">
                                             </div>
@@ -89,12 +91,20 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-content">
-                                    <div class="panel-header charts-header avatar">
-                                        <img src="{{ $monster_asset->chart_icon }}" alt="chart-icon" class="circle charts-logo">
-                                        <p class="panel-title charts-title">{{ $monster_asset->title->chart_title }}</p>
-                                        <p class="charts-subtitle">{{ $monster_asset->title->chart_sub_title }}</p>
-                                    </div>
+                                <div class="row">
+                                    @foreach($title->Asset as $asset)
+                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                            <div class="row g-0">
+                                                <div class="col-2 px-1">
+                                                    <img src="{{ $asset->chart_icon }}" alt="hitlist" class="img-fluid img-icon">
+                                                </div>
+                                                <div class="col-10 text-uppercase px-1">
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->chart_title }}</p>
+                                                    <p class="barlow {{ $asset->is_dark_mode === 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->chart_sub_title }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -103,12 +113,14 @@
                                     <div class="card-body">
                                         <form id="chartLogoForm" action="{{ route('asset.upload-image') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $monster_asset->id }}">
+                                            <input type="hidden" name="id" value="{{ $title->id }}">
                                             <input type="hidden" name="asset_type" value="charts">
 
                                             <div class="row justify-content-center">
                                                 <div class="col-12">
-                                                    <img src="{{ $monster_asset->chart_icon }}" alt="chart-icon" width="100px">
+                                                    @foreach ($title->Asset as $asset)
+                                                        <img src="{{ $asset->chart_icon }}" alt="chart-icon" width="100px">
+                                                    @endforeach
                                                 </div>
 
                                                 <div class="my-4">
@@ -124,16 +136,16 @@
                                         </form>
 
                                         <div class="row justify-content-center">
-                                            <form id="chartTitleForm" action="{{ route('asset.update', $monster_asset->id) }}" method="POST" class="col-10">
+                                            <form id="chartTitleForm" action="{{ route('asset.update', $title->id) }}" method="POST" class="col-10">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="asset_type" value="charts">
 
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="chart_title" name="chart_title" placeholder="Charts Title" value="{{ $monster_asset->title->chart_title }}">
+                                                    <input type="text" class="form-control" id="chart_title" name="chart_title" placeholder="Charts Title" value="{{ $title->chart_title }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <textarea type="text" class="form-control" id="chart_sub_title" name="chart_sub_title" placeholder="Charts Sub Title">{{ $monster_asset->title->chart_sub_title }}</textarea>
+                                                    <textarea type="text" class="form-control" id="chart_sub_title" name="chart_sub_title" placeholder="Charts Sub Title">{{ $title->chart_sub_title }}</textarea>
                                                 </div>
 
                                                 <button id="chart_title_submit" type="submit" class="btn btn-outline-dark">Save Changes</button>
@@ -148,12 +160,12 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-content">
-                                    <div class="panel-header articles-header avatar">
-                                        <img src="{{ $monster_asset->article_icon }}" alt="chart-icon" class="circle articles-logo">
-                                        <p class="panel-title articles-title">{{ $monster_asset->title->article_title }}</p>
-                                        <p class="articles-subtitle">{{ $monster_asset->title->article_sub_title }}</p>
-                                    </div>
+                                <div class="panel-header avatar">
+                                    @foreach ($title->Asset as $asset)
+                                        <img src="{{ $asset->article_icon }}" alt="articles-icon" class="circle articles-logo">
+                                    @endforeach
+                                    <p class="panel-title articles-title">{{ $title->article_title }}</p>
+                                    <p class="articles-subtitle">{{ $title->article_sub_title }}</p>
                                 </div>
                             </div>
 
@@ -162,14 +174,16 @@
                                     <div class="card-body">
                                         <form id="articleLogoForm" action="{{ route('asset.upload-image') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $monster_asset->id }}">
+                                            <input type="hidden" name="id" value="{{ $title->id }}">
                                             <input type="hidden" name="asset_type" value="articles">
 
                                             <div class="row justify-content-center">
                                                 <div class="col-12">
-                                                    <img src="{{ $monster_asset->article_icon }}" alt="article-icon" width="100px">
+                                                    @foreach ($title->Asset as $asset)
+                                                        <img src="{{ $asset->article_icon }}" alt="article-icon" width="100px">
+                                                    @endforeach
                                                 </div>
-
+                                                
                                                 <div class="my-4">
                                                     <div class="card">
                                                         <div class="card-body">
@@ -183,16 +197,16 @@
                                         </form>
 
                                         <div class="row justify-content-center">
-                                            <form id="articleTitleForm" action="{{ route('asset.update', $monster_asset->id) }}" method="POST" class="col-10">
+                                            <form id="articleTitleForm" action="{{ route('asset.update', $title->id) }}" method="POST" class="col-10">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="asset_type" value="articles">
 
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Article Title" value="{{ $monster_asset->title->article_title }}">
+                                                    <input type="text" class="form-control" id="article_title" name="article_title" placeholder="Article Title" value="{{ $title->article_title }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <textarea type="text" class="form-control" id="article_sub_title" name="article_sub_title" placeholder="Article Sub Title">{{ $monster_asset->title->article_sub_title }}</textarea>
+                                                    <textarea type="text" class="form-control" id="article_sub_title" name="article_sub_title" placeholder="Article Sub Title">{{ $title->article_sub_title }}</textarea>
                                                 </div>
 
                                                 <button id="article_title_submit" type="submit" class="btn btn-outline-dark">Save Changes</button>
@@ -207,12 +221,12 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-content">
-                                    <div class="panel-header podcast-header avatar">
-                                        <img src="{{ $monster_asset->podcast_icon }}" alt="podcasts-icon" class="circle shows-logo">
-                                        <p class="panel-title show-title">{{ $monster_asset->title->podcast_title }}</p>
-                                        <p class="shows-subtitle">{{ $monster_asset->title->podcast_sub_title }}</p>
-                                    </div>
+                                <div class="panel-header avatar">
+                                    @foreach ($title->Asset as $asset)
+                                        <img src="{{ $asset->podcast_icon }}" alt="podcast-icon" class="circle podcast-logo">
+                                    @endforeach
+                                    <p class="panel-title show-title">{{ $title->podcast_title }}</p>
+                                    <p class="shows-subtitle">{{ $title->podcast_sub_title }}</p>
                                 </div>
                             </div>
 
@@ -221,12 +235,14 @@
                                     <div class="card-body">
                                         <form id="podcastLogoForm" action="{{ route('asset.upload-image') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $monster_asset->id }}">
+                                            <input type="hidden" name="id" value="{{ $title->id }}">
                                             <input type="hidden" name="asset_type" value="podcasts">
 
                                             <div class="row justify-content-center">
                                                 <div class="col-12">
-                                                    <img src="{{ $monster_asset->podcast_icon }}" alt="podcast-icon" width="100px">
+                                                    @foreach ($title->Asset as $asset)
+                                                        <img src="{{ $asset->podcast_icon }}" alt="podcast-icon" width="100px">
+                                                    @endforeach
                                                 </div>
 
                                                 <div class="my-4">
@@ -242,16 +258,16 @@
                                         </form>
 
                                         <div class="row justify-content-center">
-                                            <form id="podcastTitleForm" action="{{ route('asset.update', $monster_asset->id) }}" method="POST" class="col-10">
+                                            <form id="podcastTitleForm" action="{{ route('asset.update', $title->id) }}" method="POST" class="col-10">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="asset_type" value="podcasts">
 
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="podcast_title" name="podcast_title" placeholder="Podcast Title" value="{{ $monster_asset->title->podcast_title }}">
+                                                    <input type="text" class="form-control" id="podcast_title" name="podcast_title" placeholder="Podcast Title" value="{{ $title->podcast_title }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <textarea type="text" class="form-control" id="podcast_sub_title" name="podcast_sub_title" placeholder="Podcast Sub Title">{{ $monster_asset->title->podcast_sub_title }}</textarea>
+                                                    <textarea type="text" class="form-control" id="podcast_sub_title" name="podcast_sub_title" placeholder="Podcast Sub Title">{{ $title->podcast_sub_title }}</textarea>
                                                 </div>
 
                                                 <button id="podcast_title_submit" type="submit" class="btn btn-outline-dark">Save Changes</button>
@@ -266,11 +282,11 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-content">
-                                    <div class="panel-header articles-header avatar">
-                                        <img src="{{ $monster_asset->article_page_icon }}" class="circle articles-icon" alt="articles-icon">
-                                        <div class="panel-title large-title">{{ $monster_asset->title->articles_main_page_title }}</div>
-                                    </div>
+                                <div class="panel-header avatar">
+                                    @foreach ($title->Asset as $asset)
+                                        <img src="{{ $asset->article_page_icon }}" alt="articles-icon" class="circle articles-logo">
+                                    @endforeach
+                                    <div class="panel-title large-title">{{ $title->articles_main_page_title }}</div>
                                 </div>
                             </div>
 
@@ -279,12 +295,14 @@
                                     <div class="card-body">
                                         <form id="articlePageLogoForm" action="{{ route('asset.upload-image') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $monster_asset->id }}">
+                                            <input type="hidden" name="id" value="{{ $title->id }}">
                                             <input type="hidden" name="asset_type" value="articlesMain">
 
                                             <div class="row justify-content-center">
                                                 <div class="col-12">
-                                                    <img src="{{ $monster_asset->article_page_icon }}" alt="podcast-icon" width="100px">
+                                                    @foreach ($title->Asset as $asset)
+                                                        <img src="{{ $asset->article_page_icon }}" alt="article-icon" width="100px">
+                                                    @endforeach
                                                 </div>
 
                                                 <div class="my-4">
@@ -300,13 +318,13 @@
                                         </form>
 
                                         <div class="row justify-content-center">
-                                            <form id="articlePageTitleForm" action="{{ route('asset.update', $monster_asset->id) }}" method="POST" class="col-10">
+                                            <form id="articlePageTitleForm" action="{{ route('asset.update', $title->id) }}" method="POST" class="col-10">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="asset_type" value="articlesMain">
 
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="articles_main_page_title" name="articles_main_page_title" placeholder="Articles Page Title" value="{{ $monster_asset->title->articles_main_page_title }}">
+                                                    <input type="text" class="form-control" id="articles_main_page_title" name="articles_main_page_title" placeholder="Articles Page Title" value="{{ $title->articles_main_page_title }}">
                                                 </div>
 
                                                 <button id="article_main_title_submit" type="submit" class="btn btn-outline-dark">Save Changes</button>
@@ -321,22 +339,20 @@
                     <div class="card my-4">
                         <div class="card-body row justify-content-center">
                             <div class="col-8">
-                                <div class="panel-content">
-                                    <div class="panel-header plainHeader no-logo">
-                                        <div class="panel-title large-title">{{ $monster_asset->title->podcast_main_page_title }}</div>
-                                    </div>
+                                <div class="panel-header plainHeader no-logo">
+                                    <div class="panel-title large-title">{{ $title->podcast_main_page_title }}</div>
                                 </div>
 
                                 <div class="card my-4">
                                     <div class="card-body row justify-content-center">
-                                        <form id="podcastPageTitleForm" action="{{ route('asset.update', $monster_asset->id) }}" method="POST" class="col-10 row justify-content-center">
+                                        <form id="podcastPageTitleForm" action="{{ route('asset.update', $title->id) }}" method="POST" class="col-10 row justify-content-center">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="asset_type" value="podcastsMain">
 
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="podcast_main_page_title" name="podcast_main_page_title" placeholder="Podcast Page Title" value="{{ $monster_asset->title->podcast_main_page_title }}">
+                                                    <input type="text" class="form-control" id="podcast_main_page_title" name="podcast_main_page_title" placeholder="Podcast Page Title" value="{{ $title->podcast_main_page_title }}">
                                                 </div>
                                             </div>
 
@@ -353,11 +369,11 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-content">
-                                    <div class="panel-header youtube avatar">
-                                        <img src="{{ $monster_asset->youtube_page_icon }}" class="circle youtube-logo" alt="youtube-icon">
-                                        <div class="panel-title large-title">{{ $monster_asset->title->youtube_main_page_title }}</div>
-                                    </div>
+                                <div class="panel-header avatar">
+                                    @foreach ($title->Asset as $asset)
+                                        <img src="{{ $asset->youtube_page_icon }}" alt="youtube-icon" class="circle youtube-logo">
+                                    @endforeach
+                                    <div class="panel-title large-title">{{ $title->youtube_main_page_title }}</div>
                                 </div>
                             </div>
 
@@ -366,12 +382,14 @@
                                     <div class="card-body">
                                         <form id="youtubeLogoForm" action="{{ route('asset.upload-image') }}" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $monster_asset->id }}">
+                                            <input type="hidden" name="id" value="{{ $title->id }}">
                                             <input type="hidden" name="asset_type" value="youtube">
 
                                             <div class="row justify-content-center">
                                                 <div class="col-12">
-                                                    <img src="{{ $monster_asset->youtube_page_icon }}" alt="youtube-icon" width="100px">
+                                                    @foreach ($title->Asset as $asset)
+                                                        <img src="{{ $asset->youtube_page_icon }}" alt="youtube-icon" width="100px">
+                                                    @endforeach
                                                 </div>
 
                                                 <div class="my-4">
@@ -387,13 +405,13 @@
                                         </form>
 
                                         <div class="row justify-content-center">
-                                            <form id="youtubeTitleForm" action="{{ route('asset.update', $monster_asset->id) }}" method="POST" class="col-10">
+                                            <form id="youtubeTitleForm" action="{{ route('asset.update', $title->id) }}" method="POST" class="col-10">
                                                 @csrf
                                                 @method('PUT')
                                                 <input type="hidden" name="asset_type" value="youtube">
 
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" id="youtube_main_page_title" name="youtube_main_page_title" placeholder="YouTube Page Title" value="{{ $monster_asset->title->youtube_main_page_title }}">
+                                                    <input type="text" class="form-control" id="youtube_main_page_title" name="youtube_main_page_title" placeholder="YouTube Page Title" value="{{ $title->youtube_main_page_title }}">
                                                 </div>
 
                                                 <button id="youtube_main_title_submit" type="submit" class="btn btn-outline-dark">Save Changes</button>
@@ -404,7 +422,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

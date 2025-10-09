@@ -50,7 +50,6 @@
                 
                 $('.modal').modal('hide');
                 $('button[type="submit"]').removeAttr('disabled');
-                $('button[type="submit"]').html('Save');
 
                 if (xhr.responseJSON) {
                     let errors = "";
@@ -94,7 +93,6 @@
                 console.log(xhr);
                 $('.modal').modal('hide');
                 $('button[type="submit"]').removeAttr('disabled');
-                $('button[type="submit"]').html('Save');
 
                 if (xhr.responseJSON) {
                     let errors = "";
@@ -229,7 +227,7 @@
             targetDataTable.DataTable().destroy();
         }
 
-        // console.log("Date: ", date, "Action: ", action, "Throwback: ", throwback, "ElementID: ", elementID);
+        console.log("createRefreshingDataTable: ", "Date: ", date, "Action: ", action, "Throwback: ", throwback, "ElementID: ", elementID);
 
         // Decide config based on elementID
         let tableConfigs = {
@@ -256,7 +254,8 @@
                     { data: 'song.name' },
                     { data: 'song.album.artist.name' },
                     { data: 'song.album.name' },
-                    { data: 'total_votes' }
+                    { data: 'total_votes' },
+                    { data: 'options' }
                 ],
                 extraParams: {
                     daily: true,
@@ -271,7 +270,7 @@
         // Pick configuration (fallback to default)
         let config = tableConfigs[elementID] || tableConfigs.default;
 
-        // console.log("Config: ", config);
+        console.log("Config: ", config);
 
         // Initialize DataTable
         let refreshingDataTable = targetDataTable.DataTable({

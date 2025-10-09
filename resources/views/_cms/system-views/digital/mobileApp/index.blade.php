@@ -25,45 +25,31 @@
                                 <thead>
                                     <tr>
                                         <th>Id</th>
-                                        <th>Logo</th>
-                                        <th>Chart Icon</th>
-                                        <th>Articles Icon</th>
-                                        <th>Podcast Icon</th>
-                                        <th>Article Page Icon</th>
-                                        <th>YouTube Page Icon</th>
-                                        <th>Location</th>
+                                        <th>App</th>
+                                        <th>Style</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($monster_assets as $asset)
-                                        <tr data-href="{{ route('asset.show', $asset->id) }}" onclick="viewData()">
-                                            <td>{{ $asset->id }}</td>
+                                    @foreach($monster_assets as $title)
+                                        <tr data-href="{{ route('asset.show', $title->id) }}" onclick="viewData()">
+                                            <td>{{ $title->id }}</td>
                                             <td>
-                                                <img src="{{ $asset->logo }}" class="img-fluid" width="100px" alt="main-logo">
-                                            </td>
-                                            <td>
-                                                <img src="{{ $asset->chart_icon }}" class="img-fluid" width="100px" alt="chart-icon">
-                                            </td>
-                                            <td>
-                                                <img src="{{ $asset->article_icon }}" class="img-fluid" width="100px" alt="article-icon">
-                                            </td>
-                                            <td>
-                                                <img src="{{ $asset->podcast_icon }}" class="img-fluid" width="100px" alt="podcast-icon">
-                                            </td>
-                                            <td>
-                                                <img src="{{ $asset->article_page_icon }}" class="img-fluid" width="100px" alt="article-page-icon">
-                                            </td>
-                                            <td>
-                                                <img src="{{ $asset->youtube_page_icon }}" class="img-fluid" width="100px" alt="youtube-page-icon">
-                                            </td>
-                                            <td>
-                                                @if($asset->location === "mnl")
-                                                    <div class="badge badge-primary">Manila</div>
-                                                @elseif($asset->location === "cbu")
-                                                    <div class="badge badge-warning">Cebu</div>
+                                                @if($title->location === "mnl")
+                                                    <div class="badge badge-primary">Monster RX93.1</div>
+                                                @elseif($title->location === "cbu")
+                                                    <div class="badge badge-warning">Monster BT105.9 Cebu</div>
                                                 @else
-                                                    <div class="badge badge-dark">Davao</div>
+                                                    <div class="badge badge-dark">Monster BT99.5 Davao</div>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @foreach($title->Asset as $asset)
+                                                    @if($asset->is_dark_mode === 0)
+                                                        <div class="badge badge-light">Light</div>
+                                                    @else
+                                                        <div class="badge badge-dark">Dark</div>
+                                                    @endif
+                                                @endforeach
                                             </td>
                                         </tr>
                                     @endforeach
@@ -85,26 +71,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="wallpaperForm" method="POST" action="{{ route('asset.store') }}" enctype="multipart/form-data">
+                <form id="mobileAssetForm" method="POST" action="{{ route('asset.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="wallpaperName">Wallpaper Name</label>
-                                    <input type="text" id="wallpaperName" name="name" placeholder="Wallpaper Name" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="device">Device Type</label>
-                                    <select id="device" name="device" class="custom-select">
+                                    <label for="style">Style</label>
+                                    <select id="style" name="is_dark_mode" class="custom-select">
                                         <option value>--</option>
-                                        <option value="mobile">Mobile</option>
-                                        <option value="web">Desktop</option>
+                                        <option value="0">Light</option>
+                                        <option value="1">Dark</option>
                                     </select>
-                                </div>
-                                <div class="custom-file">
-                                    <input type="file" name="image" id="image" class="custom-file-input">
-                                    <label class="custom-file-label" for="image">Wallpaper Image</label>
                                 </div>
                             </div>
                         </div>
