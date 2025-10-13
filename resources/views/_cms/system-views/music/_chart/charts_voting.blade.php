@@ -15,18 +15,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @forelse($chart as $charts)
+                    @forelse($charts as $chart)
                         <tr>
-                            <td><div class="text-center">{{ $charts->position }}</div></td>
-                            <td>{{ $charts->Song->name }}</td>
-                            <td>{{ $charts->Song->Album->Artist->name }}</td>
-                            <td>{{ $charts->online_votes }}</td>
-                            <td>{{ $charts->phone_votes }}</td>
-                            <td>{{ $charts->social_votes }}</td>
+                            <td><div class="text-center">{{ $chart->position }}</div></td>
+                            <td>{{ $chart->Song->name }}</td>
+                            <td>{{ $chart->Song->Album->Artist->name }}</td>
+                            <td>{{ $chart->online_votes }}</td>
+                            <td>{{ $chart->phone_votes }}</td>
+                            <td>{{ $chart->social_votes }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" id="voteButton" data-id="{{ $charts->id }}" data-device="phone" class="btn btn-outline-dark"><i class="fas fa-phone-alt"></i>  Call</button>
-                                    <button type="button" id="voteButton" data-id="{{ $charts->id }}" data-device="socmed" class="btn btn-outline-dark"><i class="fas fa-globe"></i>  Online</button>
+                                    <button type="button" id="voteButton" data-id="{{ $chart->id }}" data-device="phone" class="btn btn-outline-dark"><i class="fas fa-phone-alt"></i>  Call</button>
+                                    <button type="button" id="voteButton" data-id="{{ $chart->id }}" data-device="socmed" class="btn btn-outline-dark"><i class="fas fa-globe"></i>  Online</button>
                                 </div>
                             </td>
                         </tr>
