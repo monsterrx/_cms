@@ -205,7 +205,9 @@
                         });
 
                         setTimeout(() => {
-                            $('button#official').click();
+                            if (result.status == 'success') {
+                                $('button#official').click();
+                            }
                         }, 2000);
                     }
                 }

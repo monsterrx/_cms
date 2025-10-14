@@ -311,8 +311,8 @@
                     $('#song_id, #update_song_id, #delete_song_id').val(response.chart.song.id);
                     $('#song').val(response.chart.song.name);
                     $('#dated, #update_dated').val(response.latestDate);
-                    $('#update-modal-title').text('Update ' + response.chart.song.name);
-                    $('#delete-modal-title').text('Delete ' + response.chart.song.name);
+                    $('#update-modal-title').text('Update Song Position ' + response.chart.song.name);
+                    $('#delete-modal-title').text('Delete Song ' + response.chart.song.name + ' from the charts?');
 
                     $('#updateChartedSongForm, #deleteChartedSongForm, #updateDailyChartedSongForm').attr('action', url + '/' + response.chart.id);
 
