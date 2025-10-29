@@ -67,7 +67,7 @@
                                         @csrf
                                         <div class="row justify-content-center">
                                             @foreach($title->Asset as $asset)
-                                                <div class="col-6 {{ $asset->is_dark_mode === 0 ? '' : 'bg-dark text-white' }}">
+                                                <div class="col-6 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-monster-yellow' }}">
                                                     <p class="lead">{{ $asset->is_dark_mode === 0 ? 'Light' : 'Dark' }}</p>
                                                     <img src="{{ $asset->logo }}" alt="main-logo" width="300px">
                                                 </div>
@@ -78,6 +78,13 @@
                                             <div class="col-6">
                                                 <input type="hidden" name="id" value="{{ $title->id }}">
                                                 <input type="hidden" name="asset_type" value="main logo">
+                                                <div class="form-group">
+                                                    <label for="is_dark_mode">Icon Theme</label>
+                                                    <select name="is_dark_mode" id="is_dark_mode" class="form-control">
+                                                        <option value="0">Light Mode</option>
+                                                        <option value="1">Dark Mode</option>
+                                                    </select>
+                                                </div>
                                                 <input type="file" id="main-logo" name="image" accept="image/*">
                                             </div>
                                         </div>
@@ -115,7 +122,6 @@
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $title->id }}">
                                             <input type="hidden" name="asset_type" value="charts">
-
                                             <div class="row justify-content-center">
                                                 <div class="col-12">
                                                     @foreach ($title->Asset as $asset)
@@ -126,6 +132,13 @@
                                                 <div class="my-4">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <div class="form-group">
+                                                                <label for="is_dark_mode">Icon Theme</label>
+                                                                <select name="is_dark_mode" id="is_dark_mode" class="form-control">
+                                                                    <option value="0">Light Mode</option>
+                                                                    <option value="1">Dark Mode</option>
+                                                                </select>
+                                                            </div>
                                                             <input type="file" id="chart-logo" name="image" accept="image/*">
                                                         </div>
                                                     </div>
@@ -160,12 +173,20 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-header avatar">
-                                    @foreach ($title->Asset as $asset)
-                                        <img src="{{ $asset->article_icon }}" alt="articles-icon" class="circle articles-logo">
+                                <div class="row">
+                                    @foreach($title->Asset as $asset)
+                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                            <div class="row g-0">
+                                                <div class="col-2 px-1">
+                                                    <img src="{{ $asset->article_icon }}" alt="hitlist" class="img-fluid img-icon">
+                                                </div>
+                                                <div class="col-10 text-uppercase px-1">
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->article_title }}</p>
+                                                    <p class="barlow {{ $asset->is_dark_mode === 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->article_sub_title }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                    <p class="panel-title articles-title">{{ $title->article_title }}</p>
-                                    <p class="articles-subtitle">{{ $title->article_sub_title }}</p>
                                 </div>
                             </div>
 
@@ -187,6 +208,13 @@
                                                 <div class="my-4">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <div class="form-group">
+                                                                <label for="is_dark_mode">Icon Theme</label>
+                                                                <select name="is_dark_mode" id="is_dark_mode" class="form-control">
+                                                                    <option value="0">Light Mode</option>
+                                                                    <option value="1">Dark Mode</option>
+                                                                </select>
+                                                            </div>
                                                             <input type="file" id="article-logo" name="image" accept="image/*">
                                                         </div>
                                                     </div>
@@ -221,12 +249,20 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-header avatar">
-                                    @foreach ($title->Asset as $asset)
-                                        <img src="{{ $asset->podcast_icon }}" alt="podcast-icon" class="circle podcast-logo">
+                                <div class="row">
+                                    @foreach($title->Asset as $asset)
+                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                            <div class="row g-0">
+                                                <div class="col-2 px-1">
+                                                    <img src="{{ $asset->podcast_icon }}" alt="hitlist" class="img-fluid img-icon">
+                                                </div>
+                                                <div class="col-10 text-uppercase px-1">
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->podcast_title }}</p>
+                                                    <p class="barlow {{ $asset->is_dark_mode === 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->podcast_sub_title }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                    <p class="panel-title show-title">{{ $title->podcast_title }}</p>
-                                    <p class="shows-subtitle">{{ $title->podcast_sub_title }}</p>
                                 </div>
                             </div>
 
@@ -248,6 +284,13 @@
                                                 <div class="my-4">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <div class="form-group">
+                                                                <label for="is_dark_mode">Icon Theme</label>
+                                                                <select name="is_dark_mode" id="is_dark_mode" class="form-control">
+                                                                    <option value="0">Light Mode</option>
+                                                                    <option value="1">Dark Mode</option>
+                                                                </select>
+                                                            </div>
                                                             <input type="file" id="podcast-logo" name="image" accept="image/*">
                                                         </div>
                                                     </div>
@@ -282,11 +325,19 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-header avatar">
-                                    @foreach ($title->Asset as $asset)
-                                        <img src="{{ $asset->article_page_icon }}" alt="articles-icon" class="circle articles-logo">
+                                <div class="row">
+                                    @foreach($title->Asset as $asset)
+                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                            <div class="row g-0">
+                                                <div class="col-2 px-1">
+                                                    <img src="{{ $asset->article_page_icon }}" alt="hitlist" class="img-fluid img-icon">
+                                                </div>
+                                                <div class="col-10 text-uppercase px-1">
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->articles_main_page_title }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                    <div class="panel-title large-title">{{ $title->articles_main_page_title }}</div>
                                 </div>
                             </div>
 
@@ -308,6 +359,13 @@
                                                 <div class="my-4">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <div class="form-group">
+                                                                <label for="is_dark_mode">Icon Theme</label>
+                                                                <select name="is_dark_mode" id="is_dark_mode" class="form-control">
+                                                                    <option value="0">Light Mode</option>
+                                                                    <option value="1">Dark Mode</option>
+                                                                </select>
+                                                            </div>
                                                             <input type="file" id="article-page-logo" name="image" accept="image/*">
                                                         </div>
                                                     </div>
@@ -369,11 +427,19 @@
                     <div class="card my-4">
                         <div class="card-body row">
                             <div class="col-6">
-                                <div class="panel-header avatar">
-                                    @foreach ($title->Asset as $asset)
-                                        <img src="{{ $asset->youtube_page_icon }}" alt="youtube-icon" class="circle youtube-logo">
+                                <div class="row">
+                                    @foreach($title->Asset as $asset)
+                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                            <div class="row g-0">
+                                                <div class="col-2 px-1">
+                                                    <img src="{{ $asset->youtube_page_icon }}" alt="hitlist" class="img-fluid img-icon">
+                                                </div>
+                                                <div class="col-10 text-uppercase px-1">
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->youtube_main_page_title }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endforeach
-                                    <div class="panel-title large-title">{{ $title->youtube_main_page_title }}</div>
                                 </div>
                             </div>
 
@@ -395,6 +461,13 @@
                                                 <div class="my-4">
                                                     <div class="card">
                                                         <div class="card-body">
+                                                            <div class="form-group">
+                                                                <label for="is_dark_mode">Icon Theme</label>
+                                                                <select name="is_dark_mode" id="is_dark_mode" class="form-control">
+                                                                    <option value="0">Light Mode</option>
+                                                                    <option value="1">Dark Mode</option>
+                                                                </select>
+                                                            </div>
                                                             <input type="file" id="youtube-logo" name="image" accept="image/*">
                                                         </div>
                                                     </div>

@@ -8,6 +8,7 @@ use App\Traits\SystemFunctions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Models\Title;
+use App\Models\Asset;
 use Exception;
 use Illuminate\Support\Facades\Validator;
 
@@ -196,9 +197,13 @@ class MobileAppAssetController extends Controller
         // For icon upload.
         $icon = $this->storePhoto($request, $path, $directory);
         $asset_type = $request['asset_type'];
+        $title_id = $request['id'];
+        $is_dark_mode = $request['is_dark_mode'] == "1" ? 1 : 0;
 
         try {
-            $asset = Title::with('Asset')->findOrFail($request['id']);
+            $asset = Asset::where('title_id', $title_id)
+                ->where('is_dark_mode', $is_dark_mode)
+                ->firstOrFail();
 
             if ($asset_type == "main logo") {
                 $asset['logo'] = $icon;

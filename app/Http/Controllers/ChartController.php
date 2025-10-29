@@ -299,17 +299,21 @@ class ChartController extends Controller {
                         ->where('local', 0)
                         ->where('daily', 0)
                         ->where('is_posted', 0)
-                        ->where('location', $this->getStationCode())
-                        ->update(['is_posted' => 1]);
+                        ->where('location', $this->getStationCode());
 
-                    if (count($charts) < 20) {
+                    if (count($charts->get()) < 20) {
                         return response()->json([
                             'status' => 'error',
                             'message' => 'The charts have insufficient amount of songs, minimum 20.'
                         ]);
                     }
 
-                    return response()->json(['status' => 'success', 'message' => 'The chart has been posted']);
+                    $charts->update(['is_posted' => 1]);
+
+                    return response()->json([
+                        'status' => 'success', 
+                        'message' => 'The chart has been posted'
+                    ]);
                 }
 
                 return response()->json(['status' => 'warning', 'message' => 'Action unknown']);
@@ -438,7 +442,7 @@ class ChartController extends Controller {
             // Base duplicate check
             $existingChartQuery = Chart::query()
                 ->where('song_id', $request['song_id'])
-                ->where('daily', 1)
+                ->where('dated', $request['dated'])
                 ->whereNull('deleted_at');
 
             // Context-specific filters
@@ -457,11 +461,16 @@ class ChartController extends Controller {
                     $existingChartQuery->where('throwback', 0);
                 }
 
-                // If the chart is posted, only check for posted duplicates of same type and date
-                if ($isPosted) {
-                    $existingChartQuery->where('is_posted', 1)
-                        ->where('dated', $request['dated']);
-                }
+                $existingChartQuery->where('daily', 1);
+            } else {
+                $existingChartQuery->where('daily', 0);
+            }
+
+            // If the chart is for the Daily Survey Top 5, only check for posted duplicates of same type and date
+            if ($isPosted) {
+                $existingChartQuery->where('is_posted', 1);
+            } else {
+                $existingChartQuery->where('is_posted', 0);
             }
 
             $existingChart = $existingChartQuery->first();

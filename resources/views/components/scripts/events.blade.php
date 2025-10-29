@@ -205,7 +205,9 @@
                         });
 
                         setTimeout(() => {
-                            $('button#official').click();
+                            if (result.status == 'success') {
+                                $('button#official').click();
+                            }
                         }, 2000);
                     }
                 }
@@ -1671,7 +1673,6 @@
     /* Form Submission Functions */
     $(document).on('submit', 'form', function () {
         $(':button[type="submit"]').attr('disabled', 'disabled');
-        $(':button[type="submit"]').html('Please Wait ...');
         $('input[name="_token"]').val('{{ csrf_token() }}');
     });
     $(document).on('submit', '#artistForm, #updateArtistForm', function (event) {
@@ -1795,31 +1796,6 @@
                 title: 'User profile has been updated'
             });
 
-        }
-    });
-    $(document).on('submit', '#createCategoryForm', function (event) {
-        event.preventDefault();
-
-        let formData = new FormData(this);
-        let url = $(this).attr('action');
-
-        postAsync(url, formData, 'JSON', beforeSend, onSuccess);
-
-        function beforeSend() {
-            manualToast.fire({
-                icon: 'info',
-                title: 'Sending request ...'
-            });
-        }
-
-        function onSuccess(result) {
-            $('#AddCategory').modal('hide');
-            Toast.fire({
-                icon: result.status,
-                title: result.message
-            });
-            $('#categoryname, #description').val('');
-            categoriesTable.ajax.reload(null, false);
         }
     });
     $(document).on('submit', '#newChartedSongForm, #newDailyChartedSongForm', function (event) {
@@ -2157,7 +2133,6 @@
 
         function beforeSend() {
             $('button[type="submit"]').attr('disabled', 'disabled');
-            $('button[type="submit"]').html('Please Wait ...');
             manualToast.fire({
                 icon: 'info',
                 title: 'Adding new student ...',
@@ -2490,7 +2465,7 @@
         function beforeSend() {
             manualToast.fire({
                 icon: 'info',
-                title: 'Creating new dynamic asset please wait ...'
+                title: 'Creating new dynamic asset please wait'
             });
         }
 
@@ -2506,5 +2481,101 @@
             $(':input').val();
             mobileAppAssetTable.ajax.reload(null, false);
         }
+    });
+    $(document).on('change', '.custom-file-input', function (e) {
+        var fileName = e.target.files[0]?.name ?? 'Choose file';
+        $(this).next('.custom-file-label').text(fileName);
+    });
+    $(document).on('click', '[data-toggle="modal"][href="#category-modal"]', function (e) {
+        e.preventDefault();
+
+        const modal = $('#category-modal');
+        const form = modal.find('form');
+        const modalTitle = $('#category-title');
+
+        const actionType = $(this).data('action'); // "add" or "edit"
+        const categoryId = $(this).data('id');
+        const actionUrl = $(this).data('url');
+
+        // Reset modal to defaults
+        form[0].reset();
+        form.find('.custom-file-label').text('Choose Icon');
+        modal.find('img').attr('src', '{{ asset('images/_assets/default.png') }}');
+        modalTitle.text('Loading...');
+
+        // Reset form method
+        form.find('input[name="_method"]').remove();
+
+        if (actionType === 'add') {
+            // 🟢 Add mode
+            modalTitle.text('Add Category');
+            form.attr('action', '{{ route('categories.store') }}');
+        } 
+        else if (actionType === 'edit') {
+            // 🟡 Edit mode
+            modalTitle.text('Edit Category');
+            form.attr('action', actionUrl);
+            form.append('<input type="hidden" name="_method" value="PATCH">');
+
+            // Load data via getAsync
+            getAsync(
+                '{{ url('categories') }}/show/' + categoryId,
+                {},
+                'JSON',
+                () => {
+                    modalTitle.text('Loading category...');
+                },
+                (result) => {
+                    const category = result.category;
+
+                    $('#name').val(category.name);
+                    $('#description').val(category.description);
+                    $('#theme').val(category.theme ?? '');
+
+                    // Icons
+                    const icons = modal.find('#icon_container img');
+                    if (category.icon) $(icons[0]).attr('src', category.icon);
+                    if (category.dark_mode_icon) $(icons[1]).attr('src', category.dark_mode_icon);
+
+                    modalTitle.text('Edit Category');
+                }
+            );
+        }
+
+        modal.modal('show');
+    });
+    $(document).on('submit', '#category-modal form', function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const url = form.attr('action');
+        const formData = new FormData(this);
+
+        postAsync(
+            url,
+            formData,
+            'JSON',
+            () => {
+                $('button[type="submit"]').attr('disabled', true);
+                manualToast.fire({
+                    icon: 'info',
+                    title: 'Processing request... please wait.',
+                });
+            },
+            (result) => {
+                Toast.fire({
+                    icon: 'success',
+                    title: result.message ?? 'Operation successful!',
+                });
+
+                $('#category-modal').modal('hide');
+                $('button[type="submit"]').removeAttr('disabled');
+
+                // Optional: Refresh your table or component here
+                if (typeof categoriesTable === 'function') {
+                    categoriesTable.ajax.reload(null, false);
+                }
+            }
+        );
     });
 </script>

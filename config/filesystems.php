@@ -374,6 +374,11 @@ return [
         'bugs' => [
             'driver' => 'local',
             'root' => '../images/bugs'
+        ],
+
+        '_assets/categories' => [
+            'driver' => 'local',
+            'root' => '../images/_assets/categories'
         ]
         // END
     ],

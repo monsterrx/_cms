@@ -17,6 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
+            $table->string('icon');
+            $table->string('dark_mode_icon');
             $table->softDeletes();
             $table->timestamps();
         });
