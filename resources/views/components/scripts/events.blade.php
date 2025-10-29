@@ -2563,7 +2563,7 @@
                 });
             },
             (result) => {
-                manualToast.fire({
+                Toast.fire({
                     icon: 'success',
                     title: result.message ?? 'Operation successful!',
                 });
