@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string|null $description
+ * @property string $theme
+ * @property string $icon
+ * @property string $dark_mode_icon
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -36,7 +39,9 @@ class Category extends Model
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'icon',
+        'dark_mode_icon'
     ];
 
     public function Article() {

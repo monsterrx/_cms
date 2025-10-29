@@ -14,7 +14,7 @@
             </div>
             <div class="row my-4">
                 <div class="col-md-12 col-sm-12 col-12 col-lg-12">
-                    <a href="#AddCategory" class="btn btn-outline-dark fa-pull-right" data-toggle="modal">New Category</a>
+                    <a href="#category-modal" data-action="add" class="btn btn-outline-dark fa-pull-right" data-toggle="modal">New Category</a>
                 </div>
             </div>
             <div class="card">
@@ -23,12 +23,12 @@
                         <div class="col-md-12">
                             <table class="table table-hover" id="categoriesTable">
                                 <thead>
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                    <th>Date Created</th>
-                                    <th>Options</th>
-                                </tr>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Description</th>
+                                        <th>Date Created</th>
+                                        <th>Options</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
@@ -39,26 +39,54 @@
             </div>
         </div>
     </div>
-    <div id="AddCategory" class="modal fade" role="dialog">
+
+    <div id="category-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="lead">Add New Category</h4>
+                    <h4 class="lead" id="category-title">Edit Category</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="createCategoryForm" action="{{ route('categories.store') }}" method="POST">
+                    <form action="" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="form-group">
-                            <label for="name" class="label">Category Name</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                        @method('PATCH')
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div id="icon_container" class="text-center">
+                                    <img src="{{ asset('images/_assets/default.png') }}" class="rounded img-thumbnail" width="200" height="200">
+                                    <img src="{{ asset('images/_assets/default.png') }}" class="rounded img-thumbnail" width="200" height="200">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="description" class="label">Description</label>
-                            <textarea id="description" name="description" class="form-control"></textarea>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="name" class="label">Name</label>
+                                    <input type="text" id="name" name="name" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description" class="label">Description</label>
+                                    <textarea id="description" name="description" class="form-control" placeholder="No description available"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="theme">Icon Theme</label>
+                                    <select name="theme" id="theme" class="custom-select">
+                                        <option value>Please select</option>>
+                                        <option value="light">Light Mode</option>
+                                        <option value="dark">Dark Mode</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" id="image" name="image" class="custom_file_input">
+                                        <label for="image" class="custom-file-label">Choose Icon</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <button type="submit" id="submit" class="btn btn-outline-dark">Save</button>
+                        <div class="form-group fa-pull-right">
+                            <button type="submit" id="categoryUpdateButton" class="btn btn-outline-dark">Save</button>
                         </div>
                     </form>
                 </div>
@@ -68,36 +96,4 @@
             </div>
         </div>
     </div>
-    @foreach($categories as $category)
-        <div id="edit-{{ $category->id }}" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="lead">Edit {{ $category->name }}</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="{{ route('categories.update', $category->id) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
-                            <div class="form-group">
-                                <label for="name" class="label">Category Name</label>
-                                <input type="text" id="name" name="name" class="form-control" value="{{ $category->name }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="description" class="label">Description</label>
-                                <textarea id="description" name="description" class="form-control">{{ !$category->description ? 'No Description Available' : $category->description }}</textarea>
-                            </div>
-                            <div class="form-group fa-pull-right">
-                                <button type="submit" id="categoryUpdateButton" class="btn btn-outline-dark">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
 @endsection
