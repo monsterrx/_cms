@@ -2528,6 +2528,9 @@
                 (result) => {
                     const category = result.category;
 
+                    console.log("Category: ", result.category);
+                    
+
                     $('#name').val(category.name);
                     $('#description').val(category.description);
                     $('#theme').val(category.theme ?? '');

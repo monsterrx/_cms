@@ -182,7 +182,7 @@
         },
         columns: [
             {data: 'name'},
-            {data: 'description'},
+            {data: 'icon'},
             {data: 'created_date'},
             {data: 'options'}
         ]

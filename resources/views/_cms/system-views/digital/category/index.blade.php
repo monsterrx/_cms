@@ -25,7 +25,7 @@
                                 <thead>
                                     <tr>
                                         <th>Category</th>
-                                        <th>Description</th>
+                                        <th>Icon</th>
                                         <th>Date Created</th>
                                         <th>Options</th>
                                     </tr>

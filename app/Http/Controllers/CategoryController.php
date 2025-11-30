@@ -17,10 +17,29 @@ class CategoryController extends Controller
             ->orderBy('name')
             ->get();
 
+        $directory = '_assets/categories';
+
         if($request->ajax())
         {
             foreach ($categories as $category)
             {
+                $icon = $this->verifyPhoto($category->icon, $directory);
+                $dark_mode_icon = $this->verifyPhoto($category->dark_mode_icon, $directory);
+
+                $category->icon = 
+                    '<div class="row g-0">
+                        <div class="col-2 px-1">
+                            <img src="'.$icon.'" class="img-fluid">
+                        </div>
+                    </div>';
+
+                $category->dark_mode_icon = 
+                    '<div class="row g-0">
+                        <div class="col-2 px-1">
+                            <img src="'.$dark_mode_icon.'" class="img-fluid">
+                        </div>
+                    </div>';
+
                 $category->created_date = 
                     ($category->created_at && $category->created_at != '0000-00-00 00:00:00')
                         ? $category->created_at->format('F d, Y')
@@ -52,36 +71,36 @@ class CategoryController extends Controller
             'theme' => 'required',
         ]);
 
-        if($validator->passes()) {
-            $theme = $request['theme'];
-
-            $path = 'images/_assets/categories';
-            $directory = '_assets/categories';
-            // Store the uploaded image and return the stored path or filename
-            $iconPath = $this->storePhoto($request, $path, $directory);
-
-            // Use a ternary operator for clarity, and explicitly set default behavior
-            $iconKey = ($theme === 'dark') ? 'dark_mode_icon' : 'icon';
-
-            // Assign dynamically to the request safely
-            $request->merge([$iconKey => $iconPath]);
-
-            $category = new Category($request->all());
-
-            $category->save();
-
+        if($validator->fails()) {
             return response()
-                ->json([
-                    'status' => 'success', 
-                    'message' => 'A new category has been added'
-                ], 200);
-        }
-
-        return response()
             ->json([
                 'status' => 'error', 
                 'message' => $validator->errors()->all()
             ], 403);
+        }
+
+        $theme = $request['theme'];
+
+        $path = 'images/_assets/categories';
+        $directory = '_assets/categories';
+        // Store the uploaded image and return the stored path or filename
+        $iconPath = $this->storePhoto($request, $path, $directory);
+
+        // Use a ternary operator for clarity, and explicitly set default behavior
+        $iconKey = ($theme === 'dark') ? 'dark_mode_icon' : 'icon';
+
+        // Assign dynamically to the request safely
+        $request->merge([$iconKey => $iconPath]);
+
+        $category = new Category($request->all());
+
+        $category->save();
+
+        return response()
+            ->json([
+                'status' => 'success', 
+                'message' => 'A new category has been added'
+            ], 200);
     }
 
     public function show($id, Request $request) {
@@ -115,31 +134,33 @@ class CategoryController extends Controller
             'name' => 'required'
         ]);
 
-        if($validator->passes()) {
-            $theme = $request['theme'];
-
-            $path = 'images/_assets/categories';
-            $directory = '_assets/categories';
-            // Store the uploaded image and return the stored path or filename
-            $iconPath = $this->storePhoto($request, $path, $directory);
-
-            // Use a ternary operator for clarity, and explicitly set default behavior
-            $iconKey = ($theme === 'dark') ? 'dark_mode_icon' : 'icon';
-
-            // Assign dynamically to the request safely
-            $request->merge([$iconKey => $iconPath]);
-            
-            $category = Category::findOrfail($id);
-
-            $category->update($request->all());
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Category has been updated!'
-            ]);
+        if($validator->fails()) {
+            return redirect()
+            ->back()
+            ->withErrors($validator->errors()->all());
         }
 
-        return redirect()->back()->withErrors($validator->errors()->all());
+        $theme = $request['theme'];
+
+        $path = 'images/_assets/categories';
+        $directory = '_assets/categories';
+        // Store the uploaded image and return the stored path or filename
+        $iconPath = $this->storePhoto($request, $path, $directory);
+
+        // Use a ternary operator for clarity, and explicitly set default behavior
+        $iconKey = ($theme === 'dark') ? 'dark_mode_icon' : 'icon';
+
+        // Assign dynamically to the request safely
+        $request->merge([$iconKey => $iconPath]);
+        
+        $category = Category::findOrfail($id);
+
+        $category->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category has been updated!'
+        ]);
     }
 
     public function destroy($id)
