@@ -229,16 +229,21 @@
 
         console.log("createRefreshingDataTable: ", "Date: ", date, "Action: ", action, "Throwback: ", throwback, "ElementID: ", elementID);
 
+        // Decide first column based on action
+        const firstColumn = action === 'draft'
+            ? { title: 'ID', data: 'id' }
+            : { title: 'Position', data: 'position' };
+
         // Decide config based on elementID
         let tableConfigs = {
             dailyChartSongsTable: {
                 dataSrc: 'songs',
                 columns: [
-                    { data: 'position' },
-                    { data: 'name' },
-                    { data: 'album.artist.name' },
-                    { data: 'album.name' },
-                    { data: 'votes' }
+                    firstColumn,
+                    { title: 'Song',  data: 'name' },
+                    { title: 'Artist',  data: 'album.artist.name' },
+                    { title: 'Album',  data: 'album.name' },
+                    { title: 'Votes',  data: 'votes' }
                 ],
                 extraParams: {
                     daily: true,
@@ -250,12 +255,12 @@
             default: {
                 dataSrc: 'charts',
                 columns: [
-                    { data: 'id' },
-                    { data: 'song.name' },
-                    { data: 'song.album.artist.name' },
-                    { data: 'song.album.name' },
-                    { data: 'total_votes' },
-                    { data: 'options' }
+                    firstColumn,
+                    { title: 'Song', data: 'song.name' },
+                    { title: 'Artist', data: 'song.album.artist.name' },
+                    { title: 'Album', data: 'song.album.name' },
+                    { title: 'Votes', data: 'total_votes' },
+                    { title: 'Actions', data: 'options' }
                 ],
                 extraParams: {
                     daily: true,

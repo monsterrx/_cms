@@ -191,6 +191,7 @@ class SongController extends Controller {
                 '</div>';
         }
 
-        return response()->json($songs);
+        return response()
+        ->json($songs);
     }
 }

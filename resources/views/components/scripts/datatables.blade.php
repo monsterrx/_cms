@@ -165,11 +165,11 @@
             dataSrc: 'songs',
         },
         columns: [
-            {data: 'id'},
-            {data: 'album.year'},
-            {data: 'name'},
-            {data: 'album.artist.name'},
-            {data: 'album.name'}
+            {data: 'song.id'},
+            {data: 'song.album.year'},
+            {data: 'song.name'},
+            {data: 'song.album.artist.name'},
+            {data: 'song.album.name'}
         ],
         order: [
             [0, 'desc']

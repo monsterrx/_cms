@@ -338,7 +338,9 @@
                 loadDailyDates(payload);
 
                 setTimeout(() => {
-                    createRefreshingDataTable(payload, action, throwback, 'tdsTable');
+                    if (chart === 'daily') {
+                        createRefreshingDataTable(payload, action, throwback, 'tdsTable');
+                    }
                     $('#chartDates, #surveyDate').val(payload);
                     $('#surveyDates').attr('data-chart-type', 'throwback');
                 }, 800);
@@ -2447,11 +2449,56 @@
             // Hide daily chart options and disable fields
             $('#dailyChartsOptions').attr('hidden', true);
             $('#dailyChartsOptions').find('select, input').prop('disabled', true);
+
+            if ($.fn.DataTable.isDataTable($('#songsList'))) {
+                $('#songsList').DataTable().destroy();
+            }
+
+            $('#songsList').DataTable({
+                ajax: {
+                    url: '{{ route('reload.songs') }}',
+                    dataSrc: '',
+                },
+                columns: [
+                    {data: 'id'},
+                    {data: 'album.year'},
+                    {data: 'name'},
+                    {data: 'album.artist.name'},
+                    {data: 'album.name'}
+                ],
+                order: [
+                    [0, 'desc']
+                ]
+            });
         } 
         else if (selected === 'dailyChart') {
             // Show daily chart options and enable fields
             $('#dailyChartsOptions').removeAttr('hidden');
             $('#dailyChartsOptions').find('select, input').prop('disabled', false);
+
+            if ($.fn.DataTable.isDataTable($('#songsList'))) {
+                $('#songsList').DataTable().destroy();
+            }
+
+            $('#songsList').DataTable({
+                ajax: {
+                    url: '{{ route('charts.daily') }}',
+                    dataSrc: 'songs',
+                    data: {
+                        'is_posted': 1
+                    }
+                },
+                columns: [
+                    {data: 'song_id'},
+                    {data: 'song.album.year'},
+                    {data: 'song.name'},
+                    {data: 'song.album.artist.name'},
+                    {data: 'song.album.name'}
+                ],
+                order: [
+                    [0, 'desc']
+                ]
+            });
         }
     });
     $(document).on('submit', '#mobileAssetForm', function (event) {

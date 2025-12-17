@@ -21,6 +21,7 @@ class CreateChartsTable extends Migration
             $table->date('dated');
             $table->boolean('re_entry');
             $table->boolean('daily');
+            $table->boolean('playlist');
             $table->boolean('throwback');
             $table->boolean('local');
             $table->boolean('is_dropped')->default(0);

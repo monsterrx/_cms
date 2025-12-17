@@ -6,7 +6,7 @@
                     <table id="tdsTable" class="table table-hover m-0">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Position</th>
                                 <th>Song</th>
                                 <th>Artist</th>
                                 <th>Album</th>
@@ -17,7 +17,7 @@
                         <tbody>
                             @forelse($charts as $chart)
                                 <tr>
-                                    <td><div class="text-center">{{ $chart->id }}</div></td>
+                                    <td><div class="text-center">{{ $chart->position }}</div></td>
                                     <td>{{ $chart->Song->name }}</td>
                                     <td>{{ $chart->Song->Album->Artist->name }}</td>
                                     <td>{{ $chart->Song->Album->name }}</td>

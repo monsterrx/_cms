@@ -27,8 +27,8 @@
                     </div>
 
                     {{-- Commentted due to digital direction 09-15-2025 --}}
-                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Survey Charts</button>
-                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are not shown in the website">Songs List</button>
+                    <button id="official" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are shown in The Daily Survey's Top 5 side bar">Survey Charts</button>
+                    <button id="draft" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the songs that can be voted by the Users in The Daily Survey Page">Songs List</button>
                     <button id="throwback" data-payload="{{ $data['latestSurveyDate'] }}" data-chart="daily" data-is-throwback="true" class="btn btn-outline-dark chart-btn" data-toggle="tooltip" data-placement="bottom" title="These are the charts that are shown every wednesday">Throwback Charts</button>
                 </div>
             </div>
@@ -127,7 +127,9 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colspan="4" style="color: red">No Data Found</td>
+                                            <td colspan="5" style="color: red">
+                                                <div class="text-center">No Data Found</div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
