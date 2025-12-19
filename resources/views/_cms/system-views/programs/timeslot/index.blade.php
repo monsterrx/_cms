@@ -49,8 +49,8 @@
             <br>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="tab-container" role="tabpanel" aria-labelledby="tab-container">
-                    <div class="lead alert alert-warning text-center">
-                        Error occurred, contact developer
+                    <div class="lead alert alert-info text-center">
+                        Loading ...
                     </div>
                 </div>
             </div>
