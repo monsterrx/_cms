@@ -175,6 +175,22 @@
             [0, 'desc']
         ]
     });
+    let songsListChart = $('#songsListCharts').DataTable({
+        ajax: {
+            url: '{{ route('reload.songs') }}',
+            dataSrc: '',
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'album.year' },
+            { data: 'name' },
+            { data: 'album.artist.name' },
+            { data: 'album.name' }
+        ],
+        order: [
+            [0, 'desc']
+        ]
+    });
     let categoriesTable = $('#categoriesTable').DataTable({
         ajax: {
             url: '{{ route('categories.index') }}',

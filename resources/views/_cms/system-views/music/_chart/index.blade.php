@@ -118,20 +118,22 @@
                         <br>
                         <div class="row">
                             <div class="col-md-12">
-                                <table id="songsList" class="table table-hover" style="width: 100%;" data-page-length="5">
+                                <table id="songsListCharts" class="table table-hover" style="width: 100%;" data-page-length="5">
                                     <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Year</th>
-                                        <th>Song Name</th>
-                                        <th>Artist</th>
-                                        <th>Album</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Year</th>
+                                            <th>Song Name</th>
+                                            <th>Artist</th>
+                                            <th>Album</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td colspan="4" style="color: red">No Data Found</td>
-                                    </tr>
+                                        <tr>
+                                            <td colspan="5" style="color: red">
+                                                <p class="text-center">An error occurred, contact Developer</p>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

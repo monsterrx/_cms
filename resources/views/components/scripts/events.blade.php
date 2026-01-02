@@ -1641,7 +1641,7 @@
             $('#song_name').val(result.name);
         }
     });
-    $('#songsList, #localSongsList').on('click', 'tr', function (e) {
+    $('#songsList, #localSongsList, #songsListCharts').on('click', 'tr', function (e) {
         e.preventDefault();
         let song_id = $(this).children('td:first').text();
 
@@ -1668,7 +1668,7 @@
     }, 2500);
 
     setInterval(function () {
-        // songsTable.ajax.reload(null, false);
+        songsTable.ajax.reload(null, false);
     }, 5000);
     /* End */
 
