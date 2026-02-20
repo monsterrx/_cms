@@ -30,7 +30,7 @@
             }
 
             function onSuccess(result) {
-                if (result.indieground.introduction === "No Data") {
+                if (result.indieground.introduction == "No Data") {
                     Toast.fire({
                         'icon': 'info',
                         'title': 'Indieground needs an introduction',

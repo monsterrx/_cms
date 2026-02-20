@@ -164,7 +164,7 @@
 			}
 		},
 		option: function(option, value) { // For changing playlist options only
-			if(value === undefined) {
+			if(value == undefined) {
 				return this.options.playlistOptions[option];
 			}
 
@@ -348,7 +348,7 @@
 			if(playNow) {
 				this.play(this.playlist.length - 1);
 			} else {
-				if(this.original.length === 1) {
+				if(this.original.length == 1) {
 					this.select(0);
 				}
 			}
@@ -356,7 +356,7 @@
 		remove: function(index) {
 			var self = this;
 
-			if(index === undefined) {
+			if(index == undefined) {
 				this._initPlaylist([]);
 				this._refresh(function() {
 					$(self.cssSelector.jPlayer).jPlayer("clearMedia");
@@ -377,7 +377,7 @@
 							if(self.shuffled) {
 								var item = self.playlist[index];
 								$.each(self.original, function(i) {
-									if(self.original[i] === item) {
+									if(self.original[i] == item) {
 										self.original.splice(i, 1);
 										return false; // Exit $.each
 									}
@@ -389,7 +389,7 @@
 							}
 
 							if(self.original.length) {
-								if(index === self.current) {
+								if(index == self.current) {
 									self.current = (index < self.original.length) ? self.current : self.original.length - 1; // To cope when last element being selected when it was removed
 									self.select(self.current);
 								} else if(index < self.current) {
@@ -426,7 +426,7 @@
 					this.select(index);
 					$(this.cssSelector.jPlayer).jPlayer("play");
 				}
-			} else if(index === undefined) {
+			} else if(index == undefined) {
 				$(this.cssSelector.jPlayer).jPlayer("play");
 			}
 		},
@@ -438,7 +438,7 @@
 
 			if(this.loop) {
 				// See if we need to shuffle before looping to start, and only shuffle if more than 1 item.
-				if(index === 0 && this.shuffled && this.options.playlistOptions.shuffleOnLoop && this.playlist.length > 1) {
+				if(index == 0 && this.shuffled && this.options.playlistOptions.shuffleOnLoop && this.playlist.length > 1) {
 					this.shuffle(true, true); // playNow
 				} else {
 					this.play(index);
@@ -460,7 +460,7 @@
 		shuffle: function(shuffled, playNow) {
 			var self = this;
 
-			if(shuffled === undefined) {
+			if(shuffled == undefined) {
 				shuffled = !this.shuffled;
 			}
 

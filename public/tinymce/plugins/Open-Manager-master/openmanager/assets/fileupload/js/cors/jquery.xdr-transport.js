@@ -17,7 +17,7 @@
 
 (function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define(['jquery'], factory);
     } else {
@@ -43,11 +43,11 @@
                         }
                         xdr = new XDomainRequest();
                         // XDomainRequest only supports GET and POST:
-                        if (s.type === 'DELETE') {
+                        if (s.type == 'DELETE') {
                             s.url = s.url + (/\?/.test(s.url) ? '&' : '?') +
                                 '_method=DELETE';
                             s.type = 'POST';
-                        } else if (s.type === 'PUT') {
+                        } else if (s.type == 'PUT') {
                             s.url = s.url + (/\?/.test(s.url) ? '&' : '?') +
                                 '_method=PUT';
                             s.type = 'POST';

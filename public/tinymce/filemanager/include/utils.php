@@ -44,7 +44,7 @@ if ( ! function_exists('trans'))
 
 	// language
 	if ( ! isset($_SESSION['RF']['language'])
-		|| file_exists('lang/' . basename($_SESSION['RF']['language']) . '.php') === false
+		|| file_exists('lang/' . basename($_SESSION['RF']['language']) . '.php') == false
 		|| ! is_readable('lang/' . basename($_SESSION['RF']['language']) . '.php')
 	)
 	{
@@ -589,7 +589,7 @@ function fix_filename($str, $config, $is_folder = false)
 	// Empty or incorrectly transliterated filename.
 	// Here is a point: a good file UNKNOWN_LANGUAGE.jpg could become .jpg in previous code.
 	// So we add that default 'file' name to fix that issue.
-	if (strpos($str, '.') === 0 && $is_folder === false)
+	if (strpos($str, '.') == 0 && $is_folder == false)
 	{
 		$str = 'file' . $str;
 	}
@@ -733,7 +733,7 @@ function image_check_memory_usage($img, $max_breedte, $max_hoogte)
 */
 function endsWith($haystack, $needle)
 {
-	return $needle === "" || substr($haystack, -strlen($needle)) === $needle;
+	return $needle == "" || substr($haystack, -strlen($needle)) == $needle;
 }
 
 /**
@@ -872,7 +872,7 @@ function is_really_writable($dir)
 	{
 		$dir = $dir . '/' . md5(mt_rand(1, 1000) . mt_rand(1, 1000));
 
-		if (($fp = @fopen($dir, 'ab')) === false)
+		if (($fp = @fopen($dir, 'ab')) == false)
 		{
 			return false;
 		}
@@ -883,7 +883,7 @@ function is_really_writable($dir)
 
 		return true;
 	}
-	elseif ( ! is_file($dir) || ($fp = @fopen($dir, 'ab')) === false)
+	elseif ( ! is_file($dir) || ($fp = @fopen($dir, 'ab')) == false)
 	{
 		return false;
 	}
@@ -903,7 +903,7 @@ function is_really_writable($dir)
 */
 function is_function_callable($name)
 {
-	if (function_exists($name) === false)
+	if (function_exists($name) == false)
 	{
 		return false;
 	}
@@ -923,12 +923,12 @@ function rcopy($source, $destination, $is_rec = false)
 {
 	if (is_dir($source))
 	{
-		if ($is_rec === false)
+		if ($is_rec == false)
 		{
 			$pinfo = pathinfo($source);
 			$destination = rtrim($destination, '/') . DIRECTORY_SEPARATOR . $pinfo['basename'];
 		}
-		if (is_dir($destination) === false)
+		if (is_dir($destination) == false)
 		{
 			mkdir($destination, 0755, true);
 		}
@@ -946,7 +946,7 @@ function rcopy($source, $destination, $is_rec = false)
 	{
 		if (file_exists($source))
 		{
-			if (is_dir($destination) === true)
+			if (is_dir($destination) == true)
 			{
 				$pinfo = pathinfo($source);
 				$dest2 = rtrim($destination, '/') . DIRECTORY_SEPARATOR . $pinfo['basename'];
@@ -979,12 +979,12 @@ function rrename($source, $destination, $is_rec = false)
 {
 	if (is_dir($source))
 	{
-		if ($is_rec === false)
+		if ($is_rec == false)
 		{
 			$pinfo = pathinfo($source);
 			$destination = rtrim($destination, '/') . DIRECTORY_SEPARATOR . $pinfo['basename'];
 		}
-		if (is_dir($destination) === false)
+		if (is_dir($destination) == false)
 		{
 			mkdir($destination, 0755, true);
 		}
@@ -1002,7 +1002,7 @@ function rrename($source, $destination, $is_rec = false)
 	{
 		if (file_exists($source))
 		{
-			if (is_dir($destination) === true)
+			if (is_dir($destination) == true)
 			{
 				$pinfo = pathinfo($source);
 				$dest2 = rtrim($destination, '/') . DIRECTORY_SEPARATOR . $pinfo['basename'];
@@ -1057,7 +1057,7 @@ function rchmod($source, $mode, $rec_option = "none", $is_rec = false)
 	}
 	else
 	{
-		if ($is_rec === false)
+		if ($is_rec == false)
 		{
 			chmod($source, $mode);
 		}

@@ -34,9 +34,9 @@
                                         <tr data-href="{{ route('asset.show', $title->id) }}" onclick="viewData()">
                                             <td>{{ $title->id }}</td>
                                             <td>
-                                                @if($title->location === "mnl")
+                                                @if($title->location == "mnl")
                                                     <div class="badge badge-primary">Monster RX93.1</div>
-                                                @elseif($title->location === "cbu")
+                                                @elseif($title->location == "cbu")
                                                     <div class="badge badge-warning">Monster BT105.9 Cebu</div>
                                                 @else
                                                     <div class="badge badge-dark">Monster BT99.5 Davao</div>
@@ -44,7 +44,7 @@
                                             </td>
                                             <td>
                                                 @foreach($title->Asset as $asset)
-                                                    @if($asset->is_dark_mode === 0)
+                                                    @if($asset->is_dark_mode == 0)
                                                         <div class="badge badge-light">Light</div>
                                                     @else
                                                         <div class="badge badge-dark">Dark</div>

@@ -14,7 +14,7 @@
 
 (function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define(['jquery'], factory);
     } else {
@@ -36,7 +36,7 @@
     //  equivalent to the return data of .serializeArray(), e.g.:
     //  [{name: 'a', value: 1}, {name: 'b', value: 2}]
     $.ajaxTransport('iframe', function (options) {
-        if (options.async && (options.type === 'POST' || options.type === 'GET')) {
+        if (options.async && (options.type == 'POST' || options.type == 'GET')) {
             var form,
                 iframe;
             return {
@@ -97,7 +97,7 @@
                             });
                         }
                         if (options.fileInput && options.fileInput.length &&
-                                options.type === 'POST') {
+                                options.type == 'POST') {
                             fileInputClones = options.fileInput.clone();
                             // Insert a clone for each file input field:
                             options.fileInput.after(function (index) {

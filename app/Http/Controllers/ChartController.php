@@ -28,14 +28,14 @@ class ChartController extends Controller {
                 $chartDate = $request->get('date') ?? $request->get('dated');
                 $throwback = $request->get('is_throwback');
 
-                if (!isset($chartDate) || $chartDate === '') {
+                if (!isset($chartDate) || $chartDate == '') {
                     $chartDate = date('Y-m-d');
                 }
 
                 if($isSouthsideCharts) {
                     $type = $request->get('data-local');
 
-                    if($action === 'official') {
+                    if($action == 'official') {
                         $chart = $this->getCharts(
                             $chartDate,
                             0,
@@ -48,7 +48,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music._chart.charts', compact('chart'));
                     }
 
-                    if($action === 'draft') {
+                    if($action == 'draft') {
                         $chart = $chart = $this->getCharts(
                             $chartDate,
                             0,
@@ -61,7 +61,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music._chart.charts', compact('chart'));
                     }
 
-                    if($action === 'post') {
+                    if($action == 'post') {
                         $charts = Chart::where('dated', $request['dated'])
                             ->where('local', '=', $type)
                             ->where('daily', '=', 0)
@@ -87,8 +87,8 @@ class ChartController extends Controller {
                         ]);
                     }
                 } 
-                else if ($chartType === 'daily') {
-                    if($action === 'official') {
+                else if ($chartType == 'daily') {
+                    if($action == 'official') {
                         $charts = $this->getCharts(
                             $chartDate,
                             1,
@@ -117,7 +117,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music.daily.table', compact('charts'));
                     }
 
-                    if($action === 'draft') {
+                    if($action == 'draft') {
                         // $songs = Song::query()
                         //     ->with('Album.Artist')
                         //     ->orderBy('votes', 'desc')
@@ -147,7 +147,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music.daily.table', compact('charts'));
                     }
 
-                    if($action === 'throwback') {
+                    if($action == 'throwback') {
                         $charts = Chart::where('dated', $chartDate)
                             ->where('local', 0)
                             ->where('daily', '=', 1)
@@ -165,7 +165,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music.daily.table', compact('charts'));
                     }
 
-                    if($action === 'post') {
+                    if($action == 'post') {
                         $currentDate = date('Y-m-d');
 
                         if ($throwback) {
@@ -279,7 +279,7 @@ class ChartController extends Controller {
                     }
                 }
 
-                if($action === 'official') {
+                if($action == 'official') {
                     $charts = $this->getCharts(
                         $chartDate,
                         0,
@@ -292,7 +292,7 @@ class ChartController extends Controller {
                     return view('_cms.system-views.music._chart.charts', compact('charts'));
                 }
 
-                if($action === 'draft') {
+                if($action == 'draft') {
                     $charts = $this->getCharts(
                         $chartDate,
                         0,
@@ -305,7 +305,7 @@ class ChartController extends Controller {
                     return view('_cms.system-views.music._chart.charts', compact('charts'));
                 }
 
-                if($action === 'post') {
+                if($action == 'post') {
                     $current_charts = $this->getCharts(
                         $chartDate,
                         0,
@@ -398,7 +398,7 @@ class ChartController extends Controller {
             ->select('dated')
             ->max('dated');
 
-        if($latestChartDate === null) {
+        if($latestChartDate == null) {
             $latestChartDate = date('Y-m-d');
         }
 
@@ -409,17 +409,17 @@ class ChartController extends Controller {
             ->orderBy('position')
             ->get();
 
-        if($chart->first()->is_posted === 0 || count($chart) === 0) {
+        if($chart->first()->is_posted == 0 || count($chart) == 0) {
             $chart_type = 'Draft';
         }
 
-        if($chart->first()->is_posted === 1) {
+        if($chart->first()->is_posted == 1) {
             $chart_type = 'Official';
         }
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === 1 || $level === 2 || $level === 6|| $level === 7) {
+        if ($level == 1 || $level == 2 || $level == 6|| $level == 7) {
             return view('_cms.system-views.music._chart.index', compact('chart', 'latestChartDate', 'chart_type'));
         }
 
@@ -511,8 +511,8 @@ class ChartController extends Controller {
                 ], 400);
             }
 
-            if($request['daily'] === '1') {
-                if ($request['type'] === 'dailyChart') {
+            if($request['daily'] == '1') {
+                if ($request['type'] == 'dailyChart') {
                     $verifyCharts = Chart::query()
                         ->whereNull('deleted_at')
                         ->where('daily', 1)
@@ -545,7 +545,7 @@ class ChartController extends Controller {
                 }
 
                 // If the current request is adding songs to the TDS playlist
-                if ($request['type'] === 'song') {
+                if ($request['type'] == 'song') {
                     $request->merge([
                         'song_id'    => $request['song_id'],
                         'daily'      => 1,
@@ -563,7 +563,7 @@ class ChartController extends Controller {
                 }
 
                 // If the current request is intended for throwback songs
-                elseif ($request['throwback'] === '1') {
+                elseif ($request['throwback'] == '1') {
                     $request->merge([
                         'daily' => 1,
                         'playlist'   => 0,
@@ -731,7 +731,7 @@ class ChartController extends Controller {
             if($request->has('data-payload')) {
                 $payload = $request['data-payload'];
 
-                if($payload === 'southsides') {
+                if($payload == 'southsides') {
                     $charts = Chart::where('dated', $request['date'])
                         ->whereNull('deleted_at')
                         ->where('local', 1)
@@ -753,8 +753,8 @@ class ChartController extends Controller {
                 $chart_date = $request->get('date');
 
                 // For The Daily Survey Top 5 Charts
-                if ($is_daily === 'true') {
-                    if($chart_type === 'official') {
+                if ($is_daily == 'true') {
+                    if($chart_type == 'official') {
                         $charts = Chart::where('dated', $chart_date)
                             ->whereNull('deleted_at')
                             ->where('local', 0)
@@ -769,7 +769,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music.daily.table', compact('charts'));
                     }
 
-                    if($chart_type === 'draft') {
+                    if($chart_type == 'draft') {
                         $songs = Song::query()
                             ->orderBy('votes', 'desc')
                             ->get()
@@ -782,7 +782,7 @@ class ChartController extends Controller {
                         return view('_cms.system-views.music.daily.songs-table', compact('songs'));
                     }
 
-                    if($chart_type === 'throwback') {
+                    if($chart_type == 'throwback') {
                         $charts = Chart::where('dated', $chart_date)
                             ->whereNull('deleted_at')
                             ->where('local', 0)
@@ -800,7 +800,7 @@ class ChartController extends Controller {
                     return response()->json(['status' => 'warning', 'message' => 'Action unknown'], 400);
                 }
 
-                if($chart_type === 'voting') {
+                if($chart_type == 'voting') {
                     $charts = Chart::where('dated', $request['date'])
                         ->whereNull('deleted_at')
                         ->where('local', 0)
@@ -817,7 +817,7 @@ class ChartController extends Controller {
                     return view('_cms.system-views.music._chart.charts_voting', compact('charts', 'vote'));
                 }
 
-                if($chart_type === 'official') {
+                if($chart_type == 'official') {
                     $charts = Chart::where('dated', $request['date'])
                         ->whereNull('deleted_at')
                         ->where('local', 0)
@@ -832,7 +832,7 @@ class ChartController extends Controller {
                     return view('_cms.system-views.music._chart.charts', compact('charts'));
                 }
 
-                if($chart_type === 'draft') {
+                if($chart_type == 'draft') {
                     $charts = Chart::where('dated', $request['date'])
                         ->whereNull('deleted_at')
                         ->where('local', 0)
@@ -886,7 +886,7 @@ class ChartController extends Controller {
         $data = array('drop' => $drop);
 
         $level = Auth::user()->Employee->Designation->level;
-        if ($level === 1 || $level === 2 || $level === 6 || $level === 7)
+        if ($level == 1 || $level == 2 || $level == 6 || $level == 7)
         {
             return view('_cms.system-views.music._chart.index',compact('chart','dated', 'data'));
         }
@@ -977,7 +977,7 @@ class ChartController extends Controller {
             $dated = $request->get('dated') ?? $latestSurveyDate;
             $date = $request->get('date') ?? $latestSurveyThrowbackDate;
             $type = $request->get('type');
-            $is_posted = $type === 'official' ? 1 : 0;
+            $is_posted = $type == 'official' ? 1 : 0;
             $throwback = $request->get('throwback');
 
             $charts = Chart::query()
@@ -1006,7 +1006,7 @@ class ChartController extends Controller {
                     $isPosted = 0;
                 }
                 
-                if ($throwback === 'true') {
+                if ($throwback == 'true') {
                     $surveyDates = Chart::query()
                         ->where('daily', 1)
                         ->where('local', 0)
@@ -1075,7 +1075,7 @@ class ChartController extends Controller {
 
                 if (isset($datatable)) {
                     // Commented due to digital direction // 09-15-2025
-                    // if ($type === 'draft') {
+                    // if ($type == 'draft') {
                     //     foreach ($songs as $key => $song) {
                     //         $song->position = $key + 1;
                     //         $song->votes = $song->votes ?? 0;
@@ -1096,7 +1096,7 @@ class ChartController extends Controller {
                         ->orderBy('position')
                         ->get();
 
-                    if ($type === 'draft') {
+                    if ($type == 'draft') {
                         $charts = Chart::query()
                         ->with('Song.Album.Artist')
                         ->where('daily', 1)
@@ -1135,7 +1135,7 @@ class ChartController extends Controller {
                         }
                     }
 
-                    if ($type === 'throwback') {
+                    if ($type == 'throwback') {
                         $throwbacks = Chart::query()
                             ->with('Song.Album.Artist')
                             ->where('daily', 1)
@@ -1178,7 +1178,7 @@ class ChartController extends Controller {
                     ]);
                 }
 
-                // if ($chartType === 'draft') {
+                // if ($chartType == 'draft') {
                 //     return view('_cms.system-views.music.daily.songs-table', compact('songs'));
                 // }
 
@@ -1228,7 +1228,7 @@ class ChartController extends Controller {
             ->get();
 
         if (count($surveyDates) > 0) {
-            if ($surveyDates->first()->is_posted === 1) {
+            if ($surveyDates->first()->is_posted == 1) {
                 $chart_type = 'Official';
             } 
             else {

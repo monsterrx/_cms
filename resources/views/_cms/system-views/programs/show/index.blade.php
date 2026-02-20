@@ -17,7 +17,7 @@
                     <p class="lead">Monster Shows</p>
                 </div>
                 @php $level = Auth::user()->Employee->Designation->level; @endphp
-                @if($level === 1 || $level === 2)
+                @if($level == 1 || $level == 2)
                     <div class="col-6">
                         <a href="#newShow" class="btn btn-outline-dark fa-pull-right" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;&nbsp;New Show</a>
                     </div>
@@ -45,9 +45,9 @@
                                         <td>{{ $shows->title }}</td>
                                         <td>{{ $shows->front_description }}</td>
                                         <td>
-                                            @if($shows->location === "mnl")
+                                            @if($shows->location == "mnl")
                                                 <div class="badge badge-primary">Manila</div>
-                                            @elseif($shows->location === "cbu")
+                                            @elseif($shows->location == "cbu")
                                                 <div class="badge badge-warning">Cebu</div>
                                             @else
                                                 <div class="badge badge-dark">Davao</div>

@@ -13,13 +13,13 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
             './jquery.fileupload-process'
         ], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(
             require('jquery'),
@@ -93,7 +93,7 @@
                 if (options.minFileSize || options.maxFileSize) {
                     fileSize = file.size;
                 }
-                if ($.type(options.maxNumberOfFiles) === 'number' &&
+                if ($.type(options.maxNumberOfFiles) == 'number' &&
                         (settings.getNumberOfFiles() || 0) + data.files.length >
                             options.maxNumberOfFiles) {
                     file.error = settings.i18n('maxNumberOfFiles');
@@ -103,7 +103,7 @@
                     file.error = settings.i18n('acceptFileTypes');
                 } else if (fileSize > options.maxFileSize) {
                     file.error = settings.i18n('maxFileSize');
-                } else if ($.type(fileSize) === 'number' &&
+                } else if ($.type(fileSize) == 'number' &&
                         fileSize < options.minFileSize) {
                     file.error = settings.i18n('minFileSize');
                 } else {

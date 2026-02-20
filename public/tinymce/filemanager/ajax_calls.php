@@ -86,10 +86,10 @@ if(isset($_GET['action']))
 			$info = pathinfo($_POST['name']);
 
 			if (
-				strpos($_POST['path'], '/') === 0
+				strpos($_POST['path'], '/') == 0
 				|| strpos($_POST['path'], '../') !== false
 				|| strpos($_POST['path'], '..\\') !== false
-				|| strpos($_POST['path'], './') === 0
+				|| strpos($_POST['path'], './') == 0
 				|| (strpos($_POST['url'], 'http://s3.amazonaws.com/feather') !== 0 && strpos($_POST['url'], 'https://s3.amazonaws.com/feather') !== 0)
 				|| $_POST['name'] != fix_filename($_POST['name'], $config)
 				|| ! in_array(strtolower($info['extension']), array( 'jpg', 'jpeg', 'png' ))
@@ -99,7 +99,7 @@ if(isset($_GET['action']))
 				exit;
 			}
 			$image_data = get_file_by_url($_POST['url']);
-			if ($image_data === false)
+			if ($image_data == false)
 			{
 				response(trans('Aviary_No_Save').AddErrorLocation())->send();
 				exit;
@@ -137,10 +137,10 @@ if(isset($_GET['action']))
 			}
 			break;
 		case 'extract':
-			if (	strpos($_POST['path'], '/') === 0 
+			if (	strpos($_POST['path'], '/') == 0 
 				|| strpos($_POST['path'], '../') !== false 
 				|| strpos($_POST['path'], '..\\') !== false 
-				|| strpos($_POST['path'], './') === 0)
+				|| strpos($_POST['path'], './') == 0)
 			{
 				response(trans('wrong path'.AddErrorLocation()))->send();
 				exit;
@@ -174,7 +174,7 @@ if(isset($_GET['action']))
 			{
 				case "zip":
 					$zip = new ZipArchive;
-					if ($zip->open($path) === true)
+					if ($zip->open($path) == true)
 					{
 						//get total size
 						$sizeTotalFinal = 0;
@@ -392,7 +392,7 @@ if(isset($_GET['action']))
 			if (is_dir($path))
 			{
 				// can't copy/cut dirs
-				if ($copy_cut_dirs === false)
+				if ($copy_cut_dirs == false)
 				{
 					response(sprintf(trans('Copy_Cut_Not_Allowed'), $msg_sub_action, trans('Folders')).AddErrorLocation())->send();
 					exit;
@@ -423,7 +423,7 @@ if(isset($_GET['action']))
 				}
 			} else {
 				// can't copy/cut files
-				if ($copy_cut_files === false)
+				if ($copy_cut_files == false)
 				{
 					response(sprintf(trans('Copy_Cut_Not_Allowed'), $msg_sub_action, trans('Files')).AddErrorLocation())->send();
 					exit;
@@ -441,9 +441,9 @@ if(isset($_GET['action']))
 			if($ftp){
 				$path = $ftp_base_url . $upload_dir . $_POST['path'];
 				if (
-					($_POST['folder']==1 && $chmod_dirs === false)
-					|| ($_POST['folder']==0 && $chmod_files === false)
-					|| (is_function_callable("chmod") === false) )
+					($_POST['folder']==1 && $chmod_dirs == false)
+					|| ($_POST['folder']==0 && $chmod_files == false)
+					|| (is_function_callable("chmod") == false) )
 				{
 					response(sprintf(trans('File_Permission_Not_Allowed'), (is_dir($path) ? trans('Folders') : trans('Files')), 403).AddErrorLocation())->send();
 					exit;
@@ -452,9 +452,9 @@ if(isset($_GET['action']))
 			}else{
 				$path = $current_path . $_POST['path'];
 				if (
-					(is_dir($path) && $chmod_dirs === false)
-					|| (is_file($path) && $chmod_files === false)
-					|| (is_function_callable("chmod") === false) )
+					(is_dir($path) && $chmod_dirs == false)
+					|| (is_file($path) && $chmod_files == false)
+					|| (is_function_callable("chmod") == false) )
 				{
 					response(sprintf(trans('File_Permission_Not_Allowed'), (is_dir($path) ? trans('Folders') : trans('Files')), 403).AddErrorLocation())->send();
 					exit;
@@ -647,7 +647,7 @@ if(isset($_GET['action']))
 
 			if ( ! in_array($info['extension'], $allowed_file_exts)
 				|| ! isset($is_allowed)
-				|| $is_allowed === false
+				|| $is_allowed == false
 				|| (!$ftp && ! is_readable($selected_file))
 			)
 			{

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 trait SystemFunctions {
     public function getAppEnvironment() {
-        return Env::get('APP_ENV') === 'local' ? 'dev' : 'prod';
+        return Env::get('APP_ENV') == 'local' ? 'dev' : 'prod';
     }
 
     public function getAssetUrl($asset): string {
@@ -19,11 +19,11 @@ trait SystemFunctions {
     }
 
     public function getStationName() {
-        return $this->getStationCode() === 'mnl' ? 'Monster RX93.1' : ($this->getStationCode() === 'cbu' ? 'Monster BT105.9 Cebu' : 'Monster BT99.5 Davao');
+        return $this->getStationCode() == 'mnl' ? 'Monster RX93.1' : ($this->getStationCode() == 'cbu' ? 'Monster BT105.9 Cebu' : 'Monster BT99.5 Davao');
     }
 
     public function getFileLocation($folderName, $file) {
-        return $this->getAppEnvironment() === 'dev' ? 'http://127.0.0.6/images/'.$folderName.'/'.$file : $this->getAppUrl() . '/images/'.$folderName.'/'.$file;
+        return $this->getAppEnvironment() == 'dev' ? 'http://127.0.0.6/images/'.$folderName.'/'.$file : $this->getAppUrl() . '/images/'.$folderName.'/'.$file;
     }
 
     public function getStream() {
@@ -41,15 +41,15 @@ trait SystemFunctions {
         $station_code = $this->getStationCode();
 
         if ($application_environment !== 'dev') {
-            if ($station_code === 'cbu') {
+            if ($station_code == 'cbu') {
                 return 'https://monstercebu.com';
             }
 
-            if ($station_code === 'dav') {
+            if ($station_code == 'dav') {
                 return 'https://monsterdavao.com';
             }
 
-            if ($station_code === 'mnl') {
+            if ($station_code == 'mnl') {
                 return 'https://rx931.com';
             }
         } else {
@@ -87,7 +87,7 @@ trait SystemFunctions {
     }
 
     public function getStationChart() {
-        $id = $this->getStationCode() === 'mnl' ? 17 : ($this->getStationCode() === 'cbu' ? 38 : 29);
+        $id = $this->getStationCode() == 'mnl' ? 17 : ($this->getStationCode() == 'cbu' ? 38 : 29);
 
         $show = Show::with('Jock')->findOrFail($id);
 

@@ -20,14 +20,14 @@
             </div>
             <div class="row my-3 mx-5">
                 <div class="col-md-12">
-                    @if($where === "" || $where === null)
+                    @if($where == "" || $where == null)
 
                     @else
                         <div class="h3 text-center m-0">Outbreak Songs of the Week {{ date('F d, Y', strtotime($where)) }}</div>
                     @endif
                 </div>
                 @forelse($recentOutbreak as $outbreakSongs)
-                    @if($outbreakSongs->Song->type === 'spotify')
+                    @if($outbreakSongs->Song->type == 'spotify')
                         <div class="col-md-6">
                             <div class="embed-container" style="max-width: 100%; margin: 15%;">
                                 <iframe src="https://open.spotify.com/embed/track/{{ $outbreakSongs->track_link }}" frameborder="0" allowtransparency="true" allow="encrypted-media" height="380px"></iframe>
@@ -51,7 +51,7 @@
                                     @else
                                         <p class="card-text" style="margin-bottom: 0">{{ $outbreakSongs->Song->Album->Artist->Name }}</p>
                                     @endif
-                                    @if($outbreakSongs->Song->Album->AlbumType === 'Single' || $outbreakSongs->Song->Album->AlbumType === 'EP')
+                                    @if($outbreakSongs->Song->Album->AlbumType == 'Single' || $outbreakSongs->Song->Album->AlbumType == 'EP')
                                         @if(strlen($res) > 30)
                                             <marquee><small>{{ $res }}</small></marquee>
                                         @else

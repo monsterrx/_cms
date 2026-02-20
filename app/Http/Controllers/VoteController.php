@@ -49,7 +49,7 @@ class VoteController extends Controller
 
         $userLevel = Auth::user()->Employee->Designation->level;
 
-        if($userLevel === 5 || $userLevel === 8) {
+        if($userlevel == 5 || $userlevel == 8) {
             return view('_cms.system-views.employeeUI.Jocks.survey', compact('chart', 'show', 'jock_id', 'latestChartDate'));
         }
 
@@ -65,7 +65,7 @@ class VoteController extends Controller
 
         $this->voteLog('Added votes from '.$device, $chartId, $userId);
 
-        if($device === 'phone')
+        if($device == 'phone')
         {
             $vote = Chart::findOrFail($chartId);
 
@@ -77,7 +77,7 @@ class VoteController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Phone call vote added'], 201);
         }
 
-        if($device === 'socmed') {
+        if($device == 'socmed') {
 
             $vote = Chart::findOrFail($chartId);
 

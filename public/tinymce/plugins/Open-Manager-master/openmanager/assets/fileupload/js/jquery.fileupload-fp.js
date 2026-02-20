@@ -14,7 +14,7 @@
 
 (function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
@@ -124,7 +124,7 @@
                     dfd = $.Deferred(),
                     callback = function (blob) {
                         if (!blob.name) {
-                            if (file.type === blob.type) {
+                            if (file.type == blob.type) {
                                 blob.name = file.name;
                             } else if (file.name) {
                                 blob.name = file.name.replace(
@@ -172,12 +172,12 @@
             });
             chain.always(function () {
                 that._processing -= 1;
-                if (that._processing === 0) {
+                if (that._processing == 0) {
                     that.element
                         .removeClass('fileupload-processing');
                 }
             });
-            if (that._processing === 1) {
+            if (that._processing == 1) {
                 that.element.addClass('fileupload-processing');
             }
             return chain;

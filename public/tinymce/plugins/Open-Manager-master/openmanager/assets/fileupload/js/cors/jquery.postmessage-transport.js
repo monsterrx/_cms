@@ -14,7 +14,7 @@
 
 (function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define(['jquery'], factory);
     } else {
@@ -81,8 +81,8 @@
                             e = e.originalEvent;
                             var data = e.data,
                                 ev;
-                            if (e.origin === target && data.id === message.id) {
-                                if (data.type === 'progress') {
+                            if (e.origin == target && data.id == message.id) {
+                                if (data.type == 'progress') {
                                     ev = document.createEvent('Event');
                                     ev.initEvent(data.type, false, true);
                                     $.extend(ev, data);

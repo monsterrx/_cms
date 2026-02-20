@@ -76,7 +76,7 @@ class LoginController extends Controller
         $user = $this->guard()->getProvider()->retrieveByCredentials($this->credentials($request));
 
 
-        if ($user->Employee->is_active === 0) {
+        if ($user->Employee->is_active == 0) {
             $request['errorType'] = 'inactive';
 
             return false;

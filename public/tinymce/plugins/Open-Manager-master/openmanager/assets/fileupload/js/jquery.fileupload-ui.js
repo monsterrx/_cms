@@ -14,7 +14,7 @@
 
 (function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
@@ -121,7 +121,7 @@
                     }
                 }
                 if (data.context && data.dataType &&
-                        data.dataType.substr(0, 6) === 'iframe') {
+                        data.dataType.substr(0, 6) == 'iframe') {
                     // Iframe Transport does not support progress events.
                     // In lack of an indeterminate progress bar, we set
                     // the progress to 100%, showing the full animated bar:
@@ -325,7 +325,7 @@
         },
 
         _adjustMaxNumberOfFiles: function (operand) {
-            if (typeof this.options.maxNumberOfFiles === 'number') {
+            if (typeof this.options.maxNumberOfFiles == 'number') {
                 this.options.maxNumberOfFiles += operand;
                 if (this.options.maxNumberOfFiles < 1) {
                     this._disableFileInputButton();
@@ -411,7 +411,7 @@
                     file.size > this.options.maxFileSize) {
                 return 'maxFileSize';
             }
-            if (typeof file.size === 'number' &&
+            if (typeof file.size == 'number' &&
                     file.size < this.options.minFileSize) {
                 return 'minFileSize';
             }
@@ -554,7 +554,7 @@
                     function (e) {
                         // Make sure we don't respond to other transitions events
                         // in the container element, e.g. from button elements:
-                        if (e.target === node[0]) {
+                        if (e.target == node[0]) {
                             node.unbind($.support.transition.end);
                             dfd.resolveWith(node);
                         }
@@ -669,7 +669,7 @@
 
         _initFilesContainer: function () {
             var options = this.options;
-            if (options.filesContainer === undefined) {
+            if (options.filesContainer == undefined) {
                 options.filesContainer = this.element.find('.files');
             } else if (!(options.filesContainer instanceof $)) {
                 options.filesContainer = $(options.filesContainer);
@@ -685,12 +685,12 @@
 
         _initRegExpOptions: function () {
             var options = this.options;
-            if ($.type(options.acceptFileTypes) === 'string') {
+            if ($.type(options.acceptFileTypes) == 'string') {
                 options.acceptFileTypes = this._stringToRegExp(
                     options.acceptFileTypes
                 );
             }
-            if ($.type(options.previewSourceFileTypes) === 'string') {
+            if ($.type(options.previewSourceFileTypes) == 'string') {
                 options.previewSourceFileTypes = this._stringToRegExp(
                     options.previewSourceFileTypes
                 );

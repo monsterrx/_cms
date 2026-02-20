@@ -14,7 +14,7 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
@@ -24,7 +24,7 @@
             './jquery.fileupload-video',
             './jquery.fileupload-validate'
         ], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(
             require('jquery'),
@@ -147,7 +147,7 @@
                 var that = $(this).data('blueimp-fileupload') ||
                         $(this).data('fileupload');
                 if (data.context && data.dataType &&
-                        data.dataType.substr(0, 6) === 'iframe') {
+                        data.dataType.substr(0, 6) == 'iframe') {
                     // Iframe Transport does not support progress events.
                     // In lack of an indeterminate progress bar, we set
                     // the progress to 100%, showing the full animated bar:
@@ -563,7 +563,7 @@
                     function (e) {
                         // Make sure we don't respond to other transitions events
                         // in the container element, e.g. from button elements:
-                        if (e.target === node[0]) {
+                        if (e.target == node[0]) {
                             node.unbind($.support.transition.end);
                             dfd.resolveWith(node);
                         }
@@ -668,7 +668,7 @@
 
         _initFilesContainer: function () {
             var options = this.options;
-            if (options.filesContainer === undefined) {
+            if (options.filesContainer == undefined) {
                 options.filesContainer = this.element.find('.files');
             } else if (!(options.filesContainer instanceof $)) {
                 options.filesContainer = $(options.filesContainer);

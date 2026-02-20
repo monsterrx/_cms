@@ -14,7 +14,7 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
@@ -24,7 +24,7 @@
             './jquery.fileupload-video',
             './jquery.fileupload-validate'
         ], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(
             require('jquery'),
@@ -87,7 +87,7 @@
                     if (files) {
                         data.scope.replace(data.files, files);
                     } else if (data.errorThrown ||
-                            data.textStatus === 'error') {
+                            data.textStatus == 'error') {
                         data.files[0].error = data.errorThrown ||
                             data.textStatus;
                     }
@@ -137,7 +137,7 @@
                     }
                     var that = this,
                         scope = data.scope;
-                    if (data.errorThrown === 'abort') {
+                    if (data.errorThrown == 'abort') {
                         scope.clear(data.files);
                         return;
                     }
@@ -189,7 +189,7 @@
                         unit = $config.units[i];
                         prefix = unit.prefix || '';
                         suffix = unit.suffix || '';
-                        if (i === $config.units.length - 1 || bytes >= unit.size) {
+                        if (i == $config.units.length - 1 || bytes >= unit.size) {
                             return prefix + (bytes / unit.size).toFixed(2) + suffix;
                         }
                         i += 1;
@@ -211,7 +211,7 @@
                         return $element.fileupload('active');
                     },
                     option: function (option, data) {
-                        if (arguments.length === 1) {
+                        if (arguments.length == 1) {
                             return $element.fileupload('option', option);
                         }
                         $element.fileupload('option', option, data);
@@ -242,7 +242,7 @@
                     }
                     while (i) {
                         i -= 1;
-                        if (queue[i] === file) {
+                        if (queue[i] == file) {
                             return queue.splice(i, length);
                         }
                     }
@@ -253,7 +253,7 @@
                         i,
                         j;
                     for (i = 0; i < queue.length; i += 1) {
-                        if (queue[i] === file) {
+                        if (queue[i] == file) {
                             for (j = 0; j < newFiles.length; j += 1) {
                                 queue[i + j] = newFiles[j];
                             }
@@ -291,11 +291,11 @@
                 )).on('fileuploadadd', function (e, data) {
                     data.scope = $scope;
                 }).on('fileuploadfail', function (e, data) {
-                    if (data.errorThrown === 'abort') {
+                    if (data.errorThrown == 'abort') {
                         return;
                     }
                     if (data.dataType &&
-                            data.dataType.indexOf('json') === data.dataType.length - 4) {
+                            data.dataType.indexOf('json') == data.dataType.length - 4) {
                         try {
                             data.result = angular.fromJson(data.jqXHR.responseText);
                         } catch (ignore) {}

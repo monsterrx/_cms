@@ -56,7 +56,7 @@ class CategoryController extends Controller
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === 1 || $level === 2 || $level === 3)
+        if ($level == 1 || $level == 2 || $level == 3)
         {
             return view('_cms.system-views.digital.category.index',compact('categories'));
         }
@@ -87,7 +87,7 @@ class CategoryController extends Controller
         $iconPath = $this->storePhoto($request, $path, $directory);
 
         // Use a ternary operator for clarity, and explicitly set default behavior
-        $iconKey = ($theme === 'dark') ? 'dark_mode_icon' : 'icon';
+        $iconKey = ($theme == 'dark') ? 'dark_mode_icon' : 'icon';
 
         // Assign dynamically to the request safely
         $request->merge([$iconKey => $iconPath]);
@@ -148,7 +148,7 @@ class CategoryController extends Controller
         $iconPath = $this->storePhoto($request, $path, $directory);
 
         // Use a ternary operator for clarity, and explicitly set default behavior
-        $iconKey = ($theme === 'dark') ? 'dark_mode_icon' : 'icon';
+        $iconKey = ($theme == 'dark') ? 'dark_mode_icon' : 'icon';
 
         // Assign dynamically to the request safely
         $request->merge([$iconKey => $iconPath]);

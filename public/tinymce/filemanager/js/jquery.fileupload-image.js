@@ -14,7 +14,7 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
@@ -25,7 +25,7 @@
             'canvas-to-blob',
             './jquery.fileupload-process'
         ], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(
             require('jquery'),
@@ -163,7 +163,7 @@
                 var that = this,
                     file = data.files[data.index],
                     dfd = $.Deferred();
-                if (($.type(options.maxFileSize) === 'number' &&
+                if (($.type(options.maxFileSize) == 'number' &&
                             file.size > options.maxFileSize) ||
                         (options.fileTypes &&
                             !options.fileTypes.test(file.type)) ||
@@ -206,7 +206,7 @@
                     },
                     thumbnail;
                 if (data.exif) {
-                    if (options.orientation === true) {
+                    if (options.orientation == true) {
                         options.orientation = data.exif.get('Orientation');
                     }
                     if (options.thumbnail) {
@@ -243,7 +243,7 @@
                     data.canvas.toBlob(
                         function (blob) {
                             if (!blob.name) {
-                                if (file.type === blob.type) {
+                                if (file.type == blob.type) {
                                     blob.name = file.name;
                                 } else if (file.name) {
                                     blob.name = file.name.replace(

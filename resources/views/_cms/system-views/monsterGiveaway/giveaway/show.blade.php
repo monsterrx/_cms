@@ -4,9 +4,9 @@
     <div class="container">
         <div class="mt-md-4 mt-lg-4 mt-sm-0 mb-5">
             <h3 class="h3">
-                @if($giveaway->type === 'concerts')
+                @if($giveaway->type == 'concerts')
                     Monster Concert Tickets
-                @elseif($giveaway->type === 'movies')
+                @elseif($giveaway->type == 'movies')
                     Monster Movie Premiere
                 @else
                     Undefined
@@ -24,7 +24,7 @@
                     <div class="btn-group fa-pull-right">
                         <a href="{{ route('giveaways.index') }}" class="btn btn-outline-dark"><i class="fa fa-arrow-left"></i>  Back</a>
                         <a href="#updateGiveaway" class="btn btn-outline-dark" data-toggle="modal"><i class="fa fa-file-import"></i>  Update</a>
-                        @if($giveaway->active === '0')
+                        @if($giveaway->active == '0')
                             <a href="#activateGiveaway" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-check-circle"></i>  Activate</a>
                         @else
                             <a href="#deleteGiveaway" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-times-circle"></i>  Deactivate</a>
@@ -52,9 +52,9 @@
                                 Category
                             </div>
                             <p class="lead">
-                                @if($giveaway->type === 'movies')
+                                @if($giveaway->type == 'movies')
                                     Monster Movie Premiere
-                                @elseif($giveaway->type === 'concerts')
+                                @elseif($giveaway->type == 'concerts')
                                     Concert Tickets
                                 @else
                                     Undefined
@@ -144,9 +144,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="lead">Update
-                        @if($giveaway->type === 'concerts')
+                        @if($giveaway->type == 'concerts')
                             Concert Tickets
-                        @elseif($giveaway->type === 'movies')
+                        @elseif($giveaway->type == 'movies')
                             Monster Movie Premiere
                         @else
                             Undefined
@@ -177,10 +177,10 @@
                             <div class="col-md-4">
                                 <label for="type" class="lead">Category</label>
                                 <select id="type" name="type" class="custom-select">
-                                    @if($giveaway->type === 'concerts')
+                                    @if($giveaway->type == 'concerts')
                                         <option value="concerts" selected>Concert Tickets</option>
                                         <option value="movies">Monster Movie Premiere</option>
-                                    @elseif($giveaway->type === 'movies')
+                                    @elseif($giveaway->type == 'movies')
                                         <option value="movies" selected>Monster Movie Premiere</option>
                                         <option value="concerts">Concert Tickets</option>
                                     @else
@@ -193,10 +193,10 @@
                             <div class="col-md-4">
                                 <label for="active" class="lead">Activity</label>
                                 <select id="active" name="active" class="custom-select">
-                                    @if($giveaway->active === '1')
+                                    @if($giveaway->active == '1')
                                         <option value="1" selected>Active</option>
                                         <option value="0">Inactive</option>
-                                    @elseif($giveaway->active === '0')
+                                    @elseif($giveaway->active == '0')
                                         <option value="0" selected>Inactive</option>
                                         <option value="1">Active</option>
                                     @else
@@ -209,10 +209,10 @@
                             <div class="col-md-4">
                                 <label for="is_restricted" class="lead">Age Restriction</label>
                                 <select id="is_restricted" name="is_restricted" class="custom-select">
-                                    @if($giveaway->is_restricted === '1')
+                                    @if($giveaway->is_restricted == '1')
                                         <option value="1" selected>Yes</option>
                                         <option value="0">No</option>
-                                    @elseif($giveaway->is_restricted === '0')
+                                    @elseif($giveaway->is_restricted == '0')
                                         <option value="0" selected>No</option>
                                         <option value="1">Yes</option>
                                     @else

@@ -34,7 +34,7 @@
                                         <tr>
                                             <td>{{ $genre->name }}</td>
                                             <td>
-                                                @if($genre->description === '')
+                                                @if($genre->description == '')
                                                     No Available Description
                                                 @else
                                                     {{ $genre->description }}

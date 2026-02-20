@@ -11,7 +11,7 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             @foreach($shows as $show)
-                @if($show->id === 4) {{-- The Daily Survey --}}
+                @if($show->id == 4) {{-- The Daily Survey --}}
                     <li class="nav-item">
                         <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
                     </li>
@@ -111,7 +111,7 @@
                                                         <div class="col-6">
                                                             <div class="lead">
                                                                 <div class="h5">Moniker:</div> 
-                                                                @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') 
+                                                                @if(Auth::user()->Employee->Jock->first()->moniker == null || Auth::user()->Employee->Jock->first()->moniker == '') 
                                                                     No Moniker 
                                                                 @else 
                                                                     {{ Auth::user()->Employee->Jock->first()->moniker }} 
@@ -159,7 +159,7 @@
                                                         <div class="col-6">
                                                             <div class="lead ml-5">
                                                                 <div class="h5">Moniker:</div> 
-                                                                @if(Auth::user()->Employee->Jock->first()->moniker === null || Auth::user()->Employee->Jock->first()->moniker === '') 
+                                                                @if(Auth::user()->Employee->Jock->first()->moniker == null || Auth::user()->Employee->Jock->first()->moniker == '') 
                                                                     No Moniker 
                                                                 @else 
                                                                     {{ Auth::user()->Employee->Jock->first()->moniker }} 

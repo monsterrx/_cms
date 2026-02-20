@@ -16,7 +16,7 @@ class SouthsidesController extends Controller
             if($request->has('load')) {
                 $load = $request['load'];
 
-                if($load === 'charts') {
+                if($load == 'charts') {
                     // for the local charts obviously
                     $latestChartDate = DB::table('charts')
                         ->whereNull('deleted_at')
@@ -26,7 +26,7 @@ class SouthsidesController extends Controller
                         ->select('dated')
                         ->max('dated');
 
-                    if($latestChartDate === null) {
+                    if($latestChartDate == null) {
                         $latestChartDate = DB::table('charts')
                             ->whereNull('deleted_at')
                             ->where('daily', 0)

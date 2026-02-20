@@ -11,7 +11,7 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             @foreach($jock->Show as $shows)
-                @if($shows->id === 4)
+                @if($shows->id == 4)
                     {{-- The Daily Survey --}}
                     <li class="nav-item">
                         <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>

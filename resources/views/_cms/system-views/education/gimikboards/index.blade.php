@@ -35,7 +35,7 @@
                                         <td>{{ $gimikboard->School->name }}</td>
                                         <td>{{ $gimikboard->title }}</td>
                                         <td>
-                                            @if(!$gimikboard->gimik_date_end || $gimikboard->end_date === "0000-00-00" || $gimikboard->end_date === null)
+                                            @if(!$gimikboard->gimik_date_end || $gimikboard->end_date == "0000-00-00" || $gimikboard->end_date == null)
                                                 {{ $gimikboard->start_date }}
                                             @else
                                                 <strong>{{ $gimikboard->start_date }}</strong> <br> to <strong>{{ $gimikboard->end_date }}</strong>

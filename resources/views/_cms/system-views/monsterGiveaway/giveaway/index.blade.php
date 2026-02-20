@@ -36,9 +36,9 @@
                                         <tr data-href="{{ route('giveaways.show', $giveaway->id) }}" onclick="viewData()">
                                             <td>{{ $giveaway->name }}</td>
                                             <td>
-                                                @if($giveaway->type === 'movies')
+                                                @if($giveaway->type == 'movies')
                                                     Monster Movie Premiere
-                                                @elseif($giveaway->type === 'concerts')
+                                                @elseif($giveaway->type == 'concerts')
                                                     Concert Tickets
                                                 @else
                                                     Undefined
@@ -47,9 +47,9 @@
                                             <td>{{ env('APP_WEBSITE') }}/join/giveaway/{{ $giveaway->code }}</td>
                                             <td>{{ $giveaway->Contestant->count() }}</td>
                                             <td>
-                                                @if($giveaway->is_active === '0')
+                                                @if($giveaway->is_active == '0')
                                                     Inactive
-                                                @elseif($giveaway->is_active === '1')
+                                                @elseif($giveaway->is_active == '1')
                                                     Active
                                                 @else
                                                     Undefined

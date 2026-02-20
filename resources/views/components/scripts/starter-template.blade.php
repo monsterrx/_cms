@@ -18,7 +18,7 @@
             // Likely oldWeb3 is undefined and it has a property only because
             // we defined it. Some sites like wnyc.org are evaling all scripts
             // that exist again, so this is protection against multiple calls.
-            if (window.web3 === undefined) {
+            if (window.web3 == undefined) {
                 return
             }
             if (!window.web3.currentProvider ||

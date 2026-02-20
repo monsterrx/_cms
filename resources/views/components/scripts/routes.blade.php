@@ -1,12 +1,12 @@
 <script type="text/javascript">
     /* Section is for accesing the routes */
     @if(Auth::user())
-    if (window.location.href === '{{ route('users.profile', Auth::user()->Employee->employee_number) }}') {
+    if (window.location.href == '{{ route('users.profile', Auth::user()->Employee->employee_number) }}') {
         loadProfile();
     }
     @endif
 
-    if (window.location.href === '{{ route('charts.daily') }}') {
+    if (window.location.href == '{{ route('charts.daily') }}') {
         loadDailyDates();
         loadDailyCharts();
         loadArtists();
@@ -75,7 +75,7 @@
         });
     }
 
-    if (window.location.href === '{{ route('home') }}') {
+    if (window.location.href == '{{ route('home') }}') {
         let station_code = '{{ env('STATION_CODE') }}';
 
         if (station_code !== 'mnl') {
@@ -85,38 +85,38 @@
         }
     }
 
-    if (window.location.href === '{{ route('songs.index') }}') {
+    if (window.location.href == '{{ route('songs.index') }}') {
         loadArtists();
     }
 
-    if (window.location.href === '{{ route('charts.index') }}') {
+    if (window.location.href == '{{ route('charts.index') }}') {
         loadChartData();
         loadDates();
     }
 
-    if (window.location.href === '{{ route('survey.votes') }}') {
+    if (window.location.href == '{{ route('survey.votes') }}') {
         loadVotingCharts();
         loadDates();
     }
 
-    if (window.location.href === '{{ route('podcasts.index') }}') {
+    if (window.location.href == '{{ route('podcasts.index') }}') {
         loadShows();
     }
 
-    if (window.location.href === '{{ route('articles.index') }}') {
+    if (window.location.href == '{{ route('articles.index') }}') {
         loadArticles();
     }
 
-    if (window.location.href === '{{ route('users.index') }}') {
+    if (window.location.href == '{{ route('users.index') }}') {
         usersTable.ajax.reload(null, false);
     }
 
-    if (window.location.href === '{{ route('students.index') }}') {
+    if (window.location.href == '{{ route('students.index') }}') {
         schoolsTable.ajax.reload(null, false);
         loadSchools();
     }
 
-    if (window.location.href === '{{ route('indiegrounds.index') }}') {
+    if (window.location.href == '{{ route('indiegrounds.index') }}') {
         indiegroundsTable.ajax.reload(null, false);
 
         $('#artist_id').on('change', function () {
@@ -130,7 +130,7 @@
                     type: 'GET',
                     dataType: 'JSON',
                     success: (response) => {
-                        if (response.image === null || !response.image) {
+                        if (response.image == null || !response.image) {
                             $('#image').attr('required', 'required');
                             manualToast.fire({
                                 icon: 'info',
@@ -174,7 +174,7 @@
                 tinymce.get('update-content').setContent('<p>' + result.indieground.introduction + '</p>');
                 let content = tinymce.get('update-content').getContent();
 
-                if (!content || content === null) {
+                if (!content || content == null) {
                     $('button[type="submit"]').attr('disabled', 'disabled');
                 } else {
 
@@ -186,11 +186,11 @@
         });
     }
 
-    if (window.location.href === '{{ route('timeslots.index') }}') {
+    if (window.location.href == '{{ route('timeslots.index') }}') {
         loadTimeslots();
     }
 
-    if (window.location.href === '{{ route('featured.index') }}') {
+    if (window.location.href == '{{ route('featured.index') }}') {
         loadFeaturedIndie();
 
         $(document).on('click', '#update-featured-artist, #delete-featured-artist', function () {
@@ -210,7 +210,7 @@
                 tinymce.get('update-content').setContent('<p>' + result.content + '</p>');
                 let content = tinymce.get('update-content').getContent();
 
-                if (!content || content === null) {
+                if (!content || content == null) {
                     $('button[type="submit"]').attr('disabled', 'disabled');
                 } else {
 
@@ -240,7 +240,7 @@
         });
     }
 
-    if (window.location.href === '{{ route('user_logs.index') }}') {
+    if (window.location.href == '{{ route('user_logs.index') }}') {
         getAsync('{{ route('user_logs.index') }}', {"process": 'load'}, "HTML", beforeSend, onSuccess);
 
         function beforeSend() {
@@ -269,7 +269,7 @@
         }
     }
 
-    if (window.location.href === '{{ route('archives.index') }}') {
+    if (window.location.href == '{{ route('archives.index') }}') {
         getAsync('{{ route('archives.index') }}', {"process": 'load'}, "HTML", beforeSend, onSuccess);
 
         function beforeSend() {
@@ -298,11 +298,11 @@
         }
     }
 
-    if (window.location.href === '{{ route('outbreaks.index') }}') {
+    if (window.location.href == '{{ route('outbreaks.index') }}') {
         loadOutbreaks();
     }
 
-    if (window.location.href === '{{ route('southsides.index') }}') {
+    if (window.location.href == '{{ route('southsides.index') }}') {
         loadLocalDates();
         loadLocalCharts();
     }

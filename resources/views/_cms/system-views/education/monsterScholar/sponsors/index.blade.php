@@ -34,7 +34,7 @@
                                         <tr data-toggle="modal" data-target="#sponsor{{ $sponsors->id }}">
                                             <td>{{ $sponsors->name }}</td>
                                             <td>
-                                                @if($sponsors->remarks === "" || $sponsors->remarks === null)
+                                                @if($sponsors->remarks == "" || $sponsors->remarks == null)
                                                     No Remarks Available
                                                 @else
                                                     {{ $sponsors->remarks }}
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="remarks" class="lead">Remarks</label>
-                                        @if($sponsors->remarks === "" || $sponsors->remarks === null)
+                                        @if($sponsors->remarks == "" || $sponsors->remarks == null)
                                             <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Remarks">
                                         @else
                                             <input type="text" id="remarks" name="remarks" class="form-control" placeholder="Remarks" value="{{ $sponsors->remarks }}">

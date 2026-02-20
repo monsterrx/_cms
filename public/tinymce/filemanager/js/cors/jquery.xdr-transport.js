@@ -16,10 +16,10 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(require('jquery'));
     } else {
@@ -46,13 +46,13 @@
                         }
                         xdr = new XDomainRequest();
                         // XDomainRequest only supports GET and POST:
-                        if (s.type === 'DELETE') {
+                        if (s.type == 'DELETE') {
                             s.url = s.url + addParamChar + '_method=DELETE';
                             s.type = 'POST';
-                        } else if (s.type === 'PUT') {
+                        } else if (s.type == 'PUT') {
                             s.url = s.url + addParamChar + '_method=PUT';
                             s.type = 'POST';
-                        } else if (s.type === 'PATCH') {
+                        } else if (s.type == 'PATCH') {
                             s.url = s.url + addParamChar + '_method=PATCH';
                             s.type = 'POST';
                         }

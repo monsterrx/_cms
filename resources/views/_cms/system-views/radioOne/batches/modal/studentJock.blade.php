@@ -17,15 +17,15 @@
         <div class="form-group">
             <label for="position">Position</label>
             <select id="position" name="position" class="custom-select">
-                @if($student->position === 1)
+                @if($student->position == 1)
                     <option value="1" selected>Heads</option>
                     <option value="2">Junior</option>
                     <option value="3">Babies</option>
-                @elseif($student->position === 2)
+                @elseif($student->position == 2)
                     <option value="1">Heads</option>
                     <option value="2" selected>Junior</option>
                     <option value="3">Babies</option>
-                @elseif($student->position === 3)
+                @elseif($student->position == 3)
                     <option value="1">Heads</option>
                     <option value="2">Junior</option>
                     <option value="3" selected>Babies</option>

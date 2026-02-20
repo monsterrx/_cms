@@ -56,7 +56,7 @@
                                 <div class="form-group">
                                     <label for="special" class="label">Special Award</label>
                                     <select id="special" name="special" class="custom-select">
-                                        <option value="{{ $award->special }}" selected>@if($award->special === 0) No @else Yes @endif</option>
+                                        <option value="{{ $award->special }}" selected>@if($award->special == 0) No @else Yes @endif</option>
                                         <option value="1">Yes</option>
                                         <option value="0">No</option>
                                     </select>

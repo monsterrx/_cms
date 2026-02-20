@@ -7,11 +7,11 @@
         <div class="mt-md-4 mt-lg-4 mt-sm-0 mb-5">
             <div class="display-4">The Daily Survey Top 5</div>
             @if(isset($data['chart_type']))
-                <p id="chart-subtitle" class="h4 mb-0">{{ $data['chart_type'] === 'Draft' ? 'Songs List' : 'Daily Charts' }}</p>
+                <p id="chart-subtitle" class="h4 mb-0">{{ $data['chart_type'] == 'Draft' ? 'Songs List' : 'Daily Charts' }}</p>
             @endif
             <div class="row">
                 <div class="col-md-4">
-                    <select name="dated" id="surveyDate" data-chart="daily" data-chart-type="{{ (isset($data['chart_type']) && $data['chart_type'] === 'Draft') ? 'draft' : 'official' }}" class="form-control">
+                    <select name="dated" id="surveyDate" data-chart="daily" data-chart-type="{{ (isset($data['chart_type']) && $data['chart_type'] == 'Draft') ? 'draft' : 'official' }}" class="form-control">
                         <option value>--</option>
                     </select>
                 </div>

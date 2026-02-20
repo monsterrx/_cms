@@ -21,7 +21,7 @@
             <div class="collapse" id="musicPlayerCollapse">
                 <div class="row">
                     <div class="col-md-12">
-                        @if(strlen($outbreaks->track_link) === 22) {{-- Means its from spotify!! --}}
+                        @if(strlen($outbreaks->track_link) == 22) {{-- Means its from spotify!! --}}
                         <div id="musicPlayer" class="embed-container" style="max-width: 100%; margin: 50px;">
                             <iframe src="https://open.spotify.com/embed/track/{{ $outbreaks->track_link }}" frameborder="0" allowtransparency="true" allow="encrypted-media" width="100%" height="80px"></iframe>
                         </div>

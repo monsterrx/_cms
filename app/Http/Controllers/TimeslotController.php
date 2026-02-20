@@ -62,7 +62,7 @@ class TimeslotController extends Controller {
 
 		// Getting current user's level
 		$level = Auth::user()->Employee->Designation->level;
-		if ($level === 1 || $level === 2) {
+		if ($level == 1 || $level == 2) {
 			return view('_cms.system-views.programs.timeslot.index', compact('shows', 'jocks', 'timeslots', 'day', 'station'));
 		}
 
@@ -152,7 +152,7 @@ class TimeslotController extends Controller {
         $station = $this->getStationCode();
 
 		if($request->ajax()) {
-            if($request['type'] === 'jock') {
+            if($request['type'] == 'jock') {
                 $timeslots = Timeslot::with('Jock')
                     ->has('Jock')
                     ->whereNull('deleted_at')

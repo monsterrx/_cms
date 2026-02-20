@@ -21,7 +21,7 @@
  */
 
 (function (root, factory) {
-	if (typeof define === 'function' && define.amd) {
+	if (typeof define == 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		define(['jquery'], factory); // jQuery Switch
 		// define(['zepto'], factory); // Zepto Switch
@@ -38,7 +38,7 @@
 	// Adapted from jquery.ui.widget.js (1.8.7): $.widget.bridge - Tweaked $.data(this,XYZ) to $(this).data(XYZ) for Zepto
 	$.fn.jPlayer = function( options ) {
 		var name = "jPlayer";
-		var isMethodCall = typeof options === "string",
+		var isMethodCall = typeof options == "string",
 			args = Array.prototype.slice.call( arguments, 1 ),
 			returnValue = this;
 
@@ -48,7 +48,7 @@
 			options;
 
 		// prevent calls to internal methods
-		if ( isMethodCall && options.charAt( 0 ) === "_" ) {
+		if ( isMethodCall && options.charAt( 0 ) == "_" ) {
 			return returnValue;
 		}
 
@@ -203,7 +203,7 @@
 			};
 		},
 		time: function(s) { // function used on jPlayer.prototype._convertTime to enable per instance options.
-			s = (s && typeof s === 'number') ? s : 0;
+			s = (s && typeof s == 'number') ? s : 0;
 
 			var myTime = new Date(s * 1000),
 				hour = myTime.getUTCHours(),
@@ -294,7 +294,7 @@
 			} else { // IE 5-7
 				docMode = 5; // Assume quirks mode unless proven otherwise
 				if (document.compatMode) {
-					if (document.compatMode === "CSS1Compat") {
+					if (document.compatMode == "CSS1Compat") {
 						docMode = 7; // standards mode
 					}
 				}
@@ -364,8 +364,8 @@
 				support: {
 					w3c: !!d[spec.w3c[0]],
 					moz: !!d[spec.moz[0]],
-					webkit: typeof d[spec.webkit[3]] === 'function',
-					webkitVideo: typeof v[spec.webkitVideo[2]] === 'function'
+					webkit: typeof d[spec.webkit[3]] == 'function',
+					webkitVideo: typeof v[spec.webkitVideo[2]] == 'function'
 				},
 				used: {}
 			};
@@ -434,7 +434,7 @@
 			// What generated the key press?
 			$.each( $.jPlayer.keyIgnoreElementNames.split(/\s+/g), function(i, name) {
 				// The strings should already be uppercase.
-				if(event.target.nodeName.toUpperCase() === name.toUpperCase()) {
+				if(event.target.nodeName.toUpperCase() == name.toUpperCase()) {
 					ignoreKey = true;
 					return false; // exit each.
 				}
@@ -443,7 +443,7 @@
 				// See if the key pressed matches any of the bindings.
 				$.each(f.options.keyBindings, function(action, binding) {
 					// The binding could be a null when the default has been disabled. ie., 1st clause in if()
-					if(binding && event.which === binding.key && $.isFunction(binding.fn)) {
+					if(binding && event.which == binding.key && $.isFunction(binding.fn)) {
 						event.preventDefault(); // Key being used by jPlayer, so prevent default operation.
 						binding.fn(f);
 						return false; // exit each.
@@ -783,7 +783,7 @@
 				if(self.format[format]) { // Check format is valid.
 					var dupFound = false;
 					$.each(self.formats, function(index2, value2) { // Check for duplicates
-						if(format === value2) {
+						if(format == value2) {
 							dupFound = true;
 							return false;
 						}
@@ -800,7 +800,7 @@
 				if(self.solution[solution]) { // Check solution is valid.
 					var dupFound = false;
 					$.each(self.solutions, function(index2, value2) { // Check for duplicates
-						if(solution === value2) {
+						if(solution == value2) {
 							dupFound = true;
 							return false;
 						}
@@ -924,14 +924,14 @@
 			this.html.desired = false;
 			this.flash.desired = false;
 			$.each(this.solutions, function(solutionPriority, solution) {
-				if(solutionPriority === 0) {
+				if(solutionPriority == 0) {
 					self[solution].desired = true;
 				} else {
 					var audioCanPlay = false;
 					var videoCanPlay = false;
 					$.each(self.formats, function(formatPriority, format) {
 						if(self[self.solutions[0]].canPlay[format]) { // The other solution can play
-							if(self.format[format].media === 'video') {
+							if(self.format[format].media == 'video') {
 								videoCanPlay = true;
 							} else {
 								audioCanPlay = true;
@@ -1112,7 +1112,7 @@
 			// Remove the fullscreen event handlers
 			this._fullscreenRemoveEventListeners();
 			// Remove key bindings
-			if(this === $.jPlayer.focus) {
+			if(this == $.jPlayer.focus) {
 				$.jPlayer.focus = null;
 			}
 			// Destroy the HTML bridge.
@@ -1328,7 +1328,7 @@
 
 			ct = media.currentTime;
 			cpa = (this.status.duration > 0) ? 100 * ct / this.status.duration : 0;
-			if((typeof media.seekable === "object") && (media.seekable.length > 0)) {
+			if((typeof media.seekable == "object") && (media.seekable.length > 0)) {
 				sp = (this.status.duration > 0) ? 100 * media.seekable.end(media.seekable.length-1) / this.status.duration : 100;
 				cpr = (this.status.duration > 0) ? 100 * media.currentTime / media.seekable.end(media.seekable.length-1) : 0; // Duration conditional for iOS duration bug. ie., seekable.end is a NaN in that case.
 			} else {
@@ -1375,7 +1375,7 @@
 			this.element.trigger(event);
 		},
 		jPlayerFlashEvent: function(eventType, status) { // Called from Flash
-			if(eventType === $.jPlayer.event.ready) {
+			if(eventType == $.jPlayer.event.ready) {
 				if(!this.internal.ready) {
 					this.internal.ready = true;
 					this.internal.flash.jq.css({'width':'0px', 'height':'0px'}); // Once Flash generates the ready event, minimise to zero as it is not affected by wmode anymore.
@@ -1506,7 +1506,7 @@
 			this.status.ended = false; // status.ended;
 		},
 		_updateButtons: function(playing) {
-			if(playing === undefined) {
+			if(playing == undefined) {
 				playing = !this.status.paused;
 			} else {
 				this.status.paused = !playing;
@@ -1600,10 +1600,10 @@
 			this._resetActive();
 
 			$.each(this.formats, function(formatPriority, format) {
-				var isVideo = self.format[format].media === 'video';
+				var isVideo = self.format[format].media == 'video';
 				$.each(self.solutions, function(solutionPriority, solution) {
 					if(self[solution].support[format] && self._validString(media[format])) { // Format supported in solution and url given for format.
-						var isHtml = solution === 'html';
+						var isHtml = solution == 'html';
 
 						if(isVideo) {
 							if(isHtml) {
@@ -1715,7 +1715,7 @@
 			}
 		},
 		play: function(time) {
-			time = (typeof time === "number") ? time : NaN; // Remove jQuery event from click handler
+			time = (typeof time == "number") ? time : NaN; // Remove jQuery event from click handler
 			if(this.status.srcSet) {
 				this.focus();
 				if(this.html.active) {
@@ -1731,7 +1731,7 @@
 			this.play();
 		},
 		pause: function(time) {
-			time = (typeof time === "number") ? time : NaN; // Remove jQuery event from click handler
+			time = (typeof time == "number") ? time : NaN; // Remove jQuery event from click handler
 			if(this.status.srcSet) {
 				if(this.html.active) {
 					this._html_pause(time);
@@ -1792,15 +1792,15 @@
 			}
 		},
 		mute: function(mute) { // mute is either: undefined (true), an event object (true) or a boolean (muted).
-			mute = mute === undefined ? true : !!mute;
+			mute = mute == undefined ? true : !!mute;
 			this._muted(mute);
 		},
 		unmute: function(unmute) { // unmute is either: undefined (true), an event object (true) or a boolean (!muted).
-			unmute = unmute === undefined ? true : !!unmute;
+			unmute = unmute == undefined ? true : !!unmute;
 			this._muted(!unmute);
 		},
 		_updateMute: function(mute) {
-			if(mute === undefined) {
+			if(mute == undefined) {
 				mute = this.options.muted;
 			}
 			if(this.css.jq.mute.length && this.css.jq.unmute.length) {
@@ -1856,7 +1856,7 @@
 			// The volumeBar handles this event as the event propagates up the DOM.
 		},
 		_updateVolume: function(v) {
-			if(v === undefined) {
+			if(v == undefined) {
 				v = this.options.volume;
 			}
 			v = this.options.muted ? 0 : v;
@@ -1917,7 +1917,7 @@
 		},
 		_cssSelector: function(fn, cssSel) {
 			var self = this;
-			if(typeof cssSel === 'string') {
+			if(typeof cssSel == 'string') {
 				if($.jPlayer.prototype.options.cssSelector[fn]) {
 					if(this.css.jq[fn] && this.css.jq[fn].length) {
 						this.css.jq[fn].unbind(".jPlayer");
@@ -2013,15 +2013,15 @@
 			var options = key;
 
 			 // Enables use: options().  Returns a copy of options object
-			if ( arguments.length === 0 ) {
+			if ( arguments.length == 0 ) {
 				return $.extend( true, {}, this.options );
 			}
 
-			if(typeof key === "string") {
+			if(typeof key == "string") {
 				var keys = key.split(".");
 
 				 // Enables use: options("someOption")  Returns a copy of the option. Supports dot notation.
-				if(value === undefined) {
+				if(value == undefined) {
 
 					var opt = $.extend(true, {}, this.options);
 					for(var i = 0; i < keys.length; i++) {
@@ -2171,7 +2171,7 @@
 					break;
 				case "keyEnabled" :
 					this.options[key] = value;
-					if(!value && this === $.jPlayer.focus) {
+					if(!value && this == $.jPlayer.focus) {
 						$.jPlayer.focus = null;
 					}
 					break;
@@ -2386,7 +2386,7 @@
 		},
 		_html_resetMedia: function() {
 			if(this.htmlElement.media) {
-				if(this.htmlElement.media.id === this.internal.video.id && !this.status.nativeVideoControls) {
+				if(this.htmlElement.media.id == this.internal.video.id && !this.status.nativeVideoControls) {
 					this.internal.video.jq.css({'width':'0px', 'height':'0px'});
 				}
 				this.htmlElement.media.pause();
@@ -2426,7 +2426,7 @@
 				try {
 					// !media.seekable is for old HTML5 browsers, like Firefox 3.6.
 					// Checking seekable.length is important for iOS6 to work with setMedia().play(time)
-					if(!media.seekable || typeof media.seekable === "object" && media.seekable.length > 0) {
+					if(!media.seekable || typeof media.seekable == "object" && media.seekable.length > 0) {
 						media.currentTime = time;
 						media.play();
 					} else {
@@ -2458,7 +2458,7 @@
 
 			if(!isNaN(time)) {
 				try {
-					if(!media.seekable || typeof media.seekable === "object" && media.seekable.length > 0) {
+					if(!media.seekable || typeof media.seekable == "object" && media.seekable.length > 0) {
 						media.currentTime = time;
 					} else {
 						throw 1;
@@ -2481,7 +2481,7 @@
 			this._html_load(); // Loads if required and clears any delayed commands.
 
 			try {
-				if(typeof media.seekable === "object" && media.seekable.length > 0) {
+				if(typeof media.seekable == "object" && media.seekable.length > 0) {
 					media.currentTime = percent * media.seekable.end(media.seekable.length-1) / 100;
 				} else if(media.duration > 0 && !isNaN(media.duration)) {
 					media.currentTime = percent * media.duration / 100;
@@ -2551,7 +2551,7 @@
 					}
 				});
 
-				if(this.options.preload === 'auto') {
+				if(this.options.preload == 'auto') {
 					this._flash_load();
 					this.status.waitForLoad = false;
 				}
@@ -2579,7 +2579,7 @@
 					}
 				});
 
-				if(this.options.preload === 'auto') {
+				if(this.options.preload == 'auto') {
 					this._flash_load();
 					this.status.waitForLoad = false;
 				}
@@ -2685,7 +2685,7 @@
 			return flashOk;
 		},
 		_validString: function(url) {
-			return (url && typeof url === "string"); // Empty strings return false
+			return (url && typeof url == "string"); // Empty strings return false
 		},
 		_limitValue: function(value, min, max) {
 			return (value < min) ? min : ((value > max) ? max : value);
@@ -2745,7 +2745,7 @@
 			$.each($.jPlayer.event, function(eventName,eventType) {
 				var nativeEvent = true;
 				$.each( $.jPlayer.reservedEvent.split(/\s+/g), function(i, name) {
-					if(name === eventName) {
+					if(name == eventName) {
 						nativeEvent = false;
 						return false;
 					}

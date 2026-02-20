@@ -45,10 +45,10 @@ $subdir_path = '';
 if (isset($_GET['fldr']) && !empty($_GET['fldr'])) {
 	$subdir_path = rawurldecode(trim(strip_tags($_GET['fldr']),"/"));
 }
-if (strpos($subdir_path,'../') === FALSE
-	&& strpos($subdir_path,'./') === FALSE
-	&& strpos($subdir_path,'..\\') === FALSE
-	&& strpos($subdir_path,'.\\') === FALSE)
+if (strpos($subdir_path,'../') == FALSE
+	&& strpos($subdir_path,'./') == FALSE
+	&& strpos($subdir_path,'..\\') == FALSE
+	&& strpos($subdir_path,'.\\') == FALSE)
 {
 	$subdir = $subdir_path ."/";
 	$_SESSION['RF']["filter"]='';
@@ -57,7 +57,7 @@ else { $subdir = ''; }
 
 if($subdir == "")
 {
-	if(!empty($_COOKIE['last_position']) && strpos($_COOKIE['last_position'],'.') === FALSE){
+	if(!empty($_COOKIE['last_position']) && strpos($_COOKIE['last_position'],'.') == FALSE){
 		$subdir= trim($_COOKIE['last_position']);
 	}
 }
@@ -91,9 +91,9 @@ if (!isset($_SESSION['RF']["subfolder"]))
 }
 $rfm_subfolder = '';
 
-if (!empty($_SESSION['RF']["subfolder"]) && strpos($_SESSION['RF']["subfolder"],'../') === FALSE && strpos($_SESSION['RF']["subfolder"],'..\\') === FALSE
-&& strpos($_SESSION['RF']["subfolder"],'./') === FALSE && strpos($_SESSION['RF']["subfolder"],"/") !== 0
-&& strpos($_SESSION['RF']["subfolder"],'.') === FALSE)
+if (!empty($_SESSION['RF']["subfolder"]) && strpos($_SESSION['RF']["subfolder"],'../') == FALSE && strpos($_SESSION['RF']["subfolder"],'..\\') == FALSE
+&& strpos($_SESSION['RF']["subfolder"],'./') == FALSE && strpos($_SESSION['RF']["subfolder"],"/") !== 0
+&& strpos($_SESSION['RF']["subfolder"],'.') == FALSE)
 {
 	$rfm_subfolder = $_SESSION['RF']['subfolder'];
 }

@@ -41,7 +41,7 @@ class ShowController extends Controller
             'header_image' => 'image|file|max:2048'
         ]);
 
-        if ($request['is_special'] === 2 || $request['is_special'] === '2') {
+        if ($request['is_special'] == 2 || $request['is_special'] == '2') {
             $request['slug_string'] = Str::studly($request['title']);
             $request['location'] = $this->getStationCode();
 
@@ -78,7 +78,7 @@ class ShowController extends Controller
         $show->icon = $icon_name;
         
         // If header_image is not present
-        if ($request['is_special'] === '2') {
+        if ($request['is_special'] == '2') {
             if ($request->exists('background_image')) {
                 $background_image = $this->storePhoto($request, $path, 'shows', true, false, false, true);
 

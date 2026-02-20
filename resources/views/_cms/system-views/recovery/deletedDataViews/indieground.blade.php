@@ -19,7 +19,7 @@
             </td>
             <td>{{ $school->address }}</td>
             <td>
-                @if($school->school_seal === '' || $school->school_seal === null)
+                @if($school->school_seal == '' || $school->school_seal == null)
                     No
                 @else
                     Yes

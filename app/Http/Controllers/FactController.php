@@ -18,7 +18,7 @@ class FactController extends Controller {
 
         // Getting current user's level
         $level = Auth::user()->Employee->Designation->level;
-        if ($level === '5') {
+        if ($level == '5') {
             return response()->json(['jock_id' => $jock_id, 'facts' => $facts]);
         }
 

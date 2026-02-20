@@ -19,9 +19,9 @@
             </td>
             <td>{{ $show->frontDescription }}</td>
             <td>
-                @if($show->is_special === 0)
+                @if($show->is_special == 0)
                     No
-                @elseif($show->is_special === 1)
+                @elseif($show->is_special == 1)
                     Yes
                 @else
                     Undefined

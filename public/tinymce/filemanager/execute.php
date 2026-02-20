@@ -200,7 +200,7 @@ if (isset($_GET['action']))
 			}
 			break;
 		case 'create_file':
-			if ($create_text_files === FALSE) {
+			if ($create_text_files == FALSE) {
 				response(sprintf(trans('File_Open_Edit_Not_Allowed'), strtolower(trans('Edit'))).AddErrorLocation())->send();
 				exit;
 			}
@@ -210,7 +210,7 @@ if (isset($_GET['action']))
 			}
 
 			// check if user supplied extension
-			if (strpos($name, '.') === FALSE){
+			if (strpos($name, '.') == FALSE){
 				response(trans('No_Extension').' '.sprintf(trans('Valid_Extensions'), implode(', ', $editable_text_file_exts)).AddErrorLocation())->send();
 				exit;
 			}
@@ -250,7 +250,7 @@ if (isset($_GET['action']))
 					exit;
 				}
 
-				if (@file_put_contents($path.$name, $content) === FALSE) {
+				if (@file_put_contents($path.$name, $content) == FALSE) {
 					response(trans('File_Save_Error').AddErrorLocation())->send();
 					exit;
 				} else {
@@ -406,13 +406,13 @@ if (isset($_GET['action']))
 				}
 			}else{
 				// check for writability
-				if (is_really_writable($path) === FALSE || is_really_writable($path_thumb) === FALSE){
+				if (is_really_writable($path) == FALSE || is_really_writable($path_thumb) == FALSE){
 					response(trans('Dir_No_Write').'<br/>'.str_replace('../','',$path).'<br/>'.str_replace('../','',$path_thumb).AddErrorLocation())->send();
 					exit;
 				}
 
 				// check if server disables copy or rename
-				if (is_function_callable(($action == 'copy' ? 'copy' : 'rename')) === FALSE){
+				if (is_function_callable(($action == 'copy' ? 'copy' : 'rename')) == FALSE){
 					response(sprintf(trans('Function_Disabled'), ($action == 'copy' ? (trans('Copy')) : (trans('Cut')))).AddErrorLocation())->send();
 					exit;
 				}
@@ -430,7 +430,7 @@ if (isset($_GET['action']))
 					rrename($data['path_thumb'], $path_thumb);
 
 					// cleanup
-					if (is_dir($data['path']) === TRUE){
+					if (is_dir($data['path']) == TRUE){
 						rrename_after_cleaner($data['path']);
 						rrename_after_cleaner($data['path_thumb']);
 					}
@@ -449,7 +449,7 @@ if (isset($_GET['action']))
 			$chmod_perm = ($_POST['folder'] ? $chmod_dirs : $chmod_files);
 
 			// check perm
-			if ($chmod_perm === FALSE) {
+			if ($chmod_perm == FALSE) {
 				response(sprintf(trans('File_Permission_Not_Allowed'), (is_dir($path) ? (trans('Folders')) : (trans('Files')) )).AddErrorLocation())->send();
 				exit;
 			}
@@ -464,7 +464,7 @@ if (isset($_GET['action']))
 				exit;
 			}
 			// check if server disabled chmod
-			if (!$ftp && is_function_callable('chmod') === FALSE){
+			if (!$ftp && is_function_callable('chmod') == FALSE){
 				response(sprintf(trans('Function_Disabled'), 'chmod').AddErrorLocation())->send();
 				exit;
 			}
@@ -501,7 +501,7 @@ if (isset($_GET['action']))
 				}
 
 				// not writable or edit not allowed
-				if (!is_writable($path) || $edit_text_files === FALSE) {
+				if (!is_writable($path) || $edit_text_files == FALSE) {
 					response(sprintf(trans('File_Open_Edit_Not_Allowed'), strtolower(trans('Edit'))).AddErrorLocation())->send();
 					exit;
 				}
@@ -510,7 +510,7 @@ if (isset($_GET['action']))
 					response(sprintf(trans('max_size_reached'),$MaxSizeTotal).AddErrorLocation())->send();
 					exit;
 				}
-				if (@file_put_contents($path, $content) === FALSE) {
+				if (@file_put_contents($path, $content) == FALSE) {
 					response(trans('File_Save_Error').AddErrorLocation())->send();
 					exit;
 				} else {

@@ -115,7 +115,7 @@ class MobileAppAssetController extends Controller
                 ->withErrors($exception->getMessage());
         }
 
-        if ($request['asset_type'] === 'charts') {
+        if ($request['asset_type'] == 'charts') {
             // TODO: Image upload has been separate, see public function upload
             $monster_asset->fill($request->only('chart_title', 'chart_subtitle'));
             $monster_asset->Title->fill($request->all());
@@ -124,7 +124,7 @@ class MobileAppAssetController extends Controller
             return redirect()->back()->with('success', 'Mobile application chart assets for this station has been updated');
         }
 
-        if ($request['asset_type'] === 'articles') {
+        if ($request['asset_type'] == 'articles') {
             $monster_asset->fill($request->only('article_title', 'article_sub_title'));
             $monster_asset->Title->fill($request->all());
             $monster_asset->push();
@@ -132,7 +132,7 @@ class MobileAppAssetController extends Controller
             return redirect()->back()->with('success', 'Mobile application article assets for this station has been updated');
         }
 
-        if ($request['asset_type'] === 'podcasts') {
+        if ($request['asset_type'] == 'podcasts') {
             $monster_asset->fill($request->only('podcast_title', 'podcast_sub_title'));
             $monster_asset->Title->fill($request->all());
             $monster_asset->push();
@@ -140,7 +140,7 @@ class MobileAppAssetController extends Controller
             return redirect()->back()->with('success', 'Mobile application podcast assets for this station has been updated');
         }
 
-        if ($request['asset_type'] === 'articlesMain') {
+        if ($request['asset_type'] == 'articlesMain') {
             $monster_asset->fill($request->only('articles_main_page_title'));
             $monster_asset->Title->fill($request->all());
             $monster_asset->push();
@@ -148,7 +148,7 @@ class MobileAppAssetController extends Controller
             return redirect()->back()->with('success', 'Mobile application main article assets for this station has been updated');
         }
 
-        if ($request['asset_type'] === 'podcastsMain') {
+        if ($request['asset_type'] == 'podcastsMain') {
             $monster_asset->fill($request->only('articles_main_page_title'));
             $monster_asset->Title->fill($request->all());
             $monster_asset->push();
@@ -156,7 +156,7 @@ class MobileAppAssetController extends Controller
             return redirect()->back()->with('success', 'Mobile application main podcast assets for this station has been updated');
         }
 
-        if ($request['asset_type'] === 'youtube') {
+        if ($request['asset_type'] == 'youtube') {
             $monster_asset->fill($request->only('youtube_main_page_title'));
             $monster_asset->Title->fill($request->all());
             $monster_asset->push();

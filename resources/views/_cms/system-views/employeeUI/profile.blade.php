@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if(Auth::user()->Employee->Designation->level === '1' || Auth::user()->Employee->Designation->level === '2')
+                        @if(Auth::user()->Employee->Designation->level == '1' || Auth::user()->Employee->Designation->level == '2')
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -95,10 +95,10 @@
                                 <div class="form-group">
                                     <label for="gender" class="label">Gender</label>
                                     <select id="gender" name="gender" class="custom-select">
-                                        @if($employee->gender === 'Male')
+                                        @if($employee->gender == 'Male')
                                             <option value="Male" selected>Male</option>
                                             <option value="Female">Female</option>
-                                        @elseif($employee->gender === 'Female')
+                                        @elseif($employee->gender == 'Female')
                                             <option value="Male">Male</option>
                                             <option value="Female" selected>Female</option>
                                         @endif

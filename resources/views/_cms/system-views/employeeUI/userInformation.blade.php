@@ -13,7 +13,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label for="age" class="h5">Age:</label>
-                        <div id="age" class="lead" style="font-weight: 300;">@if($employee->birthday === null || $employee->birthday === '') Well, you haven't given your birthday @else {{ Carbon\Carbon::parse($employee->birthday)->age }} @endif</div>
+                        <div id="age" class="lead" style="font-weight: 300;">@if($employee->birthday == null || $employee->birthday == '') Well, you haven't given your birthday @else {{ Carbon\Carbon::parse($employee->birthday)->age }} @endif</div>
                     </div>
                     <div class="col-md-4">
                         <label for="gender" class="h5">Gender:</label>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="contact_number" class="h5">Contact Number:</label>
-                        <div id="contact_number" class="lead" style="font-weight: 300;">@if($employee->contact_number === null || $employee->contact_number === '') Give us a contact number @else {{ $employee->contact_number }} @endif</div>
+                        <div id="contact_number" class="lead" style="font-weight: 300;">@if($employee->contact_number == null || $employee->contact_number == '') Give us a contact number @else {{ $employee->contact_number }} @endif</div>
                     </div>
                 </div>
                 <div class="my-4"></div>
@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label for="address" class="h5">Address:</label>
-                        <div id="address" class="lead" style="font-weight: 300;">@if($employee->address === null || $employee->address === '') Please tell us where you live @else {{ $employee->address }} @endif</div>
+                        <div id="address" class="lead" style="font-weight: 300;">@if($employee->address == null || $employee->address == '') Please tell us where you live @else {{ $employee->address }} @endif</div>
                     </div>
                 </div>
                 <div class="my-4"></div>

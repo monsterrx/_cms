@@ -14,13 +14,13 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
             'jquery-ui/ui/widget'
         ], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(
             require('jquery'),
@@ -59,7 +59,7 @@
 
     // Helper function to create drag handlers for dragover/dragenter/dragleave:
     function getDragHandler(type) {
-        var isDragOver = type === 'dragover';
+        var isDragOver = type == 'dragover';
         return function (e) {
             e.dataTransfer = e.originalEvent && e.originalEvent.dataTransfer;
             var dataTransfer = e.dataTransfer;
@@ -319,13 +319,13 @@
 
         _getFormData: function (options) {
             var formData;
-            if ($.type(options.formData) === 'function') {
+            if ($.type(options.formData) == 'function') {
                 return options.formData(options.form);
             }
             if ($.isArray(options.formData)) {
                 return options.formData;
             }
-            if ($.type(options.formData) === 'object') {
+            if ($.type(options.formData) == 'object') {
                 formData = [];
                 $.each(options.formData, function (name, value) {
                     formData.push({name: name, value: value});
@@ -436,7 +436,7 @@
 
         _isInstanceOf: function (type, obj) {
             // Cross-frame instanceof check
-            return Object.prototype.toString.call(obj) === '[object ' + type + ']';
+            return Object.prototype.toString.call(obj) == '[object ' + type + ']';
         },
 
         _initXHRData: function (options) {
@@ -445,7 +445,7 @@
                 file = options.files[0],
                 // Ignore non-multipart setting if not supported:
                 multipart = options.multipart || !$.support.xhrFileUpload,
-                paramName = $.type(options.paramName) === 'array' ?
+                paramName = $.type(options.paramName) == 'array' ?
                     options.paramName[0] : options.paramName;
             options.headers = $.extend({}, options.headers);
             if (options.contentRange) {
@@ -473,7 +473,7 @@
                     } else {
                         $.each(options.files, function (index, file) {
                             formData.push({
-                                name: ($.type(options.paramName) === 'array' &&
+                                name: ($.type(options.paramName) == 'array' &&
                                     options.paramName[index]) || paramName,
                                 value: file
                             });
@@ -497,7 +497,7 @@
                             if (that._isInstanceOf('File', file) ||
                                     that._isInstanceOf('Blob', file)) {
                                 formData.append(
-                                    ($.type(options.paramName) === 'array' &&
+                                    ($.type(options.paramName) == 'array' &&
                                         options.paramName[index]) || paramName,
                                     file,
                                     file.uploadName || file.name
@@ -585,7 +585,7 @@
             }
             // The HTTP request method must be "POST" or "PUT":
             options.type = (options.type ||
-                ($.type(options.form.prop('method')) === 'string' &&
+                ($.type(options.form.prop('method')) == 'string' &&
                     options.form.prop('method')) || ''
                 ).toUpperCase();
             if (options.type !== 'POST' && options.type !== 'PUT' &&
@@ -634,9 +634,9 @@
             var dfd = $.Deferred(),
                 promise = dfd.promise();
             context = context || this.options.context || promise;
-            if (resolveOrReject === true) {
+            if (resolveOrReject == true) {
                 dfd.resolveWith(context, args);
-            } else if (resolveOrReject === false) {
+            } else if (resolveOrReject == false) {
                 dfd.rejectWith(context, args);
             }
             promise.abort = dfd.promise;
@@ -693,7 +693,7 @@
             };
             data.processing = function () {
                 return !this.jqXHR && this._processQueue && that
-                    ._getDeferredState(this._processQueue) === 'pending';
+                    ._getDeferredState(this._processQueue) == 'pending';
             };
             data.progress = function () {
                 return this._progress;
@@ -730,7 +730,7 @@
                 promise = dfd.promise(),
                 jqXHR,
                 upload;
-            if (!(this._isXHRUpload(options) && slice && (ub || ($.type(mcs) === 'function' ? mcs(options) : mcs) < fs)) ||
+            if (!(this._isXHRUpload(options) && slice && (ub || ($.type(mcs) == 'function' ? mcs(options) : mcs) < fs)) ||
                     options.data) {
                 return false;
             }
@@ -753,7 +753,7 @@
                 o.blob = slice.call(
                     file,
                     ub,
-                    ub + ($.type(mcs) === 'function' ? mcs(o) : mcs),
+                    ub + ($.type(mcs) == 'function' ? mcs(o) : mcs),
                     file.type
                 );
                 // Store the current chunk size, as the blob itself
@@ -819,7 +819,7 @@
         },
 
         _beforeSend: function (e, data) {
-            if (this._active === 0) {
+            if (this._active == 0) {
                 // the start callback is triggered when an upload starts
                 // and no other uploads are currently running,
                 // equivalent to the global ajaxStart event:
@@ -901,7 +901,7 @@
                             'send',
                             $.Event('send', {delegatedEvent: e}),
                             options
-                        ) === false) &&
+                        ) == false) &&
                         that._getXHRPromise(false, options.context, aborted)) ||
                         that._chunkedUpload(options) || $.ajax(options)
                     ).done(function (result, textStatus, jqXHR) {
@@ -923,14 +923,14 @@
                             // that has not been aborted:
                             var nextSlot = that._slots.shift();
                             while (nextSlot) {
-                                if (that._getDeferredState(nextSlot) === 'pending') {
+                                if (that._getDeferredState(nextSlot) == 'pending') {
                                     nextSlot.resolve();
                                     break;
                                 }
                                 nextSlot = that._slots.shift();
                             }
                         }
-                        if (that._active === 0) {
+                        if (that._active == 0) {
                             // The stop callback is triggered when all uploads have
                             // been completed, equivalent to the global ajaxStop event:
                             that._trigger('stop');
@@ -987,7 +987,7 @@
             if (!filesLength) {
                 return false;
             }
-            if (limitSize && files[0].size === undefined) {
+            if (limitSize && files[0].size == undefined) {
                 limitSize = undefined;
             }
             if (!(options.singleFileUploads || limit || limitSize) ||
@@ -1010,7 +1010,7 @@
                 paramNameSet = [];
                 for (i = 0; i < filesLength; i = i + 1) {
                     batchSize += files[i].size + overhead;
-                    if (i + 1 === filesLength ||
+                    if (i + 1 == filesLength ||
                             ((batchSize + files[i + 1].size + overhead) > limitSize) ||
                             (limit && i + 1 - j >= limit)) {
                         fileSet.push(files.slice(j, i + 1));
@@ -1065,14 +1065,14 @@
             // elements set with the clone, which has been copied including
             // event handlers:
             this.options.fileInput = this.options.fileInput.map(function (i, el) {
-                if (el === input[0]) {
+                if (el == input[0]) {
                     return inputClone[0];
                 }
                 return el;
             });
             // If the widget has been initialized on the file input itself,
             // override this.element with the file input clone:
-            if (input[0] === this.element[0]) {
+            if (input[0] == this.element[0]) {
                 this.element = inputClone;
             }
         },
@@ -1192,7 +1192,7 @@
                 // support the File API and we add a pseudo File object with
                 // the input value as name with path information removed:
                 files = [{name: value.replace(/^.*\\/, '')}];
-            } else if (files[0].name === undefined && files[0].fileName) {
+            } else if (files[0].name == undefined && files[0].fileName) {
                 // File normalization for Safari 4 and Firefox 3:
                 $.each(files, function (index, file) {
                     file.name = file.fileName;
@@ -1203,7 +1203,7 @@
         },
 
         _getFileInputFiles: function (fileInput) {
-            if (!(fileInput instanceof $) || fileInput.length === 1) {
+            if (!(fileInput instanceof $) || fileInput.length == 1) {
                 return this._getSingleFileInputFiles(fileInput);
             }
             return $.when.apply(
@@ -1330,7 +1330,7 @@
 
         _initSpecialOptions: function () {
             var options = this.options;
-            if (options.fileInput === undefined) {
+            if (options.fileInput == undefined) {
                 options.fileInput = this.element.is('input[type="file"]') ?
                         this.element : this.element.find('input[type="file"]');
             } else if (!(options.fileInput instanceof $)) {
@@ -1352,7 +1352,7 @@
         },
 
         _isRegExpOption: function (key, value) {
-            return key !== 'url' && $.type(value) === 'string' &&
+            return key !== 'url' && $.type(value) == 'string' &&
                 /^\/.*\/[igm]{0,3}$/.test(value);
         },
 

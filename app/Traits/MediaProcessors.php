@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 trait MediaProcessors {
     public function verifyAudio($fileName) {
-        return ($this->getAppEnvironment() === 'dev' ? 'http://127.0.0.2' : 'https://rx931.com') . '/audios/'.$fileName;
+        return ($this->getAppEnvironment() == 'dev' ? 'http://127.0.0.2' : 'https://rx931.com') . '/audios/'.$fileName;
     }
 
     public function verifyMobileAsset($fileName, $longPhoto = false, $banner = false, $banner500 = false, $mobileWallpaper = false, $desktopWallpaper = false) {
@@ -18,7 +18,7 @@ trait MediaProcessors {
         if($this->doesFileExistsInServer($photoDirectory)) {
             return $this->getAppUrl() . '/images/_assets/mobile/'.$fileName;
         } else {
-            if($fileName === null || $fileName === "" || !preg_match('/^[\w&.\-]+\.+[jpeg|jpg|png|webp|jfif|PNG|JPEG|JPG|WEBP|JFIF]+$/', $fileName)) {
+            if($fileName == null || $fileName == "" || !preg_match('/^[\w&.\-]+\.+[jpeg|jpg|png|webp|jfif|PNG|JPEG|JPG|WEBP|JFIF]+$/', $fileName)) {
                 return $this->getFileName($longPhoto, $banner, $banner500, $mobileWallpaper, $desktopWallpaper);
             }
 
@@ -33,7 +33,7 @@ trait MediaProcessors {
         if($this->doesFileExistsInServer($photoDirectory)) {
             return $this->getAppUrl() . '/images/'.$directory.'/'.$fileName;
         } else {
-            if($fileName === null || $fileName === "" || !preg_match('/^[\w&.\-]+\.+[jpeg|jpg|png|webp|jfif|PNG|JPEG|JPG|WEBP|JFIF]+$/', $fileName)) {
+            if($fileName == null || $fileName == "" || !preg_match('/^[\w&.\-]+\.+[jpeg|jpg|png|webp|jfif|PNG|JPEG|JPG|WEBP|JFIF]+$/', $fileName)) {
                 return $this->getFileName($longPhoto, $banner, $banner500, $mobileWallpaper, $desktopWallpaper);
             }
 
@@ -63,6 +63,6 @@ trait MediaProcessors {
     public function doesFileExistsInServer($fileUrl) {
         $response = Http::head($fileUrl);
 
-        return $response->status() === 200;
+        return $response->status() == 200;
     }
 }

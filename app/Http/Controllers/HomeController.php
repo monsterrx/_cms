@@ -12,24 +12,18 @@ use App\Models\Message;
 use App\Models\Outbreak;
 use App\Models\Podcast;
 use App\Models\Song;
-use App\Traits\MediaProcessors;
-use App\Traits\SystemFunctions;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use \Firebase\JWT\JWT;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
         $level = Auth::user()->Employee->Designation->level;
-
-        if ($level === 1 || $level === 2 || $level === 6 || $level === 7 || $level === 9) {
+        
+        if ($level == 1 || $level == 2 || $level == 6 || $level == 7 || $level == 9) {
             $where = DB::table('charts')
                 ->whereNull('deleted_at')
                 ->where('daily', 0)
@@ -202,11 +196,11 @@ class HomeController extends Controller
             $file = 'images/reports/'.$imageName;
             Storage::disk('reports')->put($imageName, file_get_contents($file));
 
-            if($this->getStationCode() === 'dav') {
+            if($this->getStationCode() == 'dav') {
                 copy($file, '../monsterdavao/images/reports/'.$imageName);
             }
 
-            if($this->getStationCode() === 'cbu') {
+            if($this->getStationCode() == 'cbu') {
                 copy($file, '../monstercebu/images/reports/'.$imageName);
             }
 

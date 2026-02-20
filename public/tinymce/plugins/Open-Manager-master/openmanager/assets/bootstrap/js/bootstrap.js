@@ -2007,7 +2007,7 @@
       var isSupported = eventName in this.$element
       if (!isSupported) {
         this.$element.setAttribute(eventName, 'return;')
-        isSupported = typeof this.$element[eventName] === 'function'
+        isSupported = typeof this.$element[eventName] == 'function'
       }
       return isSupported
     }
@@ -2207,7 +2207,7 @@
       'bottom' : offsetTop != null && scrollTop <= offsetTop ?
       'top'    : false
 
-    if (this.affixed === affix) return
+    if (this.affixed == affix) return
 
     this.affixed = affix
     this.unpin = affix == 'bottom' ? position.top - scrollTop : null

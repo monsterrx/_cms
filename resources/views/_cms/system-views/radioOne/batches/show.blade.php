@@ -35,7 +35,7 @@
                     <div class="text-center h3">HEADS</div>
                     <div class="row">
                         @forelse($batch->Student as $studentJocks)
-                            @if($studentJocks->position === 1)
+                            @if($studentJocks->position == 1)
                                 <div class="col-md-6">
                                     <div class="card mx-2 my-2">
                                         <div class="card-header">
@@ -76,7 +76,7 @@
                     <div class="text-center h3">SENIORS</div>
                     <div class="row">
                         @forelse($batch->Student as $studentJocks)
-                            @if($studentJocks->position === 2)
+                            @if($studentJocks->position == 2)
                                 <div class="col-md-6">
                                     <div class="card mx-2 my-2">
                                         <div class="card-header">
@@ -117,7 +117,7 @@
                     <div class="text-center h3">JUNIORS</div>
                     <div class="row">
                         @forelse($batch->Student as $studentJocks)
-                            @if($studentJocks->position === 3)
+                            @if($studentJocks->position == 3)
                                 <div class="col-md-6">
                                     <div class="card mx-2 my-2">
                                         <div class="card-header">
@@ -158,7 +158,7 @@
                     <div class="text-center h3">BABIES</div>
                     <div class="row">
                         @forelse($batch->Student as $studentJocks)
-                            @if($studentJocks->position === 4)
+                            @if($studentJocks->position == 4)
                                 <div class="col-md-6">
                                     <div class="card mx-2 my-2">
                                         <div class="card-header">

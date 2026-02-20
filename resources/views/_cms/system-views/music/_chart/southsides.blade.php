@@ -67,15 +67,15 @@
                                 <div class="form-group">
                                     <label for="Positions">Chart Position</label>
                                     <select name="Positions" id="Positions" class="form-control">
-                                        @if(env('STATION_CODE') === "mnl")
+                                        @if(env('STATION_CODE') == "mnl")
                                             @for($i = 1; $i <= 30; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
-                                        @elseif(env('STATION_CODE') === "dav")
+                                        @elseif(env('STATION_CODE') == "dav")
                                             @for($i = 1; $i <= 30; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
-                                        @elseif(env('STATION_CODE') === "cbu")
+                                        @elseif(env('STATION_CODE') == "cbu")
                                             @for($i = 1; $i <= 40; $i++)
                                                 <option value="{{ $i }}">{{ $i }}</option>
                                             @endfor
@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                @if($latestChartDate === "" || $latestChartDate === null)
+                                @if($latestChartDate == "" || $latestChartDate == null)
                                     <div class="form-group">
                                         <label for="dated">Chart Date</label>
                                         <input type="date" id="dated" name="dated" class="form-control">
@@ -166,15 +166,15 @@
                         <div class="form-group">
                             <label class="lead" for="updatePositions">Position</label>
                             <select id="updatePositions" name="Positions" class="custom-select">
-                                @if(env('STATION_CODE') === "mnl")
+                                @if(env('STATION_CODE') == "mnl")
                                     @for($i = 1; $i <= 30; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
-                                @elseif(env('STATION_CODE') === "dav")
+                                @elseif(env('STATION_CODE') == "dav")
                                     @for($i = 1; $i <= 30; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
-                                @elseif(env('STATION_CODE') === "cbu")
+                                @elseif(env('STATION_CODE') == "cbu")
                                     @for($i = 1; $i <= 40; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
@@ -216,15 +216,15 @@
                         <div class="form-group">
                             <label class="lead"  for="update_positions">Position</label>
                             <select id="update_positions" name="Positions" class="form-control">
-                                @if(env('STATION_CODE') === "mnl")
+                                @if(env('STATION_CODE') == "mnl")
                                     @for($i = 1; $i <= 30; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
-                                @elseif(env('STATION_CODE') === "dav")
+                                @elseif(env('STATION_CODE') == "dav")
                                     @for($i = 1; $i <= 30; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor
-                                @elseif(env('STATION_CODE') === "cbu")
+                                @elseif(env('STATION_CODE') == "cbu")
                                     @for($i = 1; $i <= 40; $i++)
                                         <option value="{{ $i }}">{{ $i }}</option>
                                     @endfor

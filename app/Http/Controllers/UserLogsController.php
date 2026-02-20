@@ -15,9 +15,9 @@ class UserLogsController extends Controller {
             ->get();
 
         if($request->ajax()) {
-            if($request['process'] === 'load') {
+            if($request['process'] == 'load') {
                 $level = Auth::user()->Employee->Designation->level;
-                if($level === '1' || $level === '2') {
+                if($level == '1' || $level == '2') {
                     return view('_cms.system-views.logs.table', compact('employees'));
                 }
             }

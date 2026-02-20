@@ -34,7 +34,7 @@
                     <hr>
                     <div class="col-md-12">
                         <p class="lead" style="margin-bottom: 0">Published Date</p>
-                        @if( $article->published_at === null )
+                        @if( $article->published_at == null )
                             <span class="lead text-muted" id="" style="color:red">Not Published</span>
                         @else
                             <span class="lead text-muted" id="">{{ date('M d, Y', strtotime($article->published_at)) }}</span>
@@ -244,7 +244,7 @@
             <!-- END -->
             <br>
             <div class="row mb-5">
-                @if($article->published_at === null)
+                @if($article->published_at == null)
                     <div class="col-md-6">
                         <a href="#publish-article" class="btn btn-outline-dark btn-block" data-toggle="modal">
                             <i class="fas fa-book"></i>&nbsp;&nbsp;Publish This Article?

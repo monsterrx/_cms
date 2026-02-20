@@ -67,8 +67,8 @@
                                         @csrf
                                         <div class="row justify-content-center">
                                             @foreach($title->Asset as $asset)
-                                                <div class="col-6 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-monster-yellow' }}">
-                                                    <p class="lead">{{ $asset->is_dark_mode === 0 ? 'Light' : 'Dark' }}</p>
+                                                <div class="col-6 {{ $asset->is_dark_mode == 0 ? '' : 'bg-medium-gray text-monster-yellow' }}">
+                                                    <p class="lead">{{ $asset->is_dark_mode == 0 ? 'Light' : 'Dark' }}</p>
                                                     <img src="{{ $asset->logo }}" alt="main-logo" width="300px">
                                                 </div>
                                             @endforeach
@@ -100,14 +100,14 @@
                             <div class="col-6">
                                 <div class="row">
                                     @foreach($title->Asset as $asset)
-                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                        <div class="col-12 {{ $asset->is_dark_mode == 0 ? '' : 'bg-medium-gray text-white' }}">
                                             <div class="row g-0">
                                                 <div class="col-2 px-1">
                                                     <img src="{{ $asset->chart_icon }}" alt="hitlist" class="img-fluid img-icon">
                                                 </div>
                                                 <div class="col-10 text-uppercase px-1">
-                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->chart_title }}</p>
-                                                    <p class="barlow {{ $asset->is_dark_mode === 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->chart_sub_title }}</p>
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode == 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->chart_title }}</p>
+                                                    <p class="barlow {{ $asset->is_dark_mode == 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->chart_sub_title }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -175,14 +175,14 @@
                             <div class="col-6">
                                 <div class="row">
                                     @foreach($title->Asset as $asset)
-                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                        <div class="col-12 {{ $asset->is_dark_mode == 0 ? '' : 'bg-medium-gray text-white' }}">
                                             <div class="row g-0">
                                                 <div class="col-2 px-1">
                                                     <img src="{{ $asset->article_icon }}" alt="hitlist" class="img-fluid img-icon">
                                                 </div>
                                                 <div class="col-10 text-uppercase px-1">
-                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->article_title }}</p>
-                                                    <p class="barlow {{ $asset->is_dark_mode === 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->article_sub_title }}</p>
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode == 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->article_title }}</p>
+                                                    <p class="barlow {{ $asset->is_dark_mode == 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->article_sub_title }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -251,14 +251,14 @@
                             <div class="col-6">
                                 <div class="row">
                                     @foreach($title->Asset as $asset)
-                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                        <div class="col-12 {{ $asset->is_dark_mode == 0 ? '' : 'bg-medium-gray text-white' }}">
                                             <div class="row g-0">
                                                 <div class="col-2 px-1">
                                                     <img src="{{ $asset->podcast_icon }}" alt="hitlist" class="img-fluid img-icon">
                                                 </div>
                                                 <div class="col-10 text-uppercase px-1">
-                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->podcast_title }}</p>
-                                                    <p class="barlow {{ $asset->is_dark_mode === 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->podcast_sub_title }}</p>
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode == 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->podcast_title }}</p>
+                                                    <p class="barlow {{ $asset->is_dark_mode == 0 ? 'text-dark-gray' : 'text-white' }} mb-1">{{ $title->podcast_sub_title }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -327,13 +327,13 @@
                             <div class="col-6">
                                 <div class="row">
                                     @foreach($title->Asset as $asset)
-                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                        <div class="col-12 {{ $asset->is_dark_mode == 0 ? '' : 'bg-medium-gray text-white' }}">
                                             <div class="row g-0">
                                                 <div class="col-2 px-1">
                                                     <img src="{{ $asset->article_page_icon }}" alt="hitlist" class="img-fluid img-icon">
                                                 </div>
                                                 <div class="col-10 text-uppercase px-1">
-                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->articles_main_page_title }}</p>
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode == 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->articles_main_page_title }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -429,13 +429,13 @@
                             <div class="col-6">
                                 <div class="row">
                                     @foreach($title->Asset as $asset)
-                                        <div class="col-12 {{ $asset->is_dark_mode === 0 ? '' : 'bg-medium-gray text-white' }}">
+                                        <div class="col-12 {{ $asset->is_dark_mode == 0 ? '' : 'bg-medium-gray text-white' }}">
                                             <div class="row g-0">
                                                 <div class="col-2 px-1">
                                                     <img src="{{ $asset->youtube_page_icon }}" alt="hitlist" class="img-fluid img-icon">
                                                 </div>
                                                 <div class="col-10 text-uppercase px-1">
-                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode === 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->youtube_main_page_title }}</p>
+                                                    <p class="fs-4 header mb-0 {{ $asset->is_dark_mode == 0 ? 'text-monster-blue' : 'text-white' }}">{{ $title->youtube_main_page_title }}</p>
                                                 </div>
                                             </div>
                                         </div>

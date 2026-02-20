@@ -205,7 +205,7 @@
                     );
                 }
 
-                // if (chartCount === 5 && isPosted === 1) {
+                // if (chartCount == 5 && isPosted == 1) {
                 //     $('#post').prop('disabled', true);
                 // } 
                 // else {
@@ -230,7 +230,7 @@
         console.log("createRefreshingDataTable: ", "Date: ", date, "Action: ", action, "Throwback: ", throwback, "ElementID: ", elementID);
 
         // Decide first column based on action
-        const firstColumn = action === 'draft'
+        const firstColumn = action == 'draft'
             ? { title: 'ID', data: 'id' }
             : { title: 'Position', data: 'position' };
 
@@ -304,9 +304,9 @@
 
         let date = $surveyDate.attr('data-payload') ?? $surveyDate.val();
         let action = $surveyDate.attr('data-chart-type');
-        let chart_type = $surveyDate.attr('data-chart-type') === 'draft' ? 'draft' : 'official';
+        let chart_type = $surveyDate.attr('data-chart-type') == 'draft' ? 'draft' : 'official';
         // Removed this permanently due to digital direction.
-        // let $table = chart_type === 'draft' ? 'dailyChartSongsTable' : 'tdsTable';
+        // let $table = chart_type == 'draft' ? 'dailyChartSongsTable' : 'tdsTable';
 
         getAsync('{{ route('charts.daily') }}', { 'daily': true, 'chartType': chart_type }, 'HTML', beforeSend, onSuccess);
 
@@ -319,7 +319,7 @@
             $('#dailyCharts').append(result);
 
             setTimeout(() => {
-                // if (chart_type === 'draft') {
+                // if (chart_type == 'draft') {
                 //     $('#post').removeAttr('disabled');
                 // }
                 // else {
@@ -503,14 +503,14 @@
             let outbreak_song = $('#outbreak_song_id').val();
 
             $('#newOutbreak').on('shown.bs.modal', function () {
-                getAsync('{{ url()->current() }}' + '/' + outbreak_song, {"song_id": outbreak_song}, 'JSON', beforeSend, onSuccess);
+                getAsync("{{ route('outbreaks.index') }}" + '/' + outbreak_song, {"song_id": outbreak_song}, 'JSON', beforeSend, onSuccess);
 
                 function beforeSend() {
 
                 }
 
                 function onSuccess(result) {
-                    if (result === true) {
+                    if (result == true) {
                         $('#linkString').attr('hidden', 'hidden');
                         Toast.fire({
                             icon: 'info',
@@ -545,7 +545,7 @@
         let birthDate = new Date(date);
         let age = today.getFullYear() - birthDate.getFullYear();
         let m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        if (m < 0 || (m == 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
         return age;

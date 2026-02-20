@@ -68,9 +68,9 @@
                                     <div class="card-body text-center">
                                         <div class="card-title lead">{{ str_limit($giveaway->name, $limit = 25, $end = '...') }}</div>
                                         <div class="text-muted">
-                                            @if($giveaway->type === 'movies')
+                                            @if($giveaway->type == 'movies')
                                                 Monster Movie Premiere
-                                            @elseif($giveaway->type === 'concerts')
+                                            @elseif($giveaway->type == 'concerts')
                                                 Concert Tickets
                                             @else
                                                 Undefined

@@ -112,7 +112,7 @@ class OutbreakController extends Controller {
                     ->get()
                     ->first();
 
-                if($song['track_link'] === null || $song['track_link'] === "")
+                if($song['track_link'] == null || $song['track_link'] == "")
                 {
                     return "false";
                 }

@@ -16,13 +16,13 @@
                                         <div class="lead">
                                             <div class="row">
                                                 <div class="col-md-4">
-                                                    @if ($links->website === 'Facebook')
+                                                    @if ($links->website == 'Facebook')
                                                         <img src="{{ asset("images/social_media/facebook.png") }}" alt="facebook_logo" width="70px" class="circle">
-                                                    @elseif ($links->website === 'Twitter')
+                                                    @elseif ($links->website == 'Twitter')
                                                         <img src="{{ asset("images/social_media/twitter.png") }}" alt="twitter_logo" width="70px" class="circle">
-                                                    @elseif ($links->website === 'Youtube')
+                                                    @elseif ($links->website == 'Youtube')
                                                         <img src="{{ asset("images/social_media/youtube.png") }}" alt="youtube_logo" width="70px" class="circle">
-                                                    @elseif ($links->website === 'Instagram')
+                                                    @elseif ($links->website == 'Instagram')
                                                         <img src="{{ asset("images/social_media/instagram.png") }}" alt="instagram_logo" width="70px" class="circle">
                                                     @else
                                                         <img src="{{ asset("images/social_media/other.png") }}" alt="other_logo" width="70px" class="circle">

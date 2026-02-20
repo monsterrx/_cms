@@ -44,10 +44,10 @@
                                         <label for="device">Device Type</label>
                                         <select id="device" name="device" class="custom-select">
                                             <option value>--</option>
-                                            @if($wallpaper->device === 'web')
+                                            @if($wallpaper->device == 'web')
                                                 <option value="web" selected>Desktop</option>
                                                 <option value="mobile">Mobile</option>
-                                            @elseif($wallpaper->device === 'mobile')
+                                            @elseif($wallpaper->device == 'mobile')
                                                 <option value="web">Desktop</option>
                                                 <option value="mobile" selected>Mobile</option>
                                             @else
@@ -62,15 +62,15 @@
                                         <label for="location">Station</label>
                                         <select id="location" name="location" class="custom-select">
                                             <option value>--</option>
-                                            @if($wallpaper->location === 'mnl')
+                                            @if($wallpaper->location == 'mnl')
                                                 <option value="mnl" selected>Manila</option>
                                                 <option value="cbu">Cebu</option>
                                                 <option value="dav">Davao</option>
-                                            @elseif($wallpaper->location === 'cbu')
+                                            @elseif($wallpaper->location == 'cbu')
                                                 <option value="mnl">Manila</option>
                                                 <option value="cbu" selected>Cebu</option>
                                                 <option value="dav">Davao</option>
-                                            @elseif($wallpaper->location === 'dav')
+                                            @elseif($wallpaper->location == 'dav')
                                                 <option value="mnl">Manila</option>
                                                 <option value="cbu">Cebu</option>
                                                 <option value="dav" selected>Davao</option>

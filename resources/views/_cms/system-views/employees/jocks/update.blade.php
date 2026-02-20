@@ -80,7 +80,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <div class="lead">Status:  @if($jock->is_active === 0) <span class="badge badge-danger">Inactive</span> @else <span class="badge badge-success">Active</span> @endif</div>
+                                        <div class="lead">Status:  @if($jock->is_active == 0) <span class="badge badge-danger">Inactive</span> @else <span class="badge badge-success">Active</span> @endif</div>
                                     </div>
                                     <div class="form-group">
                                         <label for="employee_id" class="label">Employee Name</label>
@@ -114,10 +114,10 @@
                                     <div class="form-group">
                                         <label for="active" class="label">Active</label>
                                         <select id="active" name="is_active" class="form-control">
-                                            @if($jock->active === '1')
+                                            @if($jock->active == '1')
                                                 <option value="1" selected>Yes</option>
                                                 <option value="0">No</option>
-                                            @elseif($jock->active === '0')
+                                            @elseif($jock->active == '0')
                                                 <option value="1">Yes</option>
                                                 <option value="0" selected>No</option>
                                             @else

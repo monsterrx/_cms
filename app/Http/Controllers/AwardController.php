@@ -20,7 +20,7 @@ class AwardController extends Controller {
         {
             $output = '';
 
-            if ($request['awardee'] === 'jock') {
+            if ($request['awardee'] == 'jock') {
                 $jock = Jock::orderBy('name')->get();
                 if($jock){
                     foreach ($jock as $jocks) {
@@ -29,7 +29,7 @@ class AwardController extends Controller {
                 } else {
                     $output.='<option value="">No Jocks Found</option>';
                 }
-            } elseif ($request['awardee'] === 'show') {
+            } elseif ($request['awardee'] == 'show') {
                 $show = Show::orderBy('title')->get();
                 if ($show) {
                     foreach ($show as $shows) {
@@ -70,11 +70,11 @@ class AwardController extends Controller {
         ]);
 
 	    if($validator->passes()) {
-            if ($request['select_awardee'] === 'show') {
+            if ($request['select_awardee'] == 'show') {
 
                 $request['show_id'] = $request['awardee'];
 
-            } elseif ($request['select_awardee'] === 'jock') {
+            } elseif ($request['select_awardee'] == 'jock') {
 
                 $request['jock_id'] = $request['awardee'];
 
@@ -123,9 +123,9 @@ class AwardController extends Controller {
         ]);
 
 		if($validator->passes()) {
-            if ($request['select_awardee'] === 'show') {
+            if ($request['select_awardee'] == 'show') {
                 $request['show_id'] = $request['awardee'];
-            } elseif ($request['select_awardee'] === 'jock') {
+            } elseif ($request['select_awardee'] == 'jock') {
                 $request['jock_id'] = $request['awardee'];
             }
 

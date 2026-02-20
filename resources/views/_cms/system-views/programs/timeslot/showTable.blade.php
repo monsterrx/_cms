@@ -25,7 +25,7 @@
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="addJockDropdown">
                                         @foreach($jocks as $jock)
-                                            <a href="{{ route('timeslot.add.jock', [$timeslot->id, $jock->id]) }}" class="dropdown-item">{{ $jock->name }} ({{ $jock->Employee->first_name }} {{ $jock->Employee->last_name }}) @if($jock->Employee->location === $station) @elseif($jock->Employee->location === 'cbu') (Cebu) @elseif($jock->Employee->location === 'dav') (Davao) @endif</a>
+                                            <a href="{{ route('timeslot.add.jock', [$timeslot->id, $jock->id]) }}" class="dropdown-item">{{ $jock->name }} ({{ $jock->Employee->first_name }} {{ $jock->Employee->last_name }}) @if($jock->Employee->location == $station) @elseif($jock->Employee->location == 'cbu') (Cebu) @elseif($jock->Employee->location == 'dav') (Davao) @endif</a>
                                         @endforeach
                                     </div>
                                     <a href="#delete-timeslot" id="delete-timeslot-toggler" data-id="{{ $timeslot->id }}" type="show" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-trash"></i></a>

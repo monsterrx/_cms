@@ -14,13 +14,13 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
             './jquery.fileupload'
         ], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(
             require('jquery'),
@@ -110,10 +110,10 @@
             $.each(options.processQueue, function () {
                 var settings = {},
                     action = this.action,
-                    prefix = this.prefix === true ? action : this.prefix;
+                    prefix = this.prefix == true ? action : this.prefix;
                 $.each(this, function (key, value) {
-                    if ($.type(value) === 'string' &&
-                            value.charAt(0) === '@') {
+                    if ($.type(value) == 'string' &&
+                            value.charAt(0) == '@') {
                         settings[key] = options[
                             value.slice(1) || (prefix ? prefix +
                                 key.charAt(0).toUpperCase() + key.slice(1) : key)
@@ -140,7 +140,7 @@
                 options = $.extend({}, this.options, data);
             if (options.processQueue && options.processQueue.length) {
                 this._transformProcessQueue(options);
-                if (this._processing === 0) {
+                if (this._processing == 0) {
                     this._trigger('processstart');
                 }
                 $.each(data.files, function (index) {
@@ -157,7 +157,7 @@
                     that._processingQueue = that._processingQueue.then(func, func)
                         .always(function () {
                             that._processing -= 1;
-                            if (that._processing === 0) {
+                            if (that._processing == 0) {
                                 that._trigger('processstop');
                             }
                         });

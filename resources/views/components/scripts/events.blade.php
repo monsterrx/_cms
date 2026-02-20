@@ -12,7 +12,7 @@
         }
     });
     $(document).on('keypress', 'form', function (e) {
-        if (e.keyCode === 13) {
+        if (e.keyCode == 13) {
             $(this).submit();
         }
     });
@@ -174,7 +174,7 @@
 
         console.log([action, payload, type, chart]);
 
-        if (action === 'post') {
+        if (action == 'post') {
             DialogAlert.fire({
                 'icon': 'question',
                 'title': 'Are you sure to post the charts?'
@@ -214,12 +214,12 @@
             });
         }
 
-        if (action === 'official') {
+        if (action == 'official') {
             $('#chart-subtitle').empty();
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
             $('#chartDates, #surveyDate').removeAttr('data-is-throwback');
 
-            if (chart === 'daily') {
+            if (chart == 'daily') {
                 $('#chart-subtitle').append('Daily Charts')
             } else {
                 $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
@@ -237,7 +237,7 @@
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
                 
-                if (chart === 'daily') {
+                if (chart == 'daily') {
                     manualToast.fire({
                         icon: 'info',
                         title: 'Loading daily charts ...',
@@ -251,7 +251,7 @@
             }
 
             function onSuccess(result) {
-                if (chart === 'daily') {
+                if (chart == 'daily') {
                     $('#post').removeAttr('disabled');
                     Toast.fire({
                         icon: 'success',
@@ -277,12 +277,12 @@
             }
         }
 
-        if (action === 'draft') {
+        if (action == 'draft') {
             $('#chart-subtitle').empty();
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
             $('#chartDates, #surveyDate').removeAttr('data-is-throwback');
 
-            if (chart === 'daily') {
+            if (chart == 'daily') {
                 $('#chart-subtitle').append('Song List')
             } else {
                 $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts')
@@ -300,7 +300,7 @@
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append("<div class='text-center'><div class='spinner-border text-dark' role='status'><span class='sr-only'>Loading...</span></div></div>");
                 
-                if (chart === 'daily') {
+                if (chart == 'daily') {
                     manualToast.fire({
                         icon: 'info',
                         title: 'Loading song list ...',
@@ -314,7 +314,7 @@
             }
 
             function onSuccess(result) {
-                if (chart === 'daily') {
+                if (chart == 'daily') {
                     Toast.fire({
                         icon: 'success',
                         title: 'Song list has been loaded'
@@ -329,16 +329,16 @@
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
 
-                if (chart === 'daily') {
+                if (chart == 'daily') {
                     $('#post').attr('disabled', true);
-                } else if (chart === 'countdown') {
+                } else if (chart == 'countdown') {
                     $('#post').removeAttr('disabled');
                 }
 
                 loadDailyDates(payload);
 
                 setTimeout(() => {
-                    if (chart === 'daily') {
+                    if (chart == 'daily') {
                         createRefreshingDataTable(payload, action, throwback, 'tdsTable');
                     }
                     $('#chartDates, #surveyDate').val(payload);
@@ -347,7 +347,7 @@
             }
         }
 
-        if (action === 'throwback') {
+        if (action == 'throwback') {
             $('#chart-subtitle').empty();
             $('#chart-subtitle').append(action.charAt(0).toUpperCase() + action.slice(1) + ' Charts');
             $('#chartDates, #surveyDate').attr('data-chart-type', action);
@@ -379,7 +379,7 @@
                 $('#monsterCharts, #dailyCharts').empty();
                 $('#monsterCharts, #dailyCharts').append(result);
 
-                if (chart === 'daily') {
+                if (chart == 'daily') {
                     $('#post').attr('disabled', true);
                 }
 
@@ -443,7 +443,7 @@
 
             $('#update_schedule_type').attr('disabled', 'disabled');
 
-            if (timeslot_type === 'jock') {
+            if (timeslot_type == 'jock') {
                 $('#update_jock_id').removeAttr('disabled');
                 $('#update_shows').attr('hidden', 'hidden');
                 $('#update_show_id').attr('disabled', 'disabled');
@@ -670,7 +670,7 @@
         function onSuccess(result) {
             $('#songDemoContainer').empty();
 
-            if (result.type === "mp3/m4a") {
+            if (result.type == "mp3/m4a") {
                 $('#songDemoContainer').append('<div class="text-center"><audio controls controlsList="nodownload"><source src="{{ asset('audios') }}' + '/' + result.track_link + '" type="audio/mpeg">Your browser does not support audio element</audio></div>');
                 $('#update_spotify').attr('hidden', 'hidden');
                 $('#update_spotify_link').attr('disabled', 'disabled');
@@ -939,7 +939,7 @@
 
                 $('#update_jock_link_form').attr('action', '{{ url('socials/update') }}' + '/' + result.link.id);
                 $('#delete_jock_link_form').attr('action', '{{ url('socials/delete') }}' + '/' + result.link.id);
-            } else if (data_open === 'radio1.jocks.social') {
+            } else if (data_open == 'radio1.jocks.social') {
                 $('#jock-radio1-remove-link-text').empty();
 
                 $('[name="id"]').val(result.id);
@@ -950,7 +950,7 @@
 
                 $('#update_r1_jock_link_form').attr('action', '{{ url('socials/update') }}' + '/' + result.id);
                 $('#delete_r1_jock_link_form').attr('action', '{{ url('socials/delete') }}' + '/' + result.id);
-            } else if (data_open === 'radio1.jocks.photo') {
+            } else if (data_open == 'radio1.jocks.photo') {
                 $('#r1_view_image, #image_name, #file').val('');
                 $('#r1-remove-image-text, #custom-file-label').empty();
 
@@ -1241,7 +1241,7 @@
         let view = $(this).attr('switch');
         let day = $(this).attr('day');
 
-        if (view === 'show') {
+        if (view == 'show') {
             $(this).attr('switch', 'jock');
             $('#timeslot-days li a').attr('type', 'show');
             $('#timeslot-subtitle').empty().append(day + ' ' + view + ' timeslots');
@@ -1315,7 +1315,7 @@
     $(document).on('change', '#schedule_type', function () {
         let type = $(this).val();
 
-        if (type === 'jock') {
+        if (type == 'jock') {
             $('#jocks').removeAttr('hidden');
             $('#jock_id').attr('required', 'required').removeAttr('disabled');
             $('#shows').attr('hidden', 'hidden');
@@ -1358,7 +1358,7 @@
             }
 
             function onSuccess(result) {
-                if (result.image === "default.png" || result.image === null || result.image === '{{ asset('images/artists/default.png') }}') {
+                if (result.image == "default.png" || result.image == null || result.image == '{{ asset('images/artists/default.png') }}') {
                     $('#indieground_image').removeAttr('hidden');
                     $('#indieground_save_button').attr('disabled', 'disabled');
 
@@ -1405,7 +1405,7 @@
         }
 
         function onSuccess(result) {
-            if (result === true) {
+            if (result == true) {
                 $('#linkString').attr('hidden', 'hidden');
                 $('#linkString').removeAttr('required');
                 Toast.fire({
@@ -1414,7 +1414,7 @@
                 });
             }
 
-            if (result === false) {
+            if (result == false) {
                 $('#linkString').removeAttr('hidden');
                 $('#linkString').attr('required', 'required');
             }
@@ -1531,8 +1531,8 @@
     $(document).on('change', '#chartDates, #surveyDate', function () {
         let date = $(this).val();
         let chart_type = $(this).attr('data-chart-type');
-        let throwback = (chart_type === 'throwback' ?? false);
-        let daily = $(this).attr('data-chart') === 'daily';
+        let throwback = (chart_type == 'throwback' ?? false);
+        let daily = $(this).attr('data-chart') == 'daily';
 
         getAsync('{{ route('filter.chart') }}', {
             "date": date,
@@ -1558,7 +1558,7 @@
             });
 
             setTimeout(() => {
-                // if (chart_type === 'draft') {
+                // if (chart_type == 'draft') {
                 //     createRefreshingDataTable(date, chart_type, throwback, 'dailyChartSongsTable');
                 // }
                 // else {
@@ -2445,7 +2445,7 @@
 
         console.log("Selected:", selected);
 
-        if (selected === 'song') {
+        if (selected == 'song') {
             // Hide daily chart options and disable fields
             $('#dailyChartsOptions').attr('hidden', true);
             $('#dailyChartsOptions').find('select, input').prop('disabled', true);
@@ -2471,7 +2471,7 @@
                 ]
             });
         } 
-        else if (selected === 'dailyChart') {
+        else if (selected == 'dailyChart') {
             // Show daily chart options and enable fields
             $('#dailyChartsOptions').removeAttr('hidden');
             $('#dailyChartsOptions').find('select, input').prop('disabled', false);
@@ -2553,12 +2553,12 @@
         // Reset form method
         form.find('input[name="_method"]').remove();
 
-        if (actionType === 'add') {
+        if (actionType == 'add') {
             // 🟢 Add mode
             modalTitle.text('Add Category');
             form.attr('action', '{{ route('categories.store') }}');
         } 
-        else if (actionType === 'edit') {
+        else if (actionType == 'edit') {
             // 🟡 Edit mode
             modalTitle.text('Edit Category');
             form.attr('action', actionUrl);
@@ -2622,7 +2622,7 @@
                 $('button[type="submit"]').removeAttr('disabled');
 
                 // Optional: Refresh your table or component here
-                if (typeof categoriesTable === 'function') {
+                if (typeof categoriesTable == 'function') {
                     categoriesTable.ajax.reload(null, false);
                 }
             }

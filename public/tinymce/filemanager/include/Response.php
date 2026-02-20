@@ -243,13 +243,13 @@ class Response {
 			throw new InvalidArgumentException(sprintf('The HTTP status code "%s" is not valid.', $code));
 		}
 
-		if (null === $text) {
+		if (null == $text) {
 			$this->statusText = isset(self::$statusTexts[$code]) ? self::$statusTexts[$code] : '';
 
 			return $this;
 		}
 
-		if (false === $text) {
+		if (false == $text) {
 			$this->statusText = '';
 
 			return $this;

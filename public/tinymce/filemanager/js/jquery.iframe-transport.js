@@ -13,10 +13,10 @@
 
 ;(function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
+    } else if (typeof exports == 'object') {
         // Node/CommonJS:
         factory(require('jquery'));
     } else {
@@ -62,13 +62,13 @@
                     form.attr('accept-charset', options.formAcceptCharset);
                     addParamChar = /\?/.test(options.url) ? '&' : '?';
                     // XDomainRequest only supports GET and POST:
-                    if (options.type === 'DELETE') {
+                    if (options.type == 'DELETE') {
                         options.url = options.url + addParamChar + '_method=DELETE';
                         options.type = 'POST';
-                    } else if (options.type === 'PUT') {
+                    } else if (options.type == 'PUT') {
                         options.url = options.url + addParamChar + '_method=PUT';
                         options.type = 'POST';
-                    } else if (options.type === 'PATCH') {
+                    } else if (options.type == 'PATCH') {
                         options.url = options.url + addParamChar + '_method=PATCH';
                         options.type = 'POST';
                     }
@@ -131,7 +131,7 @@
                             });
                         }
                         if (options.fileInput && options.fileInput.length &&
-                                options.type === 'POST') {
+                                options.type == 'POST') {
                             fileInputClones = options.fileInput.clone();
                             // Insert a clone for each file input field:
                             options.fileInput.after(function (index) {

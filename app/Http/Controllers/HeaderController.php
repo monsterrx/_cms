@@ -20,7 +20,7 @@ class HeaderController extends Controller {
         $data = array('slider' => $slider);
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === 1 || $level === 2 || $level === 4) {
+        if ($level == 1 || $level == 2 || $level == 4) {
             return view('_cms.system-views.digital.slider.index',compact('data'));
         }
 
@@ -31,7 +31,7 @@ class HeaderController extends Controller {
     {
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === 1 || $level === 2 || $level === 4) {
+        if ($level == 1 || $level == 2 || $level == 4) {
             return view('_cms.system-views.digital.slider.create');
         }
 
@@ -52,7 +52,7 @@ class HeaderController extends Controller {
 
             $sliders_count = Header::whereNull('deleted_at')->where('location', '=', $this->getStationCode())->count();
 
-            if ($sliders_count === 0) {
+            if ($sliders_count == 0) {
                 $request['number'] = 0;
             }
 
@@ -90,7 +90,7 @@ class HeaderController extends Controller {
 
         $level = Auth::user()->Employee->Designation->level;
 
-        if ($level === 1 || $level === 2 || $level === 4) {
+        if ($level == 1 || $level == 2 || $level == 4) {
             return view('_cms.system-views.digital.slider.show',compact('data'));
         }
 

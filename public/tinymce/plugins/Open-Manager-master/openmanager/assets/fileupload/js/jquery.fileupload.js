@@ -14,7 +14,7 @@
 
 (function (factory) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
             'jquery',
@@ -207,7 +207,7 @@
 
         _getFormData: function (options) {
             var formData;
-            if (typeof options.formData === 'function') {
+            if (typeof options.formData == 'function') {
                 return options.formData(options.form);
             }
 			if ($.isArray(options.formData)) {
@@ -471,9 +471,9 @@
             var dfd = $.Deferred(),
                 promise = dfd.promise();
             context = context || this.options.context || promise;
-            if (resolveOrReject === true) {
+            if (resolveOrReject == true) {
                 dfd.resolveWith(context, args);
-            } else if (resolveOrReject === false) {
+            } else if (resolveOrReject == false) {
                 dfd.rejectWith(context, args);
             }
             promise.abort = dfd.promise;
@@ -569,7 +569,7 @@
         },
 
         _beforeSend: function (e, data) {
-            if (this._active === 0) {
+            if (this._active == 0) {
                 // the start callback is triggered when an upload starts
                 // and no other uploads are currently running,
                 // equivalent to the global ajaxStart event:
@@ -622,7 +622,7 @@
                 options.errorThrown = jqXHRorError;
             }
             this._trigger('always', null, options);
-            if (this._active === 0) {
+            if (this._active == 0) {
                 // The stop callback is triggered when all uploads have
                 // been completed, equivalent to the global ajaxStop event:
                 this._trigger('stop');
@@ -750,7 +750,7 @@
 
         // File Normalization for Gecko 1.9.1 (Firefox 3.5) support:
         _normalizeFile: function (index, file) {
-            if (file.name === undefined && file.size === undefined) {
+            if (file.name == undefined && file.size == undefined) {
                 file.name = file.fileName;
                 file.size = file.fileSize;
             }
@@ -768,14 +768,14 @@
             // collection with the clone, which has been copied including
             // event handlers:
             this.options.fileInput = this.options.fileInput.map(function (i, el) {
-                if (el === input[0]) {
+                if (el == input[0]) {
                     return inputClone[0];
                 }
                 return el;
             });
             // If the widget has been initialized on the file input itself,
             // override this.element with the file input clone:
-            if (input[0] === this.element[0]) {
+            if (input[0] == this.element[0]) {
                 this.element = inputClone;
             }
         },
@@ -807,8 +807,8 @@
             if (that.options.replaceFileInput) {
                 that._replaceFileInput(data.fileInput);
             }
-            if (that._trigger('change', e, data) === false ||
-                    that._onAdd(e, data) === false) {
+            if (that._trigger('change', e, data) == false ||
+                    that._onAdd(e, data) == false) {
                 return false;
             }
         },
@@ -824,8 +824,8 @@
                     data.files.push(file);
                 }
             });
-            if (that._trigger('paste', e, data) === false ||
-                    that._onAdd(e, data) === false) {
+            if (that._trigger('paste', e, data) == false ||
+                    that._onAdd(e, data) == false) {
                 return false;
             }
         },
@@ -839,8 +839,8 @@
                         that._normalizeFile
                     )
                 };
-            if (that._trigger('drop', e, data) === false ||
-                    that._onAdd(e, data) === false) {
+            if (that._trigger('drop', e, data) == false ||
+                    that._onAdd(e, data) == false) {
                 return false;
             }
             e.preventDefault();
@@ -849,7 +849,7 @@
         _onDragOver: function (e) {
             var that = e.data.fileupload,
                 dataTransfer = e.dataTransfer = e.originalEvent.dataTransfer;
-            if (that._trigger('dragover', e) === false) {
+            if (that._trigger('dragover', e) == false) {
                 return false;
             }
             if (dataTransfer) {
@@ -894,7 +894,7 @@
 
         _initSpecialOptions: function () {
             var options = this.options;
-            if (options.fileInput === undefined) {
+            if (options.fileInput == undefined) {
                 options.fileInput = this.element.is('input:file') ?
                         this.element : this.element.find('input:file');
             } else if (!(options.fileInput instanceof $)) {

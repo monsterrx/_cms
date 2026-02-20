@@ -10,7 +10,7 @@
  */
 
 (function (factory) {
-    if (typeof define === "function" && define.amd) {
+    if (typeof define == "function" && define.amd) {
         // Register as an anonymous AMD module:
         define(["jquery"], factory);
     } else {
@@ -96,7 +96,7 @@ $.widget = function( name, base, prototype ) {
 
 $.widget.bridge = function( name, object ) {
 	$.fn[ name ] = function( options ) {
-		var isMethodCall = typeof options === "string",
+		var isMethodCall = typeof options == "string",
 			args = Array.prototype.slice.call( arguments, 1 ),
 			returnValue = this;
 
@@ -106,7 +106,7 @@ $.widget.bridge = function( name, object ) {
 			options;
 
 		// prevent calls to internal methods
-		if ( isMethodCall && options.charAt( 0 ) === "_" ) {
+		if ( isMethodCall && options.charAt( 0 ) == "_" ) {
 			return returnValue;
 		}
 
@@ -202,13 +202,13 @@ $.Widget.prototype = {
 	option: function( key, value ) {
 		var options = key;
 
-		if ( arguments.length === 0 ) {
+		if ( arguments.length == 0 ) {
 			// don't return a reference to the internal hash
 			return $.extend( {}, this.options );
 		}
 
-		if  (typeof key === "string" ) {
-			if ( value === undefined ) {
+		if  (typeof key == "string" ) {
+			if ( value == undefined ) {
 				return this.options[ key ];
 			}
 			options = {};
@@ -230,7 +230,7 @@ $.Widget.prototype = {
 	_setOption: function( key, value ) {
 		this.options[ key ] = value;
 
-		if ( key === "disabled" ) {
+		if ( key == "disabled" ) {
 			this.widget()
 				[ value ? "addClass" : "removeClass"](
 					this.widgetBaseClass + "-disabled" + " " +
@@ -254,7 +254,7 @@ $.Widget.prototype = {
 
 		data = data || {};
 		event = $.Event( event );
-		event.type = ( type === this.widgetEventPrefix ?
+		event.type = ( type == this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
 		// the original event may come from any element
@@ -274,7 +274,7 @@ $.Widget.prototype = {
 		this.element.trigger( event, data );
 
 		return !( $.isFunction(callback) &&
-			callback.call( this.element[0], event, data ) === false ||
+			callback.call( this.element[0], event, data ) == false ||
 			event.isDefaultPrevented() );
 	}
 };

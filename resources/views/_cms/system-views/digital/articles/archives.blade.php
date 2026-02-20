@@ -21,7 +21,7 @@
             <td>{{ Str::limit($articles->title, $limit = 25, $end = '...') }}</td>
             <td>{{ $articles->Category->name }}</td>
             <td>
-                @if( $articles->published_at === null )
+                @if( $articles->published_at == null )
                     <span id="" style="color:red">Not Published</span>
                 @else
                     {{ date('F d, Y', strtotime($articles->published_at)) }}

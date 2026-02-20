@@ -51,7 +51,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4 class="lead">Description</h4>
-                            @if($batch->description === '')
+                            @if($batch->description == '')
                                 <p class="h4">No Description Available</p>
                             @else
                                 <p class="h4">{{ $batch->description }}</p>
@@ -422,11 +422,11 @@
                     type: 'GET',
                     dataType: 'html',
                     success: (response) => {
-                        if (text === 'Student')
+                        if (text == 'Student')
                         {
                             $('#studentList').append(response);
 
-                        } else if(text === 'Sponsor'){
+                        } else if(text == 'Sponsor'){
 
                             $('#sponsorList').append(response);
                         }

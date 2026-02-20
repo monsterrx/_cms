@@ -25,7 +25,7 @@
                             <h3 class="h3">School</h3>
                             <p class="lead">{{ $gimikboard->School->name }}</p>
                         </div>
-                        @if($gimikboard->end_date === '0000-00-00')
+                        @if($gimikboard->end_date == '0000-00-00')
                             <div class="col-md-8">
                                 <h3 class="h3">Duration</h3>
                                 <p class="lead">One Day Event</p>

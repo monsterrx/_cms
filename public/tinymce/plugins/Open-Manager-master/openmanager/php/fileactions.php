@@ -38,7 +38,7 @@
 				$tname = $_FILES['userfile']['name'];
 				
 				//do some crude cleaning/sanitizing of the name (needs to be improved)
-				$name = strtr($tname, 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
+				$name = strtr($tname, 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½', 'AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy');
 				$name = preg_replace('/\s+/', '-', $name); //remove spaces
 				
 				
@@ -205,12 +205,12 @@
 	{
 		$source = @ImageCreateFromString(@file_get_contents($source));
 		
-		if (is_resource($source) === true)
+		if (is_resource($source) == true)
 		{			
 			$size = array(ImageSX($source), ImageSY($source));
 			
 			//check to see if the source image is the same size as required destination
-			if (isset($scale) === true)
+			if (isset($scale) == true)
 			{
 				$scale = array_filter(explode('*', $scale), 'is_numeric');
 				//echo var_dump($size);
@@ -231,7 +231,7 @@
 				}
 			}
 			
-			if (isset($crop) === true)
+			if (isset($crop) == true)
 			{
 					$crop = array_filter(explode('/', $crop), 'is_numeric');
 
@@ -263,18 +263,18 @@
 					$crop = array(0, 0);
 			}
 
-			if (isset($scale) === true)
+			if (isset($scale) == true)
 			{
 					//$scale = array_filter(explode('*', $scale), 'is_numeric');
 
 					if (count($scale) >= 1)
 					{
-							if (empty($scale[0]) === true)
+							if (empty($scale[0]) == true)
 							{
 									$scale[0] = $scale[1] * $size[0] / $size[1];
 							}
 
-							else if (empty($scale[1]) === true)
+							else if (empty($scale[1]) == true)
 							{
 									$scale[1] = $scale[0] * $size[1] / $size[0];
 							}
@@ -293,13 +293,13 @@
 
 			$result = ImageCreateTrueColor($scale[0], $scale[1]);
 
-			if (is_resource($result) === true)
+			if (is_resource($result) == true)
 			{
 				ImageFill($result, 0, 0, IMG_COLOR_TRANSPARENT);
 				ImageSaveAlpha($result, true);
 				ImageAlphaBlending($result, true);
 
-				if (ImageCopyResampled($result, $source, 0, 0, $crop[0] / 2, $crop[1] / 2, $scale[0], $scale[1], $size[0], $size[1]) === true)
+				if (ImageCopyResampled($result, $source, 0, 0, $crop[0] / 2, $crop[1] / 2, $scale[0], $scale[1], $size[0], $size[1]) == true)
 				{
 					//origpath
 					$origpath = $destination.".".$extension;

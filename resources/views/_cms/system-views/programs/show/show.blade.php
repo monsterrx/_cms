@@ -64,7 +64,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <div class="lead">Status:  @if($show->is_active === 0) <span class="badge badge-danger">Inactive</span> @else <span class="badge badge-success">Active</span> @endif</div>
+                            <div class="lead">Status:  @if($show->is_active == 0) <span class="badge badge-danger">Inactive</span> @else <span class="badge badge-success">Active</span> @endif</div>
                         </div>
                     </div>
                 </div>
@@ -240,17 +240,17 @@
                                 <div class="form-group">
                                     <label class="label" for="is_special">Specials</label>
                                     <select id="is_special" name="is_special" class="custom-select">
-                                        @if($show->is_special === 1)
+                                        @if($show->is_special == 1)
                                             <option value="1" selected>Yes</option>
                                             <option value="0">No</option>
                                             <option value="2">Weekend Show</option>
                                         @endif
-                                        @if($show->is_special === 0)
+                                        @if($show->is_special == 0)
                                             <option value="1">Yes</option>
                                             <option value="0" selected>No</option>
                                             <option value="2">Weekend Show</option>
                                         @endif
-                                        @if($show->is_special === 2)
+                                        @if($show->is_special == 2)
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                             <option value="2" selected>Weekend Show</option>
@@ -262,11 +262,11 @@
                                 <div class="form-group">
                                     <label class="label" for="is_active">Active</label>
                                     <select id="is_active" name="is_active" class="custom-select">
-                                        @if($show->is_active === 1)
+                                        @if($show->is_active == 1)
                                             <option value="1" selected>Yes</option>
                                             <option value="0">No</option>
                                         @endif
-                                        @if($show->is_active === 0)
+                                        @if($show->is_active == 0)
                                                 <option value="1">Yes</option>
                                                 <option value="0" selected>No</option>
                                         @endif

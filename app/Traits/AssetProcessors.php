@@ -61,21 +61,21 @@ trait AssetProcessors {
     public function storeAsset($directory, $asset_name, $source) {
         Storage::disk($directory)->put($asset_name, file_get_contents($source));
 
-        if($this->getStationCode() === 'mnl') {
+        if($this->getStationCode() == 'mnl') {
             Storage::disk('cbu_'.$directory.'')->put($asset_name, file_get_contents($source));
             Storage::disk('cbu_'.$directory.'_cms')->put($asset_name, file_get_contents($source));
             Storage::disk('dav_'.$directory.'')->put($asset_name, file_get_contents($source));
             Storage::disk('dav_'.$directory.'_cms')->put($asset_name, file_get_contents($source));
         }
 
-        if($this->getStationCode() === 'cbu') {
+        if($this->getStationCode() == 'cbu') {
             Storage::disk('mnl_'.$directory.'')->put($asset_name, file_get_contents($source));
             Storage::disk('mnl_'.$directory.'_cms')->put($asset_name, file_get_contents($source));
             Storage::disk('dav_'.$directory.'')->put($asset_name, file_get_contents($source));
             Storage::disk('dav_'.$directory.'_cms')->put($asset_name, file_get_contents($source));
         }
 
-        if($this->getStationCode() === 'dav') {
+        if($this->getStationCode() == 'dav') {
             Storage::disk('mnl_'.$directory.'')->put($asset_name, file_get_contents($source));
             Storage::disk('mnl_'.$directory.'_cms')->put($asset_name, file_get_contents($source));
             Storage::disk('cbu_'.$directory.'')->put($asset_name, file_get_contents($source));

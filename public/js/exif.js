@@ -358,7 +358,7 @@
         http.open("GET", url, true);
         http.responseType = "blob";
         http.onload = function(e) {
-            if (this.status == 200 || this.status === 0) {
+            if (this.status == 200 || this.status == 0) {
                 callback(this.response);
             }
         };
@@ -396,7 +396,7 @@
             } else {
                 var http = new XMLHttpRequest();
                 http.onload = function() {
-                    if (this.status == 200 || this.status === 0) {
+                    if (this.status == 200 || this.status == 0) {
                         handleBinaryFile(http.response);
                     } else {
                         throw "Could not load image";
@@ -473,12 +473,12 @@
 
         var isFieldSegmentStart = function(dataView, offset){
             return (
-                dataView.getUint8(offset) === 0x38 &&
-                dataView.getUint8(offset+1) === 0x42 &&
-                dataView.getUint8(offset+2) === 0x49 &&
-                dataView.getUint8(offset+3) === 0x4D &&
-                dataView.getUint8(offset+4) === 0x04 &&
-                dataView.getUint8(offset+5) === 0x04
+                dataView.getUint8(offset) == 0x38 &&
+                dataView.getUint8(offset+1) == 0x42 &&
+                dataView.getUint8(offset+2) == 0x49 &&
+                dataView.getUint8(offset+3) == 0x4D &&
+                dataView.getUint8(offset+4) == 0x04 &&
+                dataView.getUint8(offset+5) == 0x04
             );
         };
 
@@ -490,7 +490,7 @@
                 var nameHeaderLength = dataView.getUint8(offset+7);
                 if(nameHeaderLength % 2 !== 0) nameHeaderLength += 1;
                 // Check for pre photoshop 6 format
-                if(nameHeaderLength === 0) {
+                if(nameHeaderLength == 0) {
                     // Always 4
                     nameHeaderLength = 4;
                 }
@@ -529,7 +529,7 @@
         var fieldValue, fieldName, dataSize, segmentType, segmentSize;
         var segmentStartPos = startOffset;
         while(segmentStartPos < startOffset+sectionLength) {
-            if(dataView.getUint8(segmentStartPos) === 0x1C && dataView.getUint8(segmentStartPos+1) === 0x02){
+            if(dataView.getUint8(segmentStartPos) == 0x1C && dataView.getUint8(segmentStartPos+1) == 0x02){
                 segmentType = dataView.getUint8(segmentStartPos+2);
                 if(segmentType in IptcFieldMap) {
                     dataSize = dataView.getInt16(segmentStartPos+3);
@@ -1050,7 +1050,7 @@
         return findEXIFinJPEG(file);
     }
 
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define == 'function' && define.amd) {
         define('exif-js', [], function() {
             return EXIF;
         });

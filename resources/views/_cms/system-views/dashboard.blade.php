@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="my-4"></div>
-        @if(Auth::user()->Employee->Designation->level === 1 || Auth::user()->Employee->Designation->level === 2 || Auth::user()->Employee->Designation->level === 7)
+        @if(Auth::user()->Employee->Designation->level == 1 || Auth::user()->Employee->Designation->level == 2 || Auth::user()->Employee->Designation->level == 7)
             @if($chart->isEmpty())
                 <div class="col-md-12">
                     <div class="alert alert-info text-center h5 text-info">
@@ -27,10 +27,10 @@
                 </div>
             @else
                 <div class="col-md-12">
-                    <h5 class="h5"><i class="fa fa-music mr-3"></i>Monster Hit of the Week: {{ date('F d, Y', strtotime($where)) }} @if($chart->first()->is_posted === 0) <sup class="badge badge-pill badge-success">Draft</sup> @elseif($chart->first()->is_posted === 1) <sup class="badge badge-pill badge-info">Official</sup> @else <sup>Undefined</sup> @endif</h5>
+                    <h5 class="h5"><i class="fa fa-music mr-3"></i>Monster Hit of the Week: {{ date('F d, Y', strtotime($where)) }} @if($chart->first()->is_posted == 0) <sup class="badge badge-pill badge-success">Draft</sup> @elseif($chart->first()->is_posted == 1) <sup class="badge badge-pill badge-info">Official</sup> @else <sup>Undefined</sup> @endif</h5>
                 </div>
                 @forelse($chart as $charts)
-                    @if($charts->position === 1)
+                    @if($charts->position == 1)
                         <div class="col-md-4 col-sm-4">
                             <div class="card">
                                 <img class="card-img-top" src="{{ $charts->Song->Album->image }}" alt="{{ $charts->Song->Album->name }}">
@@ -44,7 +44,7 @@
                                                 <p class="lead text-center">
                                                     {{ $charts->Song->Album->Artist->name }}
                                                     <br>
-                                                    {{ $charts->Song->Album->name }} @if($charts->Song->Album->type === 'single' || $charts->Song->Album->type === 'Single' || $charts->Song->Album->type === 'Sigle') &mdash; Single @endif
+                                                    {{ $charts->Song->Album->name }} @if($charts->Song->Album->type == 'single' || $charts->Song->Album->type == 'Single' || $charts->Song->Album->type == 'Sigle') &mdash; Single @endif
                                                 </p>
                                             </div>
                                         </div>
@@ -213,7 +213,7 @@
                     <hr class="my-4">
                     <div class="row justify-content-center">
                         @foreach($data['outbreaks'] as $outbreak)
-                            @if($outbreak->Song->type === 'spotify')
+                            @if($outbreak->Song->type == 'spotify')
                                 <div class="col-md-6">
                                     <div class="embed-container" style="max-width: 100%; margin: 15%;">
                                         <iframe src="https://open.spotify.com/embed/track/{{ $outbreak->track_link }}" frameborder="0" allowtransparency="true" allow="encrypted-media" height="380px"></iframe>
@@ -237,7 +237,7 @@
                                             @else
                                                 <p class="card-text" style="margin-bottom: 0">{{ $outbreak->Song->Album->Artist->name }}</p>
                                             @endif
-                                            @if($outbreak->Song->Album->type === 'Single' || $outbreak->Song->Album->type === 'EP')
+                                            @if($outbreak->Song->Album->type == 'Single' || $outbreak->Song->Album->type == 'EP')
                                                 @if(strlen($res) > 30)
                                                     <marquee><small>{{ $res }}</small></marquee>
                                                 @else
@@ -293,16 +293,16 @@
                                     <div class="card zoom mx-3 my-3" data-href="{{ route('giveaways.show', $giveaways->id) }}" onclick="viewData()">
                                         <div class="card-body text-muted text-center">
                                             <div class="lead">{{ Str::limit($giveaways->name, $limit = 20, $end = '...') }}</div>
-                                            @if($giveaways->type === 'movies')
+                                            @if($giveaways->type == 'movies')
                                                 <div class="text-dark">Monster Movie Premiere</div>
-                                            @elseif($giveaways->type === 'concerts')
+                                            @elseif($giveaways->type == 'concerts')
                                                 <div class="text-dark">Monster Concert Tickets</div>
                                             @else
                                                 <div class="text-warning">Undefined</div>
                                             @endif
-                                            @if($giveaways->is_active === '0')
+                                            @if($giveaways->is_active == '0')
                                                 Status: <span class="text-danger">Inactive</span>
-                                            @elseif($giveaways->is_active === '1')
+                                            @elseif($giveaways->is_active == '1')
                                                 Status: <span class="text-success">Active</span>
                                             @else
                                                 <span class="text-warning">Undefined</span>
@@ -323,7 +323,7 @@
             </div>
             <div class="my-4"></div>
 
-        @elseif(Auth::user()->Employee->Designation->level === 6)
+        @elseif(Auth::user()->Employee->Designation->level == 6)
             <div class="my-4"></div>
             <div class="container">
                 <h4 class="h4"><i class="fa fa-user-tie ml-3 mr-3"></i>Employees</h4>

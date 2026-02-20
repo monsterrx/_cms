@@ -28,7 +28,7 @@ class MessageController extends Controller {
                 ->get();
 
 	        foreach ($newMessage as $message) {
-	            if($message->is_seen === 1) {
+	            if($message->is_seen == 1) {
 	                $message->is_seen = '<div class="text-success"><i class="fas fa-check-double"></i>  Seen</div>';
                 } else {
 	                $message->is_seen = '<div class="text-info"><i class="fas fa-circle"></i>  Unseen</div>';
@@ -45,7 +45,7 @@ class MessageController extends Controller {
             ->orderBy('created_at', 'desc')
             ->get();
 
-		if ($user === 1 || $user === 2 || $user === 6 || $user === 7) {
+		if ($user == 1 || $user == 2 || $user == 6 || $user == 7) {
 			return view('_cms.system-views.employeeUI.receptionist.messages', compact('message'));
 		}
 

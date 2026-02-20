@@ -4,12 +4,12 @@
 * Copyright 2015 jQuery Foundation and other contributors; Licensed MIT */
 
 (function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
+	if ( typeof define == "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
 		define([ "jquery" ], factory );
 
-	} else if ( typeof exports === "object" ) {
+	} else if ( typeof exports == "object" ) {
 
 		// Node/CommonJS
 		factory( require( "jquery" ) );
@@ -198,7 +198,7 @@ $.widget.extend = function( target ) {
 $.widget.bridge = function( name, object ) {
 	var fullName = object.prototype.widgetFullName || name;
 	$.fn[ name ] = function( options ) {
-		var isMethodCall = typeof options === "string",
+		var isMethodCall = typeof options == "string",
 			args = widget_slice.call( arguments, 1 ),
 			returnValue = this;
 
@@ -206,7 +206,7 @@ $.widget.bridge = function( name, object ) {
 			this.each(function() {
 				var methodValue,
 					instance = $.data( this, fullName );
-				if ( options === "instance" ) {
+				if ( options == "instance" ) {
 					returnValue = instance;
 					return false;
 				}
@@ -214,7 +214,7 @@ $.widget.bridge = function( name, object ) {
 					return $.error( "cannot call methods on " + name + " prior to initialization; " +
 						"attempted to call method '" + options + "'" );
 				}
-				if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) === "_" ) {
+				if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) == "_" ) {
 					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
 				}
 				methodValue = instance[ options ].apply( instance, args );
@@ -276,7 +276,7 @@ $.Widget.prototype = {
 			$.data( element, this.widgetFullName, this );
 			this._on( true, this.element, {
 				remove: function( event ) {
-					if ( event.target === element ) {
+					if ( event.target == element ) {
 						this.destroy();
 					}
 				}
@@ -337,12 +337,12 @@ $.Widget.prototype = {
 			curOption,
 			i;
 
-		if ( arguments.length === 0 ) {
+		if ( arguments.length == 0 ) {
 			// don't return a reference to the internal hash
 			return $.widget.extend( {}, this.options );
 		}
 
-		if ( typeof key === "string" ) {
+		if ( typeof key == "string" ) {
 			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
 			options = {};
 			parts = key.split( "." );
@@ -354,13 +354,13 @@ $.Widget.prototype = {
 					curOption = curOption[ parts[ i ] ];
 				}
 				key = parts.pop();
-				if ( arguments.length === 1 ) {
-					return curOption[ key ] === undefined ? null : curOption[ key ];
+				if ( arguments.length == 1 ) {
+					return curOption[ key ] == undefined ? null : curOption[ key ];
 				}
 				curOption[ key ] = value;
 			} else {
-				if ( arguments.length === 1 ) {
-					return this.options[ key ] === undefined ? null : this.options[ key ];
+				if ( arguments.length == 1 ) {
+					return this.options[ key ] == undefined ? null : this.options[ key ];
 				}
 				options[ key ] = value;
 			}
@@ -382,7 +382,7 @@ $.Widget.prototype = {
 	_setOption: function( key, value ) {
 		this.options[ key ] = value;
 
-		if ( key === "disabled" ) {
+		if ( key == "disabled" ) {
 			this.widget()
 				.toggleClass( this.widgetFullName + "-disabled", !!value );
 
@@ -430,11 +430,11 @@ $.Widget.prototype = {
 				// - disabled as an array instead of boolean
 				// - disabled class as method for disabling individual parts
 				if ( !suppressDisabledCheck &&
-						( instance.options.disabled === true ||
+						( instance.options.disabled == true ||
 							$( this ).hasClass( "ui-state-disabled" ) ) ) {
 					return;
 				}
-				return ( typeof handler === "string" ? instance[ handler ] : handler )
+				return ( typeof handler == "string" ? instance[ handler ] : handler )
 					.apply( instance, arguments );
 			}
 
@@ -468,7 +468,7 @@ $.Widget.prototype = {
 
 	_delay: function( handler, delay ) {
 		function handlerProxy() {
-			return ( typeof handler === "string" ? instance[ handler ] : handler )
+			return ( typeof handler == "string" ? instance[ handler ] : handler )
 				.apply( instance, arguments );
 		}
 		var instance = this;
@@ -505,7 +505,7 @@ $.Widget.prototype = {
 
 		data = data || {};
 		event = $.Event( event );
-		event.type = ( type === this.widgetEventPrefix ?
+		event.type = ( type == this.widgetEventPrefix ?
 			type :
 			this.widgetEventPrefix + type ).toLowerCase();
 		// the original event may come from any element
@@ -524,24 +524,24 @@ $.Widget.prototype = {
 
 		this.element.trigger( event, data );
 		return !( $.isFunction( callback ) &&
-			callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
+			callback.apply( this.element[0], [ event ].concat( data ) ) == false ||
 			event.isDefaultPrevented() );
 	}
 };
 
 $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
-		if ( typeof options === "string" ) {
+		if ( typeof options == "string" ) {
 			options = { effect: options };
 		}
 		var hasOptions,
 			effectName = !options ?
 				method :
-				options === true || typeof options === "number" ?
+				options == true || typeof options == "number" ?
 					defaultEffect :
 					options.effect || defaultEffect;
 		options = options || {};
-		if ( typeof options === "number" ) {
+		if ( typeof options == "number" ) {
 			options = { duration: options };
 		}
 		hasOptions = !$.isEmptyObject( options );

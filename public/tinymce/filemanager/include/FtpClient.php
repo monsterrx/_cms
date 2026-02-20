@@ -208,7 +208,7 @@ class FtpClient implements Countable
     {
         $result = $this->ftp->login($username, $password);
 
-        if ($result === false) {
+        if ($result == false) {
             throw new FtpException('Login incorrect');
         }
 
@@ -245,7 +245,7 @@ class FtpClient implements Countable
     {
         $result = @$this->ftp->cdup();
 
-        if ($result === false) {
+        if ($result == false) {
             throw new FtpException('Unable to get parent folder');
         }
 
@@ -276,7 +276,7 @@ class FtpClient implements Countable
 
         $files = $this->ftp->nlist($directory);
 
-        if ($files === false) {
+        if ($files == false) {
             throw new FtpException('Unable to list directory');
         }
 
@@ -324,7 +324,7 @@ class FtpClient implements Countable
             $file = $directory.'/'.$file;
 
             // if contains the root path (behavior of the recursivity)
-            if (0 === strpos($file, $directory, $dir_len)) {
+            if (0 == strpos($file, $directory, $dir_len)) {
                 $file = substr($file, $dir_len);
             }
 
@@ -469,7 +469,7 @@ class FtpClient implements Countable
     {
         $pwd = $this->ftp->pwd();
 
-        if ($pwd === false) {
+        if ($pwd == false) {
             throw new FtpException('Unable to resolve the current directory');
         }
 
@@ -491,7 +491,7 @@ class FtpClient implements Countable
      */
     public function isEmpty($directory)
     {
-        return $this->count($directory, null, false) === 0 ? true : false;
+        return $this->count($directory, null, false) == 0 ? true : false;
     }
 
     /**
@@ -539,12 +539,12 @@ class FtpClient implements Countable
      */
     public function count($directory = '.', $type = null, $recursive = true)
     {
-        $items  = (null === $type ? $this->nlist($directory, $recursive)
+        $items  = (null == $type ? $this->nlist($directory, $recursive)
             : $this->scanDir($directory, $recursive));
 
         $count = 0;
         foreach ($items as $item) {
-            if (null === $type or $item['type'] == $type) {
+            if (null == $type or $item['type'] == $type) {
                 $count++;
             }
         }
@@ -770,7 +770,7 @@ class FtpClient implements Countable
                 continue;
             }
 
-            if (count($chunks) === 1) {
+            if (count($chunks) == 1) {
                 $len = strlen($chunks[0]);
 
                 if ($len && $chunks[0][$len-1] == ':') {
@@ -808,7 +808,7 @@ class FtpClient implements Countable
             }
 
             // if the key is not the path, behavior of ftp_rawlist() PHP function
-            if (is_int($key) || false === strpos($key, $item['name'])) {
+            if (is_int($key) || false == strpos($key, $item['name'])) {
                 array_splice($chunks, 0, 8);
 
                 $key = $item['type'].'#'

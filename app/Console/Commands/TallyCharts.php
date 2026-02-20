@@ -65,7 +65,7 @@ class TallyCharts extends Command
             ->whereNull('deleted_at')
             ->max('dated');
 
-        if ($chart_type === 'charts') {
+        if ($chart_type == 'charts') {
             $charts = Chart::query()
                 ->where('daily', '=', 0)
                 ->where('local', '=', 0)
@@ -112,7 +112,7 @@ class TallyCharts extends Command
             Log::info("Tallied the votes for The Countdown Top 7 dated {$charts->first()->dated}");
             $this->info("Tallied the votes for The Countdown Top 7 dated {$charts->first()->dated}");
         }
-        else if ($chart_type === 'daily') {
+        else if ($chart_type == 'daily') {
             $dailyCharts = Chart::query()
                 ->where('daily', '=', 1)
                 ->where('local', '=', 0)

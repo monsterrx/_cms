@@ -47,7 +47,7 @@
                                 <button id="cropHeaderButton" type="button" class="btn btn-outline-dark" hidden>Crop</button>
                                 <button id="saveHeaderButton" type="submit" class="btn btn-outline-dark" hidden>Save</button>
                                 <button id="cancelHeaderButton" type="button" class="btn btn-outline-dark" data-role="none" hidden>Cancel</button>
-                                @if(Auth::user()->Employee->Designation->level === 5)
+                                @if(Auth::user()->Employee->Designation->level == 5)
                                     <a href="{{ route('jocks.profile', $jock->id) }}" id="doneHeaderButton" type="button" class="btn btn-outline-dark">Back</a>
                                 @else
                                     <a href="{{ route('jocks.show', $jock->id) }}" id="doneHeaderButton" type="button" class="btn btn-outline-dark">Back</a>

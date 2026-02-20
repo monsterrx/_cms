@@ -109,7 +109,7 @@
 
 			// MJP: Check fails, since it is not on the page yet.
 /*			$.each($.jPlayer.event, function(eventName,eventType) {
-				if($("#" + config.eventId[eventType])[0] === undefined) {
+				if($("#" + config.eventId[eventType])[0] == undefined) {
 					structure += '<div id="' + config.eventId[eventType] + '" style="clear:left;' + eventStyle + '">' + eventName + '</div>';
 				}
 			});
@@ -329,7 +329,7 @@
 		// Method calling logic
 		if ( methods[method] ) {
 			return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-		} else if ( typeof method === 'object' || ! method ) {
+		} else if ( typeof method == 'object' || ! method ) {
 			return methods.init.apply( this, arguments );
 		} else {
 			$.error( 'Method ' +  method + ' does not exist on jQuery.jPlayerInspector' );

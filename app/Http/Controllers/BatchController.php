@@ -116,7 +116,7 @@ class BatchController extends Controller {
             $school_year_start = $request['start_year'];
             $school_year_end = $request['end_year'];
 
-            if ($school_year_start > $school_year_end || $school_year_start === $school_year_end) {
+            if ($school_year_start > $school_year_end || $school_year_start == $school_year_end) {
                 return redirect()->back()->withErrors(['Error attained', 'school year start must be earlier than school year end and not equal']);
             }
 
@@ -181,7 +181,7 @@ class BatchController extends Controller {
             $school_year_start = $request['start_year'];
             $school_year_end = $request['end_year'];
 
-            if ($school_year_start > $school_year_end || $school_year_start === $school_year_end) {
+            if ($school_year_start > $school_year_end || $school_year_start == $school_year_end) {
                 return redirect()->back()->withErrors(['Error attained', 'School year start must be earlier than school year end and not equal']);
             }
 
@@ -271,7 +271,7 @@ class BatchController extends Controller {
 		$student = '';
 		$sponsor = '';
 
-		if ($request['param'] === 'student') {
+		if ($request['param'] == 'student') {
 			$student = Student::select(DB::raw('CONCAT(first_name, last_name) as student_name'), 'id')
                 ->orderBy('student_name')
                 ->get();
@@ -280,7 +280,7 @@ class BatchController extends Controller {
 			return view('_cms.system-views.education.monsterScholar.batch.html.add_student', compact('data'));
 		}
 
-		if ($request['param'] === 'sponsor') {
+		if ($request['param'] == 'sponsor') {
 			$sponsor = Sponsor::orderBy('sponsor_name')->get();
 
 			$data = array('student' => $student, 'sponsor' => $sponsor);
@@ -302,7 +302,7 @@ class BatchController extends Controller {
 			return redirect()->back()->withErrors(['Model Error', 'Data not Found!']);
 		}
 
-		if ($request['param'] === 'student') {
+		if ($request['param'] == 'student') {
 
             $param->Student()->detach($request['id']);
 
@@ -314,7 +314,7 @@ class BatchController extends Controller {
             return redirect()->route('batch.update', $param['id']);
 		}
 
-		if ($request['param'] === 'sponsor'){
+		if ($request['param'] == 'sponsor'){
 
             $param->Sponsor()->detach($request['id']);
 

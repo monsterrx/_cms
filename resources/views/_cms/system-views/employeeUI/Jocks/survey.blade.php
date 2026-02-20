@@ -11,7 +11,7 @@
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             @foreach($show as $shows)
-                @if($shows->id === 4)
+                @if($shows->id == 4)
                     {{-- The Daily Survey --}}
                     <li class="nav-item">
                         <a href="{{ route('charts.daily') }}" class="nav-link">Daily Survey Top 5</a>
@@ -47,7 +47,7 @@
             <div class="h3 mb-0">Monster Hit List Song Votes</div>
             <p class="lead mb-0">{{ date('F d, Y', strtotime($latestChartDate)) }}</p>
             <br>
-            @if(Auth::user()->Employee->Designation->level === '8')
+            @if(Auth::user()->Employee->Designation->level == '8')
                 <div class="row">
                     <div class="col-md-12">
                         <div class="fa-pull-right">

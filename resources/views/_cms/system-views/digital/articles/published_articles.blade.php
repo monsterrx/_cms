@@ -36,13 +36,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="btn-group fa-pull-left">
-                @if($previous === null || $previous === 'null' || !$previous)
+                @if($previous == null || $previous == 'null' || !$previous)
                     <button type="previous" data-href="{{ $previous }}" data-article="published" class="btn btn-outline-dark" readonly disabled><i class="fas fa-arrow-left"></i>  Previous Page</button>
                 @else
                     <button type="previous" data-href="{{ $previous }}" data-article="published" class="btn btn-outline-dark"><i class="fas fa-arrow-left"></i>  Previous Page</button>
                 @endif
 
-                @if($next === null || $next === 'null' || !$next)
+                @if($next == null || $next == 'null' || !$next)
                     <button type="next" data-href="{{ $next }}" data-article="published" class="btn btn-outline-dark" readonly disabled>Next Page <i class="fas fa-arrow-right"></i></button>
                 @else
                     <button type="next" data-href="{{ $next }}" data-article="published" class="btn btn-outline-dark">Next Page <i class="fas fa-arrow-right"></i></button>
