@@ -25,6 +25,7 @@ use App\Http\Controllers\JockController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MobileAppAssetController;
 use App\Http\Controllers\MobileAppTitleController;
+use App\Http\Controllers\MusicAwardsController;
 use App\Http\Controllers\OutbreakController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PodcastController;
@@ -272,6 +273,14 @@ Route::middleware('auth')->group(function() {
         Route::post('/store', [StreamLinkController::class, 'store'])->name('streaming.store');
         Route::put('/update/{id}', [StreamLinkController::class, 'update'])->name('streaming.update');
         Route::delete('/delete/{id}', [StreamLinkController::class, 'destroy'])->name('streaming.destroy');
+    });
+
+    Route::prefix('monster_music_awards')->group(function() {
+        Route::get('', [MusicAwardsController::class, 'index'])->name('mma.index');
+        Route::get('/{id}', [MusicAwardsController::class, 'show'])->name('mma.show');
+        Route::post('/store', [MusicAwardsController::class, 'store'])->name('mma.store');
+        Route::match(['put', 'patch'], '/update/{id}', [MusicAwardsController::class, 'update'])->name('mma.update');
+        Route::delete('/delete/{id}', [MusicAwardsController::class, 'delete'])->name('mma.delete');
     });
 });
 
