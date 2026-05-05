@@ -15,8 +15,18 @@ use Illuminate\Support\Facades\Storage;
 
 class SongController extends Controller {
 
-	public function index()
+	public function index(Request $request)
 	{
+        if ($request->ajax()) {
+            $songs = Song::whereNull('deleted_at')
+                ->orderBy('name')
+                ->get();
+
+            return response()->json([
+                'songs' => $songs
+            ]);
+        }
+
 		$song = Song::whereNull('deleted_at')
             ->orderBy('name')
             ->get();

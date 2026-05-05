@@ -2622,9 +2622,452 @@
                 $('button[type="submit"]').removeAttr('disabled');
 
                 // Optional: Refresh your table or component here
-                if (typeof categoriesTable == 'function') {
+                if (typeof categoriesTable !== 'undefined') {
                     categoriesTable.ajax.reload(null, false);
                 }
+            }
+        );
+    });
+
+    $(document).on('change', '#award_type', function () {
+        resetAwardTypeDropdowns();
+        toggleAwardTypeFields($(this).val());
+    });
+
+    $(document).on('click', '[href="#music-award-release-modal"][data-toggle="modal"]', function (e) {
+        e.preventDefault();
+
+        const actionType = $(this).data('action');
+        const id = $(this).data('id');
+        const url = $(this).data('url');
+        const form = $('#musicAwardReleaseForm');
+
+        form[0].reset();
+        form.find('input[name="_method"]').remove();
+        form.attr('action', '{{ route('mma-releases.store') }}');
+
+        $('#music-award-release-title').text('New Music Awards Release');
+        $('#music-award-release-banner-preview').attr('src', '{{ asset('images/_assets/default.png') }}');
+        $('#banner_image').val('');
+        $('#release_is_live').val('0');
+        $('#musicAwardReleaseSubmitButton').removeAttr('disabled').text('Save');
+        $('#music-award-release-cropper-container').addClass('d-none');
+
+        if ($('#musicAwardReleaseCropper').hasClass('croppie-container')) {
+            try { $('#musicAwardReleaseCropper').croppie('destroy'); } catch (e) {}
+            musicAwardReleaseCroppieInitialized = false;
+        }
+
+        if (actionType === 'edit') {
+            $('#music-award-release-title').text('Edit Music Awards Release');
+            form.attr('action', url);
+            form.append('<input type="hidden" name="_method" value="PATCH">');
+
+            getAsync(
+                '{{ route('mma-releases.index') }}/show/' + id,
+                {},
+                'JSON',
+                function () {
+                    $('#musicAwardReleaseSubmitButton').attr('disabled', true).text('Loading...');
+                },
+                function (result) {
+                    const release = result.release;
+
+                    $('#release_year').val(release.release);
+                    $('#release_is_live').val(String(parseInt(release.is_live || 0)));
+                    $('#music-award-release-banner-preview').attr(
+                        'src',
+                        release.banner_image ? release.banner_image : '{{ asset('images/_assets/default.png') }}'
+                    );
+
+                    $('#musicAwardReleaseSubmitButton').removeAttr('disabled').text('Save');
+                }
+            );
+        }
+
+        $('#music-award-release-modal').modal('show');
+    });
+
+    $(document).on('submit', '#musicAwardReleaseForm', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = $(this).attr('action');
+
+        postAsync(
+            url,
+            formData,
+            'JSON',
+            function () {
+                $('#musicAwardReleaseSubmitButton').attr('disabled', true).text('Saving...');
+                manualToast.fire({
+                    icon: 'info',
+                    title: 'Processing request please wait'
+                });
+            },
+            function (result) {
+                $('#music-award-release-modal').modal('hide');
+                $('#musicAwardReleaseSubmitButton').removeAttr('disabled').text('Save');
+                musicAwardsReleasesTable.ajax.reload(null, false);
+
+                Toast.fire({
+                    icon: result.status ?? 'success',
+                    title: result.message ?? 'Release saved'
+                });
+            }
+        );
+    });
+
+    $(document).on('click', '#delete-mma-release-toggler', function () {
+        const name = $(this).data('name');
+        const url = $(this).data('url');
+
+        $('#deleteMusicAwardReleaseForm').attr('action', url);
+        $('#delete-mma-release-body').html('Are you sure you want to delete <strong>' + name + '</strong>?');
+    });
+
+    $(document).on('submit', '#deleteMusicAwardReleaseForm', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = $(this).attr('action');
+
+        postAsync(
+            url,
+            formData,
+            'JSON',
+            function () {
+                manualToast.fire({
+                    icon: 'info',
+                    title: 'Deleting release please wait'
+                });
+            },
+            function (result) {
+                $('#delete-mma-release').modal('hide');
+                musicAwardsReleasesTable.ajax.reload(null, false);
+
+                Toast.fire({
+                    icon: result.status ?? 'success',
+                    title: result.message ?? 'Release deleted'
+                });
+            }
+        );
+    });
+
+    $(document).on('click', '#view-release-awards-toggler', function () {
+        const releaseId = $(this).data('id');
+        const releaseName = $(this).data('release');
+
+        $('#view-release-awards-title').text('Release Winners - ' + releaseName);
+
+        if ($.fn.DataTable.isDataTable('#releaseAwardsTable')) {
+            $('#releaseAwardsTable').DataTable().clear().destroy();
+        }
+
+        releaseAwardsTable = $('#releaseAwardsTable').DataTable({
+            ajax: {
+                url: '{{ url('music_awards/releases') }}/' + releaseId + '/awards',
+                dataSrc: 'awards'
+            },
+            columns: [
+                { data: 'id', title: 'ID' },
+                { data: 'award_name', title: 'Award Name' },
+                { data: 'award_type', title: 'Type' },
+                { data: 'awardee', title: 'Awardee' },
+                {
+                    data: 'is_featured',
+                    title: 'Featured',
+                    render: function (data) {
+                        return parseInt(data)
+                            ? '<span class="badge badge-primary">Yes</span>'
+                            : '<span class="badge badge-light">No</span>';
+                    }
+                },
+                { data: 'image_preview', title: 'Image', orderable: false, searchable: false }
+            ],
+            order: [[0, 'desc']]
+        });
+    });
+
+    function resetAwardTypeDropdowns() {
+        $('#artist_id').html('<option value="">Please select an artist</option>');
+        $('#album_id').html('<option value="">Please select an album</option>');
+        $('#song_id').html('<option value="">Please select a song</option>');
+    }
+
+    function populateDropdown(selector, items, labelKey = 'name', defaultText = 'Please select') {
+        let options = `<option value="">${defaultText}</option>`;
+        $.each(items, function (_, item) {
+            options += `<option value="${item.id}">${item[labelKey]}</option>`;
+        });
+        $(selector).html(options);
+    }
+
+    function loadArtistsDropdown(selectedId = '') {
+        return $.ajax({
+            url: '{{ route('reload.artists') }}',
+            type: 'GET',
+            dataType: 'JSON'
+        }).done(function (result) {
+            populateDropdown('#artist_id', result, 'name', 'Please select an artist');
+            if (selectedId) $('#artist_id').val(String(selectedId));
+        });
+    }
+
+    function loadAlbumsDropdown(selectedId = '') {
+        return $.ajax({
+            url: '{{ route('albums.index') }}',
+            type: 'GET',
+            dataType: 'JSON'
+        }).done(function (result) {
+            const albums = result.albums || result.data || result;
+            populateDropdown('#album_id', albums, 'name', 'Please select an album');
+            if (selectedId) $('#album_id').val(String(selectedId));
+        });
+    }
+
+    function loadSongsDropdown(selectedId = '') {
+        return $.ajax({
+            url: '{{ route('songs.index') }}',
+            type: 'GET',
+            dataType: 'JSON'
+        }).done(function (result) {
+            const songs = result.songs || result.data || result;
+            populateDropdown('#song_id', songs, 'name', 'Please select a song');
+            if (selectedId) $('#song_id').val(String(selectedId));
+        });
+    }
+
+    function toggleAwardTypeFields(type, selectedId = '') {
+        $('#artist-group, #album-group, #song-group').addClass('d-none');
+        $('#artist_id, #album_id, #song_id').val('');
+
+        if (type === 'artist') {
+            $('#artist-group').removeClass('d-none');
+            return loadArtistsDropdown(selectedId);
+        }
+
+        if (type === 'album') {
+            $('#album-group').removeClass('d-none');
+            return loadAlbumsDropdown(selectedId);
+        }
+
+        if (type === 'song') {
+            $('#song-group').removeClass('d-none');
+            return loadSongsDropdown(selectedId);
+        }
+
+        return $.Deferred().resolve().promise();
+    }
+
+    $(document).on('change', '#award_type', function () {
+        resetAwardTypeDropdowns();
+        toggleAwardTypeFields($(this).val());
+    });
+
+    $(document).on('click', '[href="#music-award-modal"][data-toggle="modal"]', function (e) {
+        e.preventDefault();
+
+        const actionType = $(this).data('action');
+        const id = $(this).data('id');
+        const url = $(this).data('url');
+        const releaseId = $(this).data('release-id');
+        const form = $('#musicAwardForm');
+
+        form[0].reset();
+        form.find('input[name="_method"]').remove();
+        form.attr('action', '/music_awards/releases/' + releaseId + '/awards/store');
+
+        $('#music-award-title').text('New Music Award');
+        $('#music-award-image-preview').attr('src', '{{ asset('images/_assets/default.png') }}');
+        $('#music_award_image').val('');
+        $('#is_featured').val('0');
+        resetAwardTypeDropdowns();
+        $('#music-award-cropper-container').addClass('d-none');
+
+        if ($('#musicAwardCropper').hasClass('croppie-container')) {
+            try { $('#musicAwardCropper').croppie('destroy'); } catch (e) {}
+            musicAwardCroppieInitialized = false;
+        }
+
+        if (actionType === 'edit') {
+            $('#music-award-title').text('Edit Music Award');
+            form.attr('action', url);
+            form.append('<input type="hidden" name="_method" value="PATCH">');
+
+            getAsync(
+                '{{ route('mma-awards.show', ['awardId' => '__ID__']) }}'.replace('__ID__', id),
+                {},
+                'JSON',
+                function () {
+                    $('#musicAwardSubmitButton').attr('disabled', true).text('Loading...');
+                },
+                function (result) {
+                    const award = result.award;
+
+                    $('#award_name').val(award.award_name);
+                    $('#is_featured').val(String(parseInt(award.is_featured || 0)));
+                    $('#music-award-image-preview').attr(
+                        'src',
+                        award.image ? award.image : '{{ asset('images/_assets/default.png') }}'
+                    );
+
+                    $('#award_type').val(award.award_type);
+
+                    if (award.award_type === 'artist') {
+                        toggleAwardTypeFields('artist', award.artist_id);
+                    } else if (award.award_type === 'album') {
+                        toggleAwardTypeFields('album', award.album_id);
+                    } else if (award.award_type === 'song') {
+                        toggleAwardTypeFields('song', award.song_id);
+                    }
+
+                    $('#musicAwardSubmitButton').removeAttr('disabled').text('Save');
+                }
+            );
+        }
+
+        $('#music-award-modal').modal('show');
+    });
+
+    $(document).on('change', '#music_award_image', function () {
+        const input = this;
+        const $cropper = $('#musicAwardCropper');
+
+        if (!input.files || !input.files[0]) return;
+
+        if (musicAwardCroppieInitialized) {
+            $cropper.croppie('destroy');
+            musicAwardCroppieInitialized = false;
+        }
+
+        $('#music-award-cropper-container').removeClass('d-none');
+
+        $cropper.croppie({
+            enableExif: true,
+            viewport: {
+                width: 320,
+                height: 180,
+                type: 'square'
+            },
+            boundary: {
+                width: 640,
+                height: 360
+            }
+        });
+
+        musicAwardCroppieInitialized = true;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $cropper.croppie('bind', {
+                url: e.target.result
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    });
+
+    $(document).on('click', '#cropMusicAwardButton', function () {
+        const $cropper = $('#musicAwardCropper');
+
+        if (!musicAwardCroppieInitialized) return;
+
+        $cropper.croppie('result', {
+            type: 'blob',
+            size: { width: 1280, height: 720 },
+            format: 'png',
+            quality: 1
+        }).then(function (blob) {
+            const previewUrl = URL.createObjectURL(blob);
+            $('#music-award-image-preview').attr('src', previewUrl);
+
+            const croppedFile = new File([blob], 'music-award-cropped.png', { type: 'image/png' });
+            const dt = new DataTransfer();
+            dt.items.add(croppedFile);
+
+            document.getElementById('music_award_image').files = dt.files;
+            $('#music-award-cropper-container').addClass('d-none');
+        });
+    });
+
+    $(document).on('click', '#cancelMusicAwardCropButton', function () {
+        const $cropper = $('#musicAwardCropper');
+
+        if (musicAwardCroppieInitialized) {
+            $cropper.croppie('destroy');
+            musicAwardCroppieInitialized = false;
+        }
+
+        $('#music-award-cropper-container').addClass('d-none');
+        $('#music_award_image').val('');
+    });
+
+    $(document).on('submit', '#musicAwardForm', function (e) {
+        e.preventDefault();
+
+        const url = $(this).attr('action');
+        const formData = new FormData(this);
+
+        postAsync(
+            url,
+            formData,
+            'JSON',
+            function () {
+                $('#musicAwardSubmitButton').attr('disabled', true).text('Saving...');
+                manualToast.fire({
+                    icon: 'info',
+                    title: 'Processing request please wait'
+                });
+            },
+            function (result) {
+                $('#music-award-modal').modal('hide');
+                $('#musicAwardSubmitButton').removeAttr('disabled').text('Save');
+                if (typeof musicAwardsTable !== 'undefined') {
+                    musicAwardsTable.ajax.reload(null, false);
+                }
+
+                Toast.fire({
+                    icon: result.status ?? 'success',
+                    title: result.message ?? 'Award saved'
+                });
+            }
+        );
+    });
+
+    $(document).on('click', '#delete-mma-toggler', function () {
+        const name = $(this).data('name');
+        const url = $(this).data('url');
+
+        $('#deleteMusicAwardForm').attr('action', url);
+        $('#delete-mma-body').html('Are you sure you want to delete <strong>' + name + '</strong>?');
+    });
+
+    $(document).on('submit', '#deleteMusicAwardForm', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = $(this).attr('action');
+
+        postAsync(
+            url,
+            formData,
+            'JSON',
+            function () {
+                manualToast.fire({
+                    icon: 'info',
+                    title: 'Deleting award please wait'
+                });
+            },
+            function (result) {
+                $('#delete-mma').modal('hide');
+                if (typeof musicAwardsTable !== 'undefined') {
+                    musicAwardsTable.ajax.reload(null, false);
+                }
+
+                Toast.fire({
+                    icon: result.status ?? 'success',
+                    title: result.message ?? 'Award deleted'
+                });
             }
         );
     });

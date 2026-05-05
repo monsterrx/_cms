@@ -142,7 +142,7 @@
         }
 
         function onSuccess(result) {
-            $('#update_song_artist_id, #song_artist_id, #album_artist_id').append(result);
+            $('#update_song_artist_id, #song_artist_id, #album_artist_id, #artist_id').append(result);
         }
     }
 
@@ -549,5 +549,106 @@
             age--;
         }
         return age;
+    }
+
+    function setMusicAwardSubmitState(disabled, text = 'Save') {
+        $('#musicAwardSubmitButton').prop('disabled', disabled).text(text);
+    }
+
+    function resetAwardTypeDropdowns() {
+        $('#artist_id').html('<option value="">Please select an artist</option>');
+        $('#album_id').html('<option value="">Please select an album</option>');
+        $('#song_id').html('<option value="">Please select a song</option>');
+    }
+
+    function populateDropdown(selector, items, labelKey = 'name', defaultText = 'Please select') {
+        let options = `<option value="">${defaultText}</option>`;
+
+        $.each(items, function (_, item) {
+            options += `<option value="${item.id}">${item[labelKey]}</option>`;
+        });
+
+        $(selector).html(options);
+    }
+
+    function loadArtistsDropdown(selectedId = '') {
+        return $.ajax({
+            url: '{{ route('reload.artists') }}',
+            type: 'GET',
+            dataType: 'JSON'
+        }).done(function (result) {
+            const artists = result.artists || result.data || result;
+            populateDropdown('#artist_id', artists, 'name', 'Please select an artist');
+
+            if (selectedId) {
+                $('#artist_id').val(String(selectedId));
+            }
+        });
+    }
+
+    function loadAlbumsDropdown(selectedId = '') {
+        return $.ajax({
+            url: '{{ route('albums.index') }}',
+            type: 'GET',
+            dataType: 'JSON'
+        }).done(function (result) {
+            const albums = result.albums || result.data || result;
+            populateDropdown('#album_id', albums, 'name', 'Please select an album');
+
+            if (selectedId) {
+                $('#album_id').val(String(selectedId));
+            }
+        });
+    }
+
+    function loadSongsDropdown(selectedId = '') {
+        return $.ajax({
+            url: '{{ route('songs.index') }}',
+            type: 'GET',
+            dataType: 'JSON'
+        }).done(function (result) {
+            const songs = result.songs || result.data || result;
+            populateDropdown('#song_id', songs, 'name', 'Please select a song');
+
+            if (selectedId) {
+                $('#song_id').val(String(selectedId));
+            }
+        });
+    }
+
+    function toggleAwardTypeFields(type, selectedId = '') {
+        $('#artist-group, #album-group, #song-group').addClass('d-none');
+        $('#artist_id, #album_id, #song_id').val('');
+
+        if (!type) {
+            setMusicAwardSubmitState(false, 'Save');
+            return $.Deferred().resolve().promise();
+        }
+
+        setMusicAwardSubmitState(true, 'Loading...');
+
+        if (type === 'artist') {
+            $('#artist-group').removeClass('d-none');
+            return loadArtistsDropdown(selectedId).always(function () {
+                setMusicAwardSubmitState(false, 'Save');
+            });
+        }
+
+        if (type === 'album') {
+            $('#album-group').removeClass('d-none');
+            return loadAlbumsDropdown(selectedId).always(function () {
+                setMusicAwardSubmitState(false, 'Save');
+            });
+        }
+
+        if (type === 'song') {
+            $('#song-group').removeClass('d-none');
+            return loadSongsDropdown(selectedId).always(function () {
+                setMusicAwardSubmitState(false, 'Save');
+            });
+        }
+
+        setMusicAwardSubmitState(false, 'Save');
+        return $.Deferred().resolve().promise();
     }
 </script>

@@ -27,6 +27,9 @@ trait AssetProcessors {
 
     public function storePhoto(Request $request, string $path, string $directory, $universal = false, $profile_pic = false, $header_pic = false, $main_pic = false): string
     {
+        $image = $request->get('image');
+        $image_name = null;
+
         if ($request->exists('image')) {
             $image = $request->file('image');
 
@@ -43,7 +46,11 @@ trait AssetProcessors {
             $image = $request->file('header_image');
 
             $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
-        }
+        } else if ($request->exists('banner_image')) {
+            $image = $request->file('banner_image');
+
+            $image_name = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+        } 
 
         $image->move($path, $image_name);
 

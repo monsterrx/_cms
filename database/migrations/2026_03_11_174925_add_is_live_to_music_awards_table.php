@@ -14,7 +14,7 @@ class AddIsLiveToMusicAwardsTable extends Migration
     public function up()
     {
         Schema::table('music_awards', function (Blueprint $table) {
-            $table->boolean('is_live');
+            $table->boolean('is_live')->after('award_name');
         });
     }
 
@@ -26,7 +26,7 @@ class AddIsLiveToMusicAwardsTable extends Migration
     public function down()
     {
         Schema::table('music_awards', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_live');
         });
     }
 }

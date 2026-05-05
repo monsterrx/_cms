@@ -840,12 +840,13 @@ namespace App\Models{
  * App\Models\MusicAward
  *
  * @property int $id
- * @property string $release
+ * @property int $music_awards_releases_id
  * @property string|null $award_name
+ * @property string|null $award_type
+ * @property int $is_featured
  * @property int|null $artist_id
  * @property int|null $album_id
  * @property int|null $song_id
- * @property int $is_live
  * @property string|null $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -858,16 +859,41 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereAlbumId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereArtistId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereAwardName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereAwardType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereIsLive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereRelease($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereIsFeatured($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereMusicAwardsReleasesId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereSongId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MusicAward whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 	class IdeHelperMusicAward {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\MusicAwardsReleases
+ *
+ * @property int $id
+ * @property string $release
+ * @property string|null $banner_image
+ * @property int $is_live
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases whereBannerImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases whereIsLive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases whereRelease($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MusicAwardsReleases whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class IdeHelperMusicAwardsReleases {}
 }
 
 namespace App\Models{

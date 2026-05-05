@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsFeaturedColumn extends Migration
+class CreateMusicAwardsReleasesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddIsFeaturedColumn extends Migration
      */
     public function up()
     {
-        Schema::table('music_awards', function (Blueprint $table) {
-            $table->boolean('is_featured')->after('is_live')->default(0);
+        Schema::create('music_awards_releases', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +26,6 @@ class AddIsFeaturedColumn extends Migration
      */
     public function down()
     {
-        Schema::table('music_awards', function (Blueprint $table) {
-            $table->dropColumn('is_featured');
-        });
+        Schema::dropIfExists('music_awards_releases');
     }
 }

@@ -66,6 +66,7 @@
             <a class="dropdown-item" href="{{ route('sliders.index') }}">Graphics Artist</a>
             <a class="dropdown-item" href="{{ route('asset.index') }}">Mobile Application</a>
             <a class="dropdown-item" href="{{ route('wallpapers.index') }}">Wallpapers</a>
+            <a class="dropdown-item" href="{{ route('mma.view') }}">Monster Music Awards</a>
             <div class="dropdown-divider"></div>
             <div class="dropdown-header">Programs</div>
             <a class="dropdown-item" href="{{ route('shows.index') }}">Shows</a>

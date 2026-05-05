@@ -340,4 +340,40 @@
             [0, 'desc'],
         ]
     });
+    if ($('#musicAwardsTable').length) {
+        let releaseId = $('#musicAwardsTable').data('release-id');
+
+        let musicAwardsTable = $('#musicAwardsTable').DataTable({
+            ajax: {
+                url: '{{ url('/') }}' + '/music_awards/releases/' + releaseId + '/awards',
+                dataSrc: 'awards'
+            },
+            columns: [
+                { data: 'id', title: 'ID' },
+                { data: 'award_name', title: 'Award Name' },
+                { data: 'award_type', title: 'Type' },
+                { data: 'awardee', title: 'Awardee' },
+                { data: 'featured_status', title: 'Featured', orderable: false, searchable: false },
+                { data: 'image_preview', title: 'Image', orderable: false, searchable: false },
+                { data: 'options', title: 'Options', orderable: false, searchable: false }
+            ],
+            order: [[0, 'desc']]
+        });
+    }
+
+    let musicAwardsReleasesTable = $('#musicAwardsReleasesTable').DataTable({
+        ajax: {
+            url: '{{ route('mma-releases.index') }}',
+            dataSrc: 'releases'
+        },
+        columns: [
+            { data: 'id', title: 'ID' },
+            { data: 'release', title: 'Release' },
+            { data: 'live_status', title: 'Live', orderable: false, searchable: false },
+            { data: 'banner_preview', title: 'Banner', orderable: false, searchable: false },
+            { data: 'music_award_count', title: 'Winners' },
+            { data: 'options', title: 'Options', orderable: false, searchable: false }
+        ],
+        order: [[1, 'desc']]
+    });
 </script>

@@ -247,4 +247,166 @@
             });
         });
     });
+    
+    let musicAwardCroppieInitialized = false;
+
+    $(document).on('change', '#music_award_image', function () {
+        const input = this;
+        const $cropper = $('#musicAwardCropper');
+
+        if (!input.files || !input.files[0]) return;
+
+        if (!$cropper.length) {
+            console.error('#musicAwardCropper not found');
+            return;
+        }
+
+        // destroy old instance if already initialized
+        if (musicAwardCroppieInitialized) {
+            $cropper.croppie('destroy');
+            musicAwardCroppieInitialized = false;
+        }
+
+        $('#music-award-cropper-container').removeClass('d-none');
+
+        $cropper.croppie({
+            enableExif: true,
+            viewport: {
+                width: 320,
+                height: 180,
+                type: 'square'
+            },
+            boundary: {
+                width: 640,
+                height: 360
+            }
+        });
+
+        musicAwardCroppieInitialized = true;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $cropper.croppie('bind', {
+                url: e.target.result
+            }).then(function () {
+                console.log('Croppie bind complete');
+            });
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    });
+
+    $(document).on('click', '#cropMusicAwardButton', function () {
+        const $cropper = $('#musicAwardCropper');
+
+        if (!musicAwardCroppieInitialized) {
+            console.error('Croppie is not initialized');
+            return;
+        }
+
+        $cropper.croppie('result', {
+            type: 'blob',
+            size: { width: 1280, height: 720 },
+            format: 'png',
+            quality: 1
+        }).then(function (blob) {
+            const objectUrl = URL.createObjectURL(blob);
+
+            $('#music-award-image-preview').attr('src', objectUrl);
+
+            const croppedFile = new File([blob], 'music-award-cropped.png', { type: 'image/png' });
+            const dt = new DataTransfer();
+            dt.items.add(croppedFile);
+
+            document.getElementById('music_award_image').files = dt.files;
+
+            $('#music-award-cropper-container').addClass('d-none');
+        });
+    });
+
+    $(document).on('click', '#cancelMusicAwardCropButton', function () {
+        const $cropper = $('#musicAwardCropper');
+
+        if (musicAwardCroppieInitialized) {
+            $cropper.croppie('destroy');
+            musicAwardCroppieInitialized = false;
+        }
+
+        $('#music-award-cropper-container').addClass('d-none');
+        $('#music_award_image').val('');
+    });
+
+    let musicAwardReleaseCroppieInitialized = false;
+
+    $(document).on('change', '#banner_image', function () {
+        const input = this;
+        const $cropper = $('#musicAwardReleaseCropper');
+
+        if (!input.files || !input.files[0]) return;
+
+        if (musicAwardReleaseCroppieInitialized) {
+            $cropper.croppie('destroy');
+            musicAwardReleaseCroppieInitialized = false;
+        }
+
+        $('#music-award-release-cropper-container').removeClass('d-none');
+
+        $cropper.croppie({
+            enableExif: true,
+            viewport: {
+                width: 320,
+                height: 180,
+                type: 'square'
+            },
+            boundary: {
+                width: 640,
+                height: 360
+            }
+        });
+
+        musicAwardReleaseCroppieInitialized = true;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            $cropper.croppie('bind', {
+                url: e.target.result
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    });
+
+    $(document).on('click', '#cropMusicAwardReleaseButton', function () {
+        const $cropper = $('#musicAwardReleaseCropper');
+
+        if (!musicAwardReleaseCroppieInitialized) return;
+
+        $cropper.croppie('result', {
+            type: 'blob',
+            size: { width: 1280, height: 720 },
+            format: 'png',
+            quality: 1
+        }).then(function (blob) {
+            const previewUrl = URL.createObjectURL(blob);
+            $('#music-award-release-banner-preview').attr('src', previewUrl);
+
+            const croppedFile = new File([blob], 'music-award-release-banner.png', { type: 'image/png' });
+            const dt = new DataTransfer();
+            dt.items.add(croppedFile);
+
+            document.getElementById('banner_image').files = dt.files;
+            $('#music-award-release-cropper-container').addClass('d-none');
+        });
+    });
+
+    $(document).on('click', '#cancelMusicAwardReleaseCropButton', function () {
+        const $cropper = $('#musicAwardReleaseCropper');
+
+        if (musicAwardReleaseCroppieInitialized) {
+            $cropper.croppie('destroy');
+            musicAwardReleaseCroppieInitialized = false;
+        }
+
+        $('#music-award-release-cropper-container').addClass('d-none');
+        $('#banner_image').val('');
+    });
 </script>

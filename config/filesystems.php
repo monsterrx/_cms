@@ -379,6 +379,11 @@ return [
         '_assets/categories' => [
             'driver' => 'local',
             'root' => '../images/_assets/categories'
+        ],
+
+        'music_awards' => [
+            'driver' => 'local',
+            'root' => '../images/music_awards'
         ]
         // END
     ],

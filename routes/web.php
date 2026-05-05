@@ -275,12 +275,23 @@ Route::middleware('auth')->group(function() {
         Route::delete('/delete/{id}', [StreamLinkController::class, 'destroy'])->name('streaming.destroy');
     });
 
-    Route::prefix('monster_music_awards')->group(function() {
-        Route::get('', [MusicAwardsController::class, 'index'])->name('mma.index');
-        Route::get('/{id}', [MusicAwardsController::class, 'show'])->name('mma.show');
-        Route::post('/store', [MusicAwardsController::class, 'store'])->name('mma.store');
-        Route::match(['put', 'patch'], '/update/{id}', [MusicAwardsController::class, 'update'])->name('mma.update');
-        Route::delete('/delete/{id}', [MusicAwardsController::class, 'delete'])->name('mma.delete');
+    Route::prefix('music_awards')->group(function () {
+        Route::get('', [MusicAwardsController::class, 'view'])->name('mma.view');
+
+        // releases
+        Route::get('/releases', [MusicAwardsController::class, 'index'])->name('mma-releases.index');
+        Route::post('/releases/store', [MusicAwardsController::class, 'store'])->name('mma-releases.store');
+        Route::get('/releases/show/{id}', [MusicAwardsController::class, 'show'])->name('mma-releases.show');
+        Route::match(['put', 'patch'], '/releases/update/{id}', [MusicAwardsController::class, 'update'])->name('mma-releases.update');
+        Route::delete('/releases/delete/{id}', [MusicAwardsController::class, 'destroy'])->name('mma-releases.destroy');
+
+        // release awards page + CRUD
+        Route::get('/releases/{id}/awards/page', [MusicAwardsController::class, 'releaseAwardsPage'])->name('mma-awards.page');
+        Route::get('/releases/{id}/awards', [MusicAwardsController::class, 'releaseAwards'])->name('mma-awards.index');
+        Route::post('/releases/{id}/awards/store', [MusicAwardsController::class, 'storeAward'])->name('mma-awards.store');
+        Route::get('/awards/show/{awardId}', [MusicAwardsController::class, 'showAward'])->name('mma-awards.show');
+        Route::match(['put', 'patch'], '/awards/update/{awardId}', [MusicAwardsController::class, 'updateAward'])->name('mma-awards.update');
+        Route::delete('/awards/delete/{awardId}', [MusicAwardsController::class, 'destroyAward'])->name('mma-awards.destroy');
     });
 });
 
