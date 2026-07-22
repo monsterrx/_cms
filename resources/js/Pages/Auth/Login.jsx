@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
+import Icon from '../../Components/Icon';
+import ThemeSwitcher from '../../Components/ThemeSwitcher';
+import { translateError } from '../../lib/errorTranslator';
 
 const initialForm = {
     email: '',
@@ -17,11 +20,11 @@ function firstError(errors, field) {
 
     return typeof error === 'string' ? error : '';
 }
-
 export default function Login() {
     const [form, setForm] = useState(initialForm);
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
     const updateField = (event) => {
@@ -45,14 +48,10 @@ export default function Login() {
             const { data } = await axios.post('/login', form);
             window.location.assign(data.data?.redirect_url ?? '/dashboard');
         } catch (error) {
-            const response = error.response;
+            const translated = translateError(error);
 
-            if (!response) {
-                setMessage('Unable to reach the server. Check your connection and try again.');
-            } else {
-                setErrors(response.data?.errors ?? {});
-                setMessage(response.data?.message ?? 'Sign in failed. Please try again.');
-            }
+            setErrors(translated.fieldErrors);
+            setMessage(translated.message);
         } finally {
             setSubmitting(false);
         }
@@ -60,110 +59,131 @@ export default function Login() {
 
     const emailError = firstError(errors, 'email');
     const passwordError = firstError(errors, 'password');
+    const inputClass = 'mt-2 block w-full rounded-none border bg-canvas px-3.5 py-3 text-base text-ink shadow-none transition placeholder:text-ink-muted/60';
 
     return (
         <>
             <Head title="Sign in" />
 
-            <main className="flex min-h-screen items-center justify-center bg-slate-100 px-4 py-10">
-                <section className="w-full max-w-md border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
-                    <div className="mb-8">
-                        <div className="mb-5 flex h-11 w-11 items-center justify-center bg-slate-900 text-sm font-bold tracking-wider text-white">
-                            RX
+            <main className="grid min-h-screen bg-canvas lg:grid-cols-[0.85fr_1.15fr]">
+                <section className="relative hidden overflow-hidden bg-[#181818] p-12 text-white lg:flex lg:flex-col lg:justify-between">
+                    <div>
+                        <div className="flex items-center gap-4">
+                            <span className="flex h-14 w-14 items-center justify-center bg-rx-yellow font-heading text-lg font-bold text-neutral-950">RX</span>
+                            <div>
+                                <p className="font-heading text-xl font-bold uppercase tracking-wide">Monster CMS</p>
+                                <p className="text-sm uppercase tracking-[0.24em] text-rx-blue">RX93.1</p>
+                            </div>
                         </div>
-                        <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-500">
-                            Monster CMS
-                        </p>
-                        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-                            Sign in
+                    </div>
+
+                    <div className="relative z-10 max-w-lg">
+                        <p className="font-heading text-sm font-semibold uppercase tracking-[0.24em] text-rx-yellow">Content control room</p>
+                        <h1 className="mt-5 font-heading text-6xl font-bold uppercase leading-[0.98] tracking-tight">
+                            Keep the Monster on air.
                         </h1>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">
-                            Use your account credentials to access the content management system.
+                        <p className="mt-6 max-w-md text-lg leading-7 text-neutral-400">
+                            Manage stories, shows, charts, podcasts, and digital campaigns from one secure workspace.
                         </p>
                     </div>
 
-                    {message && (
-                        <div
-                            className="mb-6 border-l-4 border-red-500 bg-red-50 px-4 py-3 text-sm text-red-800"
-                            role="alert"
-                        >
-                            {message}
-                        </div>
-                    )}
+                    <div className="absolute -bottom-24 -right-16 font-heading text-[19rem] font-bold leading-none text-[#282828]" aria-hidden="true">
+                        93.1
+                    </div>
+                    <p className="relative z-10 text-xs uppercase tracking-[0.2em] text-neutral-500">Monster</p>
+                </section>
 
-                    <form className="space-y-5" onSubmit={submit} noValidate>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-800" htmlFor="email">
-                                Email address
+                <section className="relative flex items-center justify-center px-4 py-24 sm:px-8">
+                    <div className="absolute right-4 top-4 sm:right-8 sm:top-8">
+                        <ThemeSwitcher compact />
+                    </div>
+
+                    <div className="w-full max-w-md">
+                        <div className="mb-8 lg:hidden">
+                            <span className="flex h-12 w-12 items-center justify-center bg-rx-yellow font-heading text-base font-bold text-neutral-950">RX</span>
+                            <p className="mt-4 font-heading text-sm font-semibold uppercase tracking-[0.2em] text-rx-blue">Monster CMS</p>
+                        </div>
+
+                        <p className="rx-kicker">Authorized access</p>
+                        <h2 className="mt-3 font-heading text-4xl font-bold uppercase tracking-tight sm:text-5xl">Sign in</h2>
+                        <p className="mt-3 text-base leading-6 text-ink-muted">
+                            Enter your CMS credentials to continue.
+                        </p>
+
+                        {message && (
+                            <div className="mt-6 flex gap-3 border-l-4 border-red-500 bg-surface p-4 text-sm text-ink" role="alert">
+                                <Icon className="mt-0.5 h-5 w-5 shrink-0 text-red-500" name="alert" />
+                                <span>{message}</span>
+                            </div>
+                        )}
+
+                        <form className="mt-8 space-y-5" noValidate onSubmit={submit}>
+                            <div>
+                                <label className="font-heading text-sm font-semibold uppercase tracking-wide" htmlFor="email">
+                                    Email address
+                                </label>
+                                <input
+                                    aria-describedby={emailError ? 'email-error' : undefined}
+                                    aria-invalid={Boolean(emailError)}
+                                    autoComplete="email"
+                                    autoFocus
+                                    className={`${inputClass} ${emailError ? 'border-red-500' : 'border-line focus:border-rx-blue'}`}
+                                    id="email"
+                                    name="email"
+                                    onChange={updateField}
+                                    type="email"
+                                    value={form.email}
+                                />
+                                {emailError && <p className="mt-2 text-sm text-red-500" id="email-error">{emailError}</p>}
+                            </div>
+
+                            <div>
+                                <label className="font-heading text-sm font-semibold uppercase tracking-wide" htmlFor="password">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        aria-describedby={passwordError ? 'password-error' : undefined}
+                                        aria-invalid={Boolean(passwordError)}
+                                        autoComplete="current-password"
+                                        className={`${inputClass} pr-20 ${passwordError ? 'border-red-500' : 'border-line focus:border-rx-blue'}`}
+                                        id="password"
+                                        name="password"
+                                        onChange={updateField}
+                                        type={showPassword ? 'text' : 'password'}
+                                        value={form.password}
+                                    />
+                                    <button
+                                        aria-controls="password"
+                                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                        aria-pressed={showPassword}
+                                        className="absolute inset-y-0 right-0 mt-2 flex items-center px-4 font-heading text-xs font-semibold uppercase tracking-wide text-rx-blue transition-colors duration-200 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-rx-blue"
+                                        onClick={() => setShowPassword((current) => !current)}
+                                        type="button"
+                                    >
+                                        {showPassword ? 'Hide' : 'Show'}
+                                    </button>
+                                </div>
+                                {passwordError && <p className="mt-2 text-sm text-red-500" id="password-error">{passwordError}</p>}
+                            </div>
+
+                            <label className="flex cursor-pointer items-center gap-3 text-sm text-ink-muted">
+                                <input
+                                    checked={form.remember}
+                                    className="rounded-none border-line bg-canvas text-rx-blue focus:ring-rx-blue"
+                                    name="remember"
+                                    onChange={updateField}
+                                    type="checkbox"
+                                />
+                                Keep me signed in on this device
                             </label>
-                            <input
-                                autoComplete="email"
-                                autoFocus
-                                className={`mt-2 block w-full rounded-none border px-3.5 py-3 text-sm shadow-none outline-none transition focus:ring-2 ${
-                                    emailError
-                                        ? 'border-red-500 focus:border-red-500 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-slate-900 focus:ring-slate-200'
-                                }`}
-                                id="email"
-                                name="email"
-                                onChange={updateField}
-                                type="email"
-                                value={form.email}
-                                aria-invalid={Boolean(emailError)}
-                                aria-describedby={emailError ? 'email-error' : undefined}
-                            />
-                            {emailError && (
-                                <p className="mt-2 text-sm text-red-700" id="email-error">
-                                    {emailError}
-                                </p>
-                            )}
-                        </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-slate-800" htmlFor="password">
-                                Password
-                            </label>
-                            <input
-                                autoComplete="current-password"
-                                className={`mt-2 block w-full rounded-none border px-3.5 py-3 text-sm shadow-none outline-none transition focus:ring-2 ${
-                                    passwordError
-                                        ? 'border-red-500 focus:border-red-500 focus:ring-red-100'
-                                        : 'border-slate-300 focus:border-slate-900 focus:ring-slate-200'
-                                }`}
-                                id="password"
-                                name="password"
-                                onChange={updateField}
-                                type="password"
-                                value={form.password}
-                                aria-invalid={Boolean(passwordError)}
-                                aria-describedby={passwordError ? 'password-error' : undefined}
-                            />
-                            {passwordError && (
-                                <p className="mt-2 text-sm text-red-700" id="password-error">
-                                    {passwordError}
-                                </p>
-                            )}
-                        </div>
-
-                        <label className="flex cursor-pointer items-center gap-3 text-sm text-slate-700">
-                            <input
-                                checked={form.remember}
-                                className="rounded-none border-slate-300 text-slate-900 focus:ring-slate-500"
-                                name="remember"
-                                onChange={updateField}
-                                type="checkbox"
-                            />
-                            Keep me signed in
-                        </label>
-
-                        <button
-                            className="flex w-full items-center justify-center bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-400"
-                            disabled={submitting}
-                            type="submit"
-                        >
-                            {submitting ? 'Signing in…' : 'Sign in'}
-                        </button>
-                    </form>
+                            <button className="rx-button w-full" disabled={submitting} type="submit">
+                                {submitting ? 'Signing in...' : 'Sign in'}
+                                {!submitting && <Icon className="h-4 w-4" name="arrow" />}
+                            </button>
+                        </form>
+                    </div>
                 </section>
             </main>
         </>

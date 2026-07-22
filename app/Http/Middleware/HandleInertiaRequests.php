@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\StationContext;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -30,9 +31,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $stations = app(StationContext::class);
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
+            ],
+            'navigation' => config('workspace.navigation'),
+            'station' => [
+                'current' => $stations->current($request),
+                'can_switch' => $stations->canSwitch($request->user()),
+                'options' => $stations->options(),
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [

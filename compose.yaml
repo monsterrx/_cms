@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: monster-cms-v3:local
+    container_name: monster_cms_v3
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+    ports:
+      - "${APP_PORT:-9001}:80"
+    volumes:
+      - .:/var/www/html/cms
+      - vendor:/var/www/html/cms/vendor
+      - bootstrap_cache:/var/www/html/cms/bootstrap/cache
+    networks:
+      - rx931
+
+  db:
+    build:
+      context: .
+      dockerfile: docker/mysql/Dockerfile
+    image: monster-cms-mysql:5.7-local
+    container_name: monster_cms_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-secret}"
+      MYSQL_DATABASE: "${DB_DATABASE:-rxninthr_monster}"
+      MYSQL_USER: "${DB_USERNAME:-monster}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-secret}"
+    ports:
+      - "${FORWARD_DB_PORT:-3309}:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ../../../dumps/rxninthr_monster_20260622.sql:/docker-entrypoint-initdb.d/01-rxninthr-monster.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    networks:
+      - rx931
+
+networks:
+  rx931:
+    name: monster_cms_rx931
+
+volumes:
+  dbdata:
+    name: monster_cms_dbdata
+  vendor:
+    name: monster_cms_vendor
+  bootstrap_cache:
+    name: monster_cms_bootstrap_cache

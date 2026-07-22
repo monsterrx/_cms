@@ -7,9 +7,22 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <script>
+            (() => {
+                const storageKey = 'monster-cms:theme';
+                const preference = localStorage.getItem(storageKey) || 'dark';
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const isDark = preference === 'dark' || (preference === 'system' && systemDark);
+
+                document.documentElement.classList.toggle('dark', isDark);
+                document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+                document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+            })();
+        </script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @routes

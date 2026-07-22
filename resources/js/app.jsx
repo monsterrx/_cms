@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
+import { AppStateProvider } from './Contexts/AppStateContext';
 import '../css/app.css';
 
 axios.defaults.headers.common.Accept = 'application/json';
@@ -20,9 +21,13 @@ createInertiaApp({
         return pages(`./${name}.jsx`);
     },
     setup({ el, App, props }) {
-        createRoot(el).render(<App {...props} />);
+        createRoot(el).render(
+            <AppStateProvider>
+                <App {...props} />
+            </AppStateProvider>,
+        );
     },
     progress: {
-        color: '#111827',
+        color: '#00c9ff',
     },
 });

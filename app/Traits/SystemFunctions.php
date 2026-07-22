@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Show;
 use App\Models\StreamLink;
+use App\Support\StationContext;
 use Illuminate\Http\Request;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Hash;
@@ -57,8 +58,8 @@ trait SystemFunctions {
         }
     }
 
-    public function getStationCode() {
-        return Env::get('APP_CODE');
+    public function getStationCode(): string {
+        return app(StationContext::class)->current();
     }
 
     // TODO: Always update the app version

@@ -2,13 +2,17 @@
 
 namespace App\Exceptions;
 
+use App\Support\StatusPage;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
+use PDOException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -17,47 +21,46 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array<int, class-string<Throwable>>
-     */
-    protected $dontReport = [
-        //
-    ];
+    /** @var array<int, class-string<Throwable>> */
+    protected $dontReport = [];
 
-    /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array<int, string>
-     */
+    /** @var array<int, string> */
     protected $dontFlash = [
         'current_password',
         'password',
         'password_confirmation',
     ];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     *
-     * @return void
-     */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(static function (Throwable $e): void {
+            // Laravel's configured logger handles reportable exceptions.
         });
     }
 
     /**
-     * Render JSON errors for API and AJAX requests without exposing internals.
+     * API requests receive a stable JSON contract; browser requests receive branded status pages.
      */
     public function render($request, Throwable $e): Response
     {
-        if (! $this->expectsJson($request)) {
-            return parent::render($request, $e);
+        if ($this->expectsJson($request)) {
+            return $this->renderJson($e);
         }
 
+        $response = parent::render($request, $e);
+        $status = $response->getStatusCode();
+
+        if (! $request->acceptsHtml() || ! StatusPage::supports($status)) {
+            return $response;
+        }
+
+        return Inertia::render('Status/StatusPage', StatusPage::forStatus($status))
+            ->toResponse($request)
+            ->setStatusCode($status);
+    }
+
+    private function renderJson(Throwable $e): Response
+    {
         if ($e instanceof ValidationException) {
             return $this->errorResponse(
                 'The submitted data is invalid.',
@@ -112,6 +115,10 @@ class Handler extends ExceptionHandler
             );
         }
 
+        if ($e instanceof QueryException || $e instanceof PDOException) {
+            return $this->databaseErrorResponse($e);
+        }
+
         if ($e instanceof HttpExceptionInterface) {
             $status = $e->getStatusCode();
             $message = match ($status) {
@@ -123,7 +130,7 @@ class Handler extends ExceptionHandler
                     : ($e->getMessage() ?: Response::$statusTexts[$status] ?? 'Request failed.'),
             };
 
-            return $this->errorResponse($message, $status, [], 'HTTP_ERROR');
+            return $this->errorResponse($message, $status, [], $this->errorCodeForStatus($status));
         }
 
         return $this->errorResponse(
@@ -134,6 +141,39 @@ class Handler extends ExceptionHandler
         );
     }
 
+    private function databaseErrorResponse(Throwable $e): Response
+    {
+        $errorInfo = $e instanceof QueryException
+            ? $e->errorInfo
+            : ($e->errorInfo ?? []);
+        $sqlState = (string) ($errorInfo[0] ?? $e->getCode());
+
+        if (str_starts_with($sqlState, '23')) {
+            return $this->errorResponse(
+                'This record conflicts with existing content. Review it and try again.',
+                Response::HTTP_CONFLICT,
+                [],
+                'DATA_CONFLICT'
+            );
+        }
+
+        if (str_starts_with($sqlState, '08') || in_array($sqlState, ['2002', '2006'], true)) {
+            return $this->errorResponse(
+                'The content database is temporarily unavailable. Please try again shortly.',
+                Response::HTTP_SERVICE_UNAVAILABLE,
+                [],
+                'DATABASE_UNAVAILABLE'
+            );
+        }
+
+        return $this->errorResponse(
+            'The request could not be completed because of a data service error.',
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            [],
+            'DATABASE_ERROR'
+        );
+    }
+
     private function expectsJson(Request $request): bool
     {
         return $request->expectsJson()
@@ -141,15 +181,28 @@ class Handler extends ExceptionHandler
             || $request->ajax();
     }
 
-    /**
-     * @param  array<string, array<int, string>|string>  $errors
-     */
-    private function errorResponse(
-        string $message,
-        int $status,
-        array $errors,
-        string $code
-    ): Response {
+    private function errorCodeForStatus(int $status): string
+    {
+        return match ($status) {
+            Response::HTTP_BAD_REQUEST => 'BAD_REQUEST',
+            Response::HTTP_UNAUTHORIZED => 'UNAUTHENTICATED',
+            Response::HTTP_FORBIDDEN => 'FORBIDDEN',
+            Response::HTTP_NOT_FOUND => 'NOT_FOUND',
+            Response::HTTP_METHOD_NOT_ALLOWED => 'METHOD_NOT_ALLOWED',
+            Response::HTTP_REQUEST_TIMEOUT => 'REQUEST_TIMEOUT',
+            Response::HTTP_CONFLICT => 'CONFLICT',
+            Response::HTTP_UNPROCESSABLE_ENTITY => 'VALIDATION_ERROR',
+            Response::HTTP_TOO_MANY_REQUESTS => 'TOO_MANY_REQUESTS',
+            Response::HTTP_BAD_GATEWAY => 'BAD_GATEWAY',
+            Response::HTTP_SERVICE_UNAVAILABLE => 'SERVICE_UNAVAILABLE',
+            Response::HTTP_GATEWAY_TIMEOUT => 'GATEWAY_TIMEOUT',
+            default => $status >= 500 ? 'SERVER_ERROR' : 'HTTP_ERROR',
+        };
+    }
+
+    /** @param array<string, array<int, string>|string> $errors */
+    private function errorResponse(string $message, int $status, array $errors, string $code): Response
+    {
         return response()->json([
             'success' => false,
             'message' => $message,

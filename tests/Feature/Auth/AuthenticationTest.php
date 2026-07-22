@@ -45,6 +45,27 @@ class AuthenticationTest extends TestCase
             ->assertJsonValidationErrors('email');
     }
 
+    public function test_authenticated_web_session_can_access_stateful_api_routes(): void
+    {
+        $user = User::factory()->create();
+
+        $this->postJson('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ])->assertOk();
+
+        $this->app['auth']->forgetGuards();
+
+        $this->withHeaders([
+            'Host' => 'localhost:9001',
+            'Origin' => 'http://localhost:9001',
+            'Referer' => 'http://localhost:9001/dashboard',
+        ])->getJson('/api/user')
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('data.user.id', $user->id);
+    }
+
     public function test_login_validation_errors_use_the_api_error_contract(): void
     {
         $response = $this->postJson('/login', [
