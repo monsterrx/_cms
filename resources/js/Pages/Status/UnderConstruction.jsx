@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import AppShell from '../../Components/AppShell';
 import Icon from '../../Components/Icon';
+import { appPath } from '../../lib/appUrl';
 
 export default function UnderConstruction({ section = 'This section' }) {
     return (
@@ -20,7 +21,7 @@ export default function UnderConstruction({ section = 'This section' }) {
                                 This workspace is under construction. The content model and publishing controls are being prepared for review.
                             </p>
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                                <Link className="rx-button" href="/dashboard">
+                                <Link className="rx-button" href={appPath('/dashboard')}>
                                     Back to dashboard
                                     <Icon className="h-4 w-4" name="arrow" />
                                 </Link>
@@ -50,4 +51,3 @@ export default function UnderConstruction({ section = 'This section' }) {
         </AppShell>
     );
 }
-

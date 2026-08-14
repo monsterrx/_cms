@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +37,7 @@ class ConfirmablePasswordController extends Controller
         $request->session()->put('auth.password_confirmed_at', time());
 
         return $this->successResponse([
-            'redirect_url' => RouteServiceProvider::HOME,
+            'redirect_url' => route('dashboard', [], false),
         ], 'Password confirmed successfully.');
     }
 }

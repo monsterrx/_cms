@@ -5,6 +5,7 @@ import Icon from './Icon';
 export default function CardDropdown({
     ariaDescribedBy,
     ariaInvalid = false,
+    ariaLabel,
     ariaRequired = false,
     buttonClassName = '',
     disabled = false,
@@ -112,6 +113,7 @@ export default function CardDropdown({
                 aria-expanded={open}
                 aria-haspopup="listbox"
                 aria-invalid={ariaInvalid}
+                aria-label={ariaLabel}
                 aria-required={ariaRequired}
                 className={`${buttonClassName} ${open ? 'border-rx-blue bg-rx-blue/10' : ''}`}
                 disabled={disabled}

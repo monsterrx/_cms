@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from './Icon';
 
-export default function PersistentModal({ children, dirty, footer, open, onClose, title }) {
+export default function PersistentModal({ children, dirty, footer, kicker = 'Record editor', open, onClose, title }) {
     const [confirmingDiscard, setConfirmingDiscard] = useState(false);
     const dialogRef = useRef(null);
 
@@ -46,7 +46,7 @@ export default function PersistentModal({ children, dirty, footer, open, onClose
             >
                 <header className="flex h-16 shrink-0 items-center justify-between border-b border-line px-5 sm:px-6">
                     <div className="min-w-0">
-                        <p className="rx-kicker">Record editor</p>
+                        <p className="rx-kicker">{kicker}</p>
                         <h2 className="truncate font-heading text-lg font-semibold uppercase tracking-wide" id="record-modal-title">
                             {title}
                         </h2>

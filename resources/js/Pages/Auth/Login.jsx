@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import Icon from '../../Components/Icon';
 import ThemeSwitcher from '../../Components/ThemeSwitcher';
+import { appPath } from '../../lib/appUrl';
 import { translateError } from '../../lib/errorTranslator';
 
 const initialForm = {
@@ -46,7 +47,7 @@ export default function Login() {
 
         try {
             const { data } = await axios.post('/login', form);
-            window.location.assign(data.data?.redirect_url ?? '/dashboard');
+            window.location.assign(appPath(data.data?.redirect_url ?? '/dashboard'));
         } catch (error) {
             const translated = translateError(error);
 
@@ -71,7 +72,7 @@ export default function Login() {
                         <div className="flex items-center gap-4">
                             <span className="flex h-14 w-14 items-center justify-center bg-rx-yellow font-heading text-lg font-bold text-neutral-950">RX</span>
                             <div>
-                                <p className="font-heading text-xl font-bold uppercase tracking-wide">Monster CMS</p>
+                                <p className="font-heading text-xl font-bold uppercase tracking-wide">Monster Content Management System</p>
                                 <p className="text-sm uppercase tracking-[0.24em] text-rx-blue">RX93.1</p>
                             </div>
                         </div>
@@ -101,13 +102,13 @@ export default function Login() {
                     <div className="w-full max-w-md">
                         <div className="mb-8 lg:hidden">
                             <span className="flex h-12 w-12 items-center justify-center bg-rx-yellow font-heading text-base font-bold text-neutral-950">RX</span>
-                            <p className="mt-4 font-heading text-sm font-semibold uppercase tracking-[0.2em] text-rx-blue">Monster CMS</p>
+                            <p className="mt-4 font-heading text-sm font-semibold uppercase tracking-[0.2em] text-rx-blue">Monster Content Operations</p>
                         </div>
 
                         <p className="rx-kicker">Authorized access</p>
                         <h2 className="mt-3 font-heading text-4xl font-bold uppercase tracking-tight sm:text-5xl">Sign in</h2>
                         <p className="mt-3 text-base leading-6 text-ink-muted">
-                            Enter your CMS credentials to continue.
+                            Enter your account credentials to continue.
                         </p>
 
                         {message && (

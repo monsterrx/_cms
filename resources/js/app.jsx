@@ -2,11 +2,18 @@ import axios from 'axios';
 import { createInertiaApp } from '@inertiajs/react';
 import { createRoot } from 'react-dom/client';
 import { AppStateProvider } from './Contexts/AppStateContext';
+import { getAppBasePath } from './lib/appUrl';
 import '../css/app.css';
 
 axios.defaults.headers.common.Accept = 'application/json';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.withCredentials = true;
+
+const appBasePath = getAppBasePath();
+
+if (appBasePath) {
+    axios.defaults.baseURL = appBasePath;
+}
 
 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 

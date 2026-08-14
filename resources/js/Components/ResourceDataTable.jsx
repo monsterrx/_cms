@@ -22,7 +22,7 @@ function formatValue(value, field) {
 
     const text = String(value).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
-    return text.length > 90 ? `${text.slice(0, 87)}...` : text;
+    return text;
 }
 
 export default function ResourceDataTable({
@@ -45,13 +45,15 @@ export default function ResourceDataTable({
                     <thead className="bg-surface-muted/70">
                         <tr>
                             {fields.map((field) => (
-                                <th className="whitespace-nowrap px-4 py-3 font-heading text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink-muted" key={field.name}>
-                                    <button className="flex items-center gap-1.5 hover:text-ink" onClick={() => onSort(field.name)} type="button">
-                                        {field.label}
-                                        {sort === field.name && (
-                                            <Icon className={`h-3.5 w-3.5 ${direction === 'asc' ? 'rotate-180' : ''}`} name="chevron" />
-                                        )}
-                                    </button>
+                                <th className="min-w-32 whitespace-normal break-words px-4 py-3 font-heading text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink-muted" key={field.name}>
+                                    {field.sortable === false ? field.label : (
+                                        <button className="flex items-center gap-1.5 hover:text-ink" onClick={() => onSort(field.name)} type="button">
+                                            {field.label}
+                                            {sort === field.name && (
+                                                <Icon className={`h-3.5 w-3.5 ${direction === 'asc' ? 'rotate-180' : ''}`} name="chevron" />
+                                            )}
+                                        </button>
+                                    )}
                                 </th>
                             ))}
                             <th className="px-4 py-3 text-right font-heading text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-ink-muted">Actions</th>
@@ -69,8 +71,8 @@ export default function ResourceDataTable({
                         ) : records.map((record) => (
                             <tr className="transition-colors hover:bg-surface-muted/50" key={record.id}>
                                 {fields.map((field) => (
-                                    <td className="max-w-xs whitespace-nowrap px-4 py-3 text-ink" key={`${record.id}-${field.name}`} title={String(record[field.name] ?? '')}>
-                                        {formatValue(record[field.name], field)}
+                                    <td className="max-w-sm whitespace-normal break-words px-4 py-3 align-top leading-6 text-ink" key={`${record.id}-${field.name}`} title={String(record[field.name] ?? '')}>
+                                        {record._media?.[field.name] ? <img alt={field.label} className="h-16 w-16 rounded-md border border-line object-cover" src={record._media[field.name]} /> : formatValue(record[field.name], field)}
                                     </td>
                                 ))}
                                 <td className="whitespace-nowrap px-4 py-3 text-right">

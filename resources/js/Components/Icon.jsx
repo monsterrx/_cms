@@ -27,6 +27,7 @@ const iconPaths = {
     more: ['M5 12h.01', 'M12 12h.01', 'M19 12h.01'],
     logout: ['M10 17l5-5-5-5', 'M15 12H3', 'M15 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4'],
     refresh: ['M20 6v5h-5', 'M4 18v-5h5', 'M6.1 9a7 7 0 0 1 11.7-2.6L20 11', 'M4 13l2.2 4.6A7 7 0 0 0 17.9 15'],
+    bug: ['M8 9h8v7a4 4 0 0 1-8 0V9Z', 'M9 9V7a3 3 0 0 1 6 0v2', 'M4 13h4', 'M16 13h4', 'M5 8l3 2', 'M19 8l-3 2', 'M6 19l3-2', 'M18 19l-3-2'],
 };
 
 export default function Icon({ name, className = 'h-5 w-5', title }) {

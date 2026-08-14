@@ -53,6 +53,333 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        // JOCKS
+        'jocks' => [
+            'driver' => 'local',
+            'root'   => '../images/jocks',
+        ],
+
+        'mnl_jocks' => [
+            'driver' => 'local',
+            'root'   => '../../images/jocks',
+        ],
+
+        'mnl_jocks_cms' => [
+            'driver' => 'local',
+            'root'   => '../../rxcms/images/jocks',
+        ],
+
+        'cbu_jocks' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/images/jocks',
+        ],
+
+        'cbu_jocks_cms' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/cebucms/images/jocks',
+        ],
+
+        'dav_jocks' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/images/jocks',
+        ],
+
+        'dav_jocks_cms' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/davaocms/images/jocks',
+        ],
+        // END
+
+        'articles' => [
+            'driver' => 'local',
+            'root'   => '../images/articles',
+        ],
+
+
+        // SHOWS
+        'shows' => [
+            'driver' => 'local',
+            'root'   => '../images/shows',
+        ],
+
+        'mnl_shows' => [
+            'driver' => 'local',
+            'root'   => '../../images/shows',
+        ],
+
+        'mnl_shows_cms' => [
+            'driver' => 'local',
+            'root'   => '../../rxcms/images/shows',
+        ],
+
+        'cbu_shows' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/images/shows',
+        ],
+
+        'dav_shows' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/images/shows',
+        ],
+
+        'cbu_shows_cms' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/cebucms/images/shows',
+        ],
+
+        'dav_shows_cms' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/davaocms/images/shows',
+        ],
+        // END
+
+
+        // ARTIST
+        'artists' => [
+            'driver' => 'local',
+            'root'   => '../images/artists',
+        ],
+
+        'mnl_artists' => [
+            'driver' => 'local',
+            'root'   => '../../images/artists',
+        ],
+
+        'mnl_artists_cms' => [
+            'driver' => 'local',
+            'root' => '../../rxcms/images/artists'
+        ],
+
+        'cbu_artists' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/images/artists'
+        ],
+
+        'cbu_artists_cms' => [
+            'driver' => 'local',
+            'root' => '../monstercebu/cebucms/images/artists'
+        ],
+
+        'dav_artists' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/images/artists'
+        ],
+
+        'dav_artists_cms' => [
+            'driver' => 'local',
+            'root' => '../monsterdavao/davaocms/images/artists'
+        ],
+        // END
+
+        // ALBUM
+        'albums' => [
+            'driver' => 'local',
+            'root'   => '../images/albums',
+        ],
+
+        'mnl_albums' => [
+            'driver' => 'local',
+            'root'   => '../../images/albums'
+        ],
+
+        'mnl_albums_cms' => [
+            'driver' => 'local',
+            'root' => '../../rxcms/images/albums'
+        ],
+
+        'cbu_albums' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/images/albums'
+        ],
+
+        'cbu_albums_cms' => [
+            'driver' => 'local',
+            'root' => '../monstercebu/cebucms/images/albums'
+        ],
+
+        'dav_albums' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/images/albums'
+        ],
+
+        'dav_albums_cms' => [
+            'driver' => 'local',
+            'root' => '../monsterdavao/davaocms/images/albums'
+        ],
+        // END
+
+        'schools' => [
+            'driver' => 'local',
+            'root'   => '../images/schools',
+        ],
+
+        'giveaways' => [
+            'driver' => 'local',
+            'root'   => '../images/giveaways',
+        ],
+
+        'headers' => [
+            'driver' => 'local',
+            'root'   => '../images/headers',
+        ],
+
+        // HEADERS
+        'mnl_headers' => [
+            'driver' => 'local',
+            'root'   => '../../images/headers',
+        ],
+
+        'mnl_headers_cms' => [
+            'driver' => 'local',
+            'root'   => '../../rxcms/images/headers',
+        ],
+
+        'cbu_headers' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/images/headers'
+        ],
+
+        'cbu_headers_cms' => [
+            'driver' => 'local',
+            'root' => '../monstercebu/cebucms/images/headers'
+        ],
+
+        'dav_headers' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/images/headers'
+        ],
+
+        'dav_headers_cms' => [
+            'driver' => 'local',
+            'root' => '../monsterdavao/davaocms/images/headers'
+        ],
+        // END
+
+        'podcasts' => [
+            'driver' => 'local',
+            'root'   => '../images/podcasts',
+        ],
+
+        'studentJocks' => [
+            'driver' => 'local',
+            'root'   => '../images/studentJocks',
+        ],
+
+        'batch' => [
+            'driver' => 'local',
+            'root'   => '../images/scholarBatch',
+        ],
+
+        'students' => [
+            'driver' => 'local',
+            'root' => '../images/scholars'
+        ],
+
+        // INDIEGROUND
+        'indie' => [
+            'driver' => 'local',
+            'root' => '../images/indie',
+        ],
+
+        'mnl_indie' => [
+            'driver' => 'local',
+            'root'   => '../../images/indie',
+        ],
+
+        'mnl_indie_cms' => [
+            'driver' => 'local',
+            'root' => '../../rxcms/images/indie'
+        ],
+
+        'cbu_indie' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/images/indie'
+        ],
+
+        'cbu_indie_cms' => [
+            'driver' => 'local',
+            'root' => '../monstercebu/cebucms/images/indie'
+        ],
+
+        'dav_indie' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/images/indie'
+        ],
+
+        'dav_indie_cms' => [
+            'driver' => 'local',
+            'root' => '../monsterdavao/davaocms/images/indie'
+        ],
+        // END
+
+        'wallpapers' => [
+            'driver' => 'local',
+            'root' => '../images/wallpapers',
+        ],
+
+        'reports' => [
+            'driver' => 'local',
+            'root' => '../images/reports'
+        ],
+
+        // SONG AUDIOS
+        'songs' => [
+            'driver' => 'local',
+            'root'   => '../audios',
+        ],
+
+        'mnl_songs' => [
+            'driver' => 'local',
+            'root'   => '../../audios',
+        ],
+
+        'mnl_songs_cms' => [
+            'driver' => 'local',
+            'root' => '../../rxcms/audios'
+        ],
+
+        'cbu_songs' => [
+            'driver' => 'local',
+            'root'   => '../monstercebu/audios'
+        ],
+
+        'cbu_songs_cms' => [
+            'driver' => 'local',
+            'root' => '../monstercebu/cebucms/audios'
+        ],
+
+        'dav_songs' => [
+            'driver' => 'local',
+            'root'   => '../monsterdavao/audios'
+        ],
+
+        'dav_songs_cms' => [
+            'driver' => 'local',
+            'root' => '../monsterdavao/davaocms/audios'
+        ],
+        // END
+
+        // New additions
+        '_assets/mobile' =>[
+            'driver' => 'local',
+            'root' => '../images/_assets/mobile'
+        ],
+
+        'bugs' => [
+            'driver' => 'local',
+            'root' => '../images/bugs'
+        ],
+
+        '_assets/categories' => [
+            'driver' => 'local',
+            'root' => '../images/_assets/categories'
+        ],
+
+        'music_awards' => [
+            'driver' => 'local',
+            'root' => '../images/music_awards'
+        ]
+        // END
     ],
 
     /*

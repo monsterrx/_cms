@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import AppShell from '../../Components/AppShell';
 import Icon from '../../Components/Icon';
+import { appPath } from '../../lib/appUrl';
 
 export default function StatusPage({ status = 500, title, description, retryable = false }) {
     return (
@@ -22,14 +23,14 @@ export default function StatusPage({ status = 500, title, description, retryable
                         </div>
 
                         <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-14">
-                            <p className="rx-kicker">Monster CMS</p>
+                            <p className="rx-kicker">Monster Content Management System</p>
                             <h1 className="mt-4 font-heading text-3xl font-bold uppercase tracking-tight sm:text-5xl">
                                 {title}
                             </h1>
                             <p className="mt-5 max-w-xl text-base leading-7 text-ink-muted">{description}</p>
 
                             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                                <Link className="rx-button" href="/dashboard">
+                                <Link className="rx-button" href={appPath('/dashboard')}>
                                     Return to dashboard
                                     <Icon className="h-4 w-4" name="arrow" />
                                 </Link>
@@ -50,4 +51,3 @@ export default function StatusPage({ status = 500, title, description, retryable
         </AppShell>
     );
 }
-

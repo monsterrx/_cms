@@ -6,17 +6,16 @@ use App\Models\Show;
 use App\Models\StreamLink;
 use App\Support\StationContext;
 use Illuminate\Http\Request;
-use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 trait SystemFunctions {
     public function getAppEnvironment() {
-        return Env::get('APP_ENV') == 'local' ? 'dev' : 'prod';
+        return app()->environment('production') ? 'prod' : 'dev';
     }
 
     public function getAssetUrl($asset): string {
-        return Env::get('APP_URL').'/images/'.$asset.'/';
+        return rtrim((string) config('app.url'), '/').'/images/'.$asset.'/';
     }
 
     public function getStationName() {
@@ -54,7 +53,7 @@ trait SystemFunctions {
                 return 'https://rx931.com';
             }
         } else {
-            return Env::get('APP_URL');
+            return config('app.url');
         }
     }
 
@@ -80,11 +79,11 @@ trait SystemFunctions {
     }
 
     public function getSecret() {
-        return Env::get('APP_RECAPTCHA_SECRET');
+        return config('services.recaptcha.secret');
     }
 
     public function getSiteKey() {
-        return Env::get('APP_RECAPTCHA_SITEKEY');
+        return config('services.recaptcha.site_key');
     }
 
     public function getStationChart() {

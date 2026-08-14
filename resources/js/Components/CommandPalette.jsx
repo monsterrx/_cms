@@ -1,13 +1,14 @@
 import { router } from '@inertiajs/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Icon from './Icon';
+import { appPath } from '../lib/appUrl';
 
 function flattenNavigation(navigation) {
     return navigation.flatMap((section) => section.groups.flatMap((group) => (
         group.items.map((item) => ({
             ...item,
             group: group.label,
-            href: `/workspace/${section.slug}/${item.slug}`,
+            href: appPath(`/workspace/${section.slug}/${item.slug}`),
             icon: section.icon,
             section: section.label,
         }))
@@ -67,8 +68,8 @@ export default function CommandPalette({ navigation, open, onClose }) {
     };
 
     return (
-        <div aria-label="Search CMS tools" aria-modal="true" className="fixed inset-0 z-[90] flex items-start justify-center bg-black/70 px-4 pt-[10vh] backdrop-blur-sm" role="dialog">
-            <button aria-label="Close CMS search" className="absolute inset-0 cursor-default" onClick={onClose} type="button" />
+        <div aria-label="Search management tools" aria-modal="true" className="fixed inset-0 z-[90] flex items-start justify-center bg-black/70 px-4 pt-[10vh] backdrop-blur-sm" role="dialog">
+            <button aria-label="Close tool search" className="absolute inset-0 cursor-default" onClick={onClose} type="button" />
             <section className="rx-page relative z-10 w-full max-w-2xl overflow-hidden rounded-xl bg-surface shadow-2xl shadow-black/30">
                 <div className="flex items-center gap-3 border-b border-line/60 px-4 sm:px-5">
                     <Icon className="h-5 w-5 shrink-0 text-rx-blue" name="search" />
@@ -107,7 +108,7 @@ export default function CommandPalette({ navigation, open, onClose }) {
                         </button>
                     )) : (
                         <div className="px-5 py-12 text-center">
-                            <p className="font-heading text-sm font-semibold">No matching CMS tools</p>
+                            <p className="font-heading text-sm font-semibold">No matching tools</p>
                             <p className="mt-1 text-sm text-ink-muted">Try a module name such as articles, charts, shows, or reports.</p>
                         </div>
                     )}

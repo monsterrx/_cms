@@ -3,14 +3,24 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use App\Http\Controllers\BugReportReviewController;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', function () {
+    return redirect(route('dashboard', [], false));
+});
 
 Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->middleware('guest')->name('login');
 
 Route::middleware('auth')->group(function (): void {
+    Route::get('/bug-reports/{bugReport}', [BugReportReviewController::class, 'show'])
+        ->whereNumber('bugReport')
+        ->name('bug-reports.show');
+    Route::get('/bug-reports/{bugReport}/attachments/{attachment}', [BugReportReviewController::class, 'attachment'])
+        ->whereNumber(['bugReport', 'attachment'])
+        ->name('bug-reports.attachments.show');
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
@@ -20,6 +30,14 @@ Route::middleware('auth')->group(function (): void {
             'section' => Str::headline($section ?? 'This section'),
         ]);
     })->where('section', '[a-z0-9-]+')->name('under-construction');
+
+    Route::get('/workspace/digital-content-programs/shows/{record}', function (int $record) {
+        return Inertia::render('Shows/Edit', ['recordId' => $record]);
+    })->whereNumber('record')->name('shows.edit');
+
+    Route::get('/workspace/digital-content-programs/articles/{record}', function (int $record) {
+        return Inertia::render('Articles/Edit', ['recordId' => $record]);
+    })->whereNumber('record')->name('articles.edit');
 
     Route::get('/workspace/{section}/{item?}', function (string $section, ?string $item = null) {
         $selectedSection = collect(config('workspace.navigation'))

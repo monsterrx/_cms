@@ -1,14 +1,21 @@
 import axios from 'axios';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useMemo, useState } from 'react';
 import AppShell from '../Components/AppShell';
+import ResourceCardGrid from '../Components/ResourceCardGrid';
 import ResourceDataTable from '../Components/ResourceDataTable';
+import ResourceDetails from '../Components/ResourceDetails';
 import ResourceForm from '../Components/ResourceForm';
+import WeeklySchedule from '../Components/WeeklySchedule';
+import ChartWorkspace from '../Components/ChartWorkspace';
+import VoteWorkspace from '../Components/VoteWorkspace';
 import Icon from '../Components/Icon';
 import PersistentModal from '../Components/PersistentModal';
 import { getCreateAction } from '../Config/resourceActions';
 import { useAppState } from '../Contexts/AppStateContext';
+import { appPath } from '../lib/appUrl';
 import { translateError } from '../lib/errorTranslator';
+import { resourceFormValues, resourceRequestPayload } from '../lib/resourceForm';
 
 const emptyMeta = {
     current_page: 1,
@@ -21,6 +28,24 @@ const emptyMeta = {
     direction: 'desc',
 };
 
+const detailResources = new Set([
+    'jocks',
+    'radio1-batches',
+    'student-jocks',
+    'articles',
+    'songs',
+    'podcasts',
+    'shows',
+    'timeslots',
+    'mobile-application',
+    'monster-music-awards',
+    'scholar-batches',
+]);
+
+const chartResources = new Set(['station-chart', 'daily-survey-top-5', 'dropouts']);
+const fullWidthResources = new Set(['timeslots', 'giveaways', 'contestants', 'indieground-artists']);
+const reviewFirstResources = new Set(['indieground-featured']);
+
 function resolveWorkspace(navigation, sectionSlug, itemSlug) {
     const section = navigation.find((candidate) => candidate.slug === sectionSlug);
     const groups = section?.groups ?? [];
@@ -29,24 +54,6 @@ function resolveWorkspace(navigation, sectionSlug, itemSlug) {
         .find((candidate) => candidate.slug === itemSlug);
 
     return { section, item };
-}
-
-function formValuesFor(fields, record = null) {
-    return fields.reduce((values, field) => {
-        if (!field.form) {
-            return values;
-        }
-
-        if (record) {
-            values[field.name] = record[field.name] ?? '';
-        } else if (field.type === 'checkbox') {
-            values[field.name] = Number(field.default ?? 0);
-        } else {
-            values[field.name] = field.default ?? '';
-        }
-
-        return values;
-    }, {});
 }
 
 function SectionOverview({ section }) {
@@ -68,7 +75,7 @@ function SectionOverview({ section }) {
                         {group.items.map((item) => (
                             <Link
                                 className="group flex items-start gap-4 rounded-lg bg-canvas px-4 py-4 transition-all duration-200 hover:translate-x-1 hover:bg-surface-muted"
-                                href={`/workspace/${section.slug}/${item.slug}`}
+                                href={appPath(`/workspace/${section.slug}/${item.slug}`)}
                                 key={item.slug}
                             >
                                 <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-rx-blue/15 text-rx-blue transition-colors group-hover:bg-rx-blue group-hover:text-neutral-950">
@@ -91,18 +98,28 @@ function ItemWorkspace({ section, item }) {
     const { notify } = useAppState();
     const createAction = getCreateAction(item.slug);
     const endpoint = `/api/resources/${section.slug}/${item.slug}`;
+    const requestedPageSize = ['jocks', 'indieground-artists', 'indieground-featured'].includes(item.slug)
+        ? 12
+        : (['graphics-artist', 'shows'].includes(item.slug)
+            ? 100
+            : (item.slug === 'timeslots' ? 250 : 25));
     const [records, setRecords] = useState([]);
     const [fields, setFields] = useState([]);
     const [tableFields, setTableFields] = useState([]);
     const [meta, setMeta] = useState(emptyMeta);
-    const [resource, setResource] = useState({ can_write: false, has_uploads: false, read_only: false });
+    const [resource, setResource] = useState({
+        can_write: false,
+        has_uploads: false,
+        presentation: 'table',
+        read_only: false,
+    });
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState('');
     const [searchInput, setSearchInput] = useState('');
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [sort, setSort] = useState('');
-    const [direction, setDirection] = useState('desc');
+    const [direction, setDirection] = useState(item.slug === 'graphics-artist' ? 'asc' : 'desc');
     const [refreshToken, setRefreshToken] = useState(0);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
@@ -111,6 +128,12 @@ function ItemWorkspace({ section, item }) {
     const [formErrors, setFormErrors] = useState({});
     const [formMessage, setFormMessage] = useState('');
     const [saving, setSaving] = useState(false);
+    const [reviewEditing, setReviewEditing] = useState(true);
+    const [cropStatus, setCropStatus] = useState({});
+    const [details, setDetails] = useState({});
+    const [detailsError, setDetailsError] = useState('');
+    const [detailsLoading, setDetailsLoading] = useState(false);
+    const [detailsToken, setDetailsToken] = useState(0);
     const relatedItems = section.groups
         .flatMap((group) => group.items)
         .filter((candidate) => candidate.slug !== item.slug)
@@ -135,7 +158,7 @@ function ItemWorkspace({ section, item }) {
             params: {
                 direction,
                 page,
-                per_page: meta.per_page,
+                per_page: requestedPageSize,
                 search: search || undefined,
                 sort: sort || undefined,
             },
@@ -172,9 +195,46 @@ function ItemWorkspace({ section, item }) {
         setSearchInput('');
         setSearch('');
         setSort('');
-        setDirection('desc');
+        setDirection(item.slug === 'graphics-artist' ? 'asc' : 'desc');
         setModalOpen(false);
+        setReviewEditing(true);
+        setDetails({});
+        setDetailsError('');
     }, [item.slug]);
+
+    useEffect(() => {
+        if (!modalOpen || !selectedRecord || !detailResources.has(item.slug)) {
+            setDetails({});
+            setDetailsError('');
+            setDetailsLoading(false);
+            return undefined;
+        }
+
+        let active = true;
+
+        setDetailsLoading(true);
+        setDetailsError('');
+        axios.get(`${endpoint}/${selectedRecord.id}/details`, { silent: true })
+            .then(({ data }) => {
+                if (active) {
+                    setDetails(data.data.details ?? {});
+                }
+            })
+            .catch((error) => {
+                if (active) {
+                    setDetailsError(translateError(error).message);
+                }
+            })
+            .finally(() => {
+                if (active) {
+                    setDetailsLoading(false);
+                }
+            });
+
+        return () => {
+            active = false;
+        };
+    }, [detailsToken, endpoint, item.slug, modalOpen, selectedRecord]);
 
     const updatedToday = useMemo(() => {
         const today = new Date().toDateString();
@@ -191,40 +251,79 @@ function ItemWorkspace({ section, item }) {
         () => JSON.stringify(formValues) !== JSON.stringify(initialFormValues),
         [formValues, initialFormValues],
     );
+    const hasPendingCrop = Object.values(cropStatus).some((ready) => !ready);
+    const hasDeferredUploads = fields.some(
+        (field) => field.type === 'file' && !field.upload_supported,
+    );
+    const reviewFirst = Boolean(selectedRecord) && reviewFirstResources.has(item.slug);
+    const modalCanEdit = resource.can_write && (!reviewFirst || reviewEditing);
 
     const openCreate = () => {
-        const values = formValuesFor(fields);
+        const values = resourceFormValues(fields);
 
         setSelectedRecord(null);
         setInitialFormValues(values);
         setFormValues(values);
         setFormErrors({});
         setFormMessage('');
+        setCropStatus({});
+        setDetails({});
+        setDetailsError('');
+        setReviewEditing(true);
         setModalOpen(true);
     };
 
     const openEdit = (record) => {
-        const values = formValuesFor(fields, record);
+        if (['articles', 'shows'].includes(item.slug)) {
+            router.visit(appPath(`/workspace/${section.slug}/${item.slug}/${record.id}`));
+            return;
+        }
+
+        const values = resourceFormValues(fields, record);
 
         setSelectedRecord(record);
         setInitialFormValues(values);
         setFormValues(values);
         setFormErrors({});
         setFormMessage('');
+        setCropStatus({});
+        setReviewEditing(!reviewFirstResources.has(item.slug));
         setModalOpen(true);
     };
 
     const saveRecord = async (event) => {
         event.preventDefault();
+
+        if (hasPendingCrop) {
+            setFormMessage('Apply every selected image crop before saving the record.');
+            return;
+        }
+
         setSaving(true);
         setFormErrors({});
         setFormMessage('');
 
         try {
+            const payload = resourceRequestPayload(fields, formValues);
+
+            let response;
+
             if (selectedRecord) {
-                await axios.put(`${endpoint}/${selectedRecord.id}`, formValues);
+                if (payload instanceof FormData) {
+                    payload.append('_method', 'PUT');
+                    response = await axios.post(`${endpoint}/${selectedRecord.id}`, payload);
+                } else {
+                    response = await axios.put(`${endpoint}/${selectedRecord.id}`, payload);
+                }
             } else {
-                await axios.post(endpoint, formValues);
+                response = await axios.post(endpoint, payload);
+            }
+
+            const createdId = response?.data?.data?.record?.id;
+            if (!selectedRecord && item.slug === 'articles' && createdId) {
+                setModalOpen(false);
+                router.visit(appPath(`/workspace/${section.slug}/articles/${createdId}`));
+                return;
             }
 
             setModalOpen(false);
@@ -250,6 +349,36 @@ function ItemWorkspace({ section, item }) {
         } catch {
             // The global Axios handler displays the translated failure.
         }
+    };
+
+    const performRecordAction = async (record, action) => {
+        try {
+            const { data } = await axios.post(`${endpoint}/${record.id}/actions/${action}`);
+
+            notify({
+                type: 'success',
+                title: 'Saved',
+                message: data.message ?? 'The change was saved successfully.',
+            });
+            setRefreshToken((current) => current + 1);
+        } catch {
+            // The global Axios handler displays the translated failure.
+        }
+    };
+
+    const saveRecordOrder = async (ids) => {
+        if (ids.length === 0) {
+            return;
+        }
+
+        const { data } = await axios.post(`${endpoint}/${ids[0]}/actions/reorder`, { ids });
+
+        notify({
+            type: 'success',
+            title: 'Order saved',
+            message: data.message ?? 'The new display order was saved.',
+        });
+        setRefreshToken((current) => current + 1);
     };
 
     const sortRecords = (column) => {
@@ -283,7 +412,7 @@ function ItemWorkspace({ section, item }) {
     };
 
     return (
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(18rem,0.55fr)]">
+        <div className={`grid gap-6 ${fullWidthResources.has(item.slug) ? '' : 'xl:grid-cols-[minmax(0,1.6fr)_minmax(18rem,0.55fr)]'}`}>
             <div className="min-w-0 space-y-6">
                 <section aria-label={`${item.label} summary`} className="grid gap-3 sm:grid-cols-3">
                     {[
@@ -349,6 +478,29 @@ function ItemWorkspace({ section, item }) {
                             <p className="mt-2 text-sm text-ink-muted">{loadError}</p>
                             <button className="rx-button-secondary mt-5" onClick={() => setRefreshToken((current) => current + 1)} type="button">Try again</button>
                         </div>
+                    ) : resource.presentation === 'weekly-schedule' ? (
+                        <WeeklySchedule
+                            canWrite={resource.can_write}
+                            endpoint={endpoint}
+                            fields={fields}
+                            loading={loading}
+                            onEdit={openEdit}
+                            onSaved={() => setRefreshToken((current) => current + 1)}
+                            records={records}
+                        />
+                    ) : resource.presentation !== 'table' ? (
+                        <ResourceCardGrid
+                            canWrite={resource.can_write}
+                            loading={loading}
+                            meta={meta}
+                            onAction={performRecordAction}
+                            onDelete={deleteRecord}
+                            onEdit={openEdit}
+                            onOrderSave={saveRecordOrder}
+                            onPageChange={setPage}
+                            presentation={resource.presentation}
+                            records={records}
+                        />
                     ) : (
                         <ResourceDataTable
                             canWrite={resource.can_write}
@@ -367,7 +519,7 @@ function ItemWorkspace({ section, item }) {
                 </section>
             </div>
 
-            <aside className="space-y-6">
+            <aside className={fullWidthResources.has(item.slug) ? 'grid gap-6 lg:grid-cols-2' : 'space-y-6'}>
                 <section className="rx-panel p-5">
                     <p className="rx-kicker">Current tool</p>
                     <h2 className="mt-2 font-heading text-lg font-semibold uppercase tracking-wide">About {item.label}</h2>
@@ -383,7 +535,7 @@ function ItemWorkspace({ section, item }) {
                         </p>
                         {resource.has_uploads && (
                             <p className="mt-2 rounded-lg bg-rx-yellow/10 px-3 py-2 text-xs leading-5 text-ink-muted">
-                                File fields are shown in forms, but uploads are deferred.
+                                Approved image fields open a cropper and validate their exact output size before upload.
                             </p>
                         )}
                     </div>
@@ -395,7 +547,7 @@ function ItemWorkspace({ section, item }) {
                         {relatedItems.map((related) => (
                             <Link
                                 className="group flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors duration-200 hover:bg-canvas"
-                                href={`/workspace/${section.slug}/${related.slug}`}
+                                href={appPath(`/workspace/${section.slug}/${related.slug}`)}
                                 key={related.slug}
                             >
                                 <span>{related.label}</span>
@@ -407,40 +559,106 @@ function ItemWorkspace({ section, item }) {
             </aside>
 
             <PersistentModal
-                dirty={resource.can_write && dirty}
-                footer={resource.can_write ? (
+                dirty={modalCanEdit && dirty}
+                footer={modalCanEdit ? (
                     <div className="flex items-center justify-between gap-4">
                         <p className="text-xs text-ink-muted">Close with the X button. Unsaved changes require confirmation.</p>
-                        <button className="rx-button" disabled={saving} form="resource-record-form" type="submit">
-                            {saving ? 'Saving...' : (selectedRecord ? 'Save changes' : 'Create record')}
+                        <button className="rx-button" disabled={saving || hasPendingCrop} form="resource-record-form" type="submit">
+                            {saving ? 'Saving...' : 'Save'}
                         </button>
                     </div>
                 ) : (
-                    <p className="text-right text-xs text-ink-muted">This record is read-only. Use the X button to close.</p>
+                    <p className="text-right text-xs text-ink-muted">
+                        {reviewFirst ? 'Review mode is active. Enable editing above to update this feature.' : 'This record is read-only. Use the X button to close.'}
+                    </p>
                 )}
                 onClose={() => setModalOpen(false)}
                 open={modalOpen}
                 title={selectedRecord ? `Edit ${item.label} #${selectedRecord.id}` : `New ${item.label}`}
             >
-                {resource.has_uploads && (
+                {reviewFirst && (
+                    <div className="mb-6 flex flex-col gap-4 rounded-lg border border-rx-blue/30 bg-rx-blue/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex min-w-0 items-center gap-4">
+                            {selectedRecord?._display?.image && <img alt="" className="h-20 w-20 shrink-0 rounded-md border border-line object-cover" src={selectedRecord._display.image} />}
+                            <div className="min-w-0">
+                                <p className="truncate font-heading text-base font-semibold uppercase tracking-wide">{selectedRecord?.artist_name}</p>
+                                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-rx-blue">{selectedRecord?.feature_period}</p>
+                                <p className="mt-2 text-xs leading-5 text-ink-muted">{reviewEditing ? 'Editing is enabled.' : 'Review the feature and content first, then enable editing when changes are required.'}</p>
+                            </div>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-3 text-xs font-semibold uppercase tracking-wide">
+                            <span>Update contents</span>
+                            <button
+                                aria-checked={reviewEditing}
+                                className={`relative h-7 w-12 rounded-full transition-colors ${reviewEditing ? 'bg-rx-blue' : 'bg-line'}`}
+                                onClick={() => {
+                                    if (reviewEditing && dirty && !window.confirm('Discard the unsaved changes and return to review mode?')) return;
+                                    if (reviewEditing && dirty) setFormValues(initialFormValues);
+                                    setReviewEditing((current) => !current);
+                                }}
+                                role="switch"
+                                type="button"
+                            >
+                                <span className={`absolute top-1 h-5 w-5 rounded-full bg-white transition-transform ${reviewEditing ? 'translate-x-6' : 'translate-x-1'}`} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+                {hasDeferredUploads && (
                     <div className="mb-6 flex gap-3 rounded-lg border border-rx-yellow/30 bg-rx-yellow/10 p-4 text-sm text-ink-muted">
                         <Icon className="mt-0.5 h-5 w-5 shrink-0 text-rx-yellow" name="alert" />
-                        <p>Photo and file controls are included for completeness, but upload processing is not enabled yet.</p>
+                        <p>Some file fields remain read-only because an approved crop size has not been defined for them.</p>
                     </div>
                 )}
                 {formMessage && <div className="mb-5 border-l-4 border-red-500 bg-red-500/10 p-4 text-sm text-red-500" role="alert">{formMessage}</div>}
                 <form id="resource-record-form" onSubmit={saveRecord}>
                     <ResourceForm
                         errors={formErrors}
-                        fields={fields}
+                        fields={selectedRecord && item.slug === 'mobile-application'
+                            ? fields.filter((field) => field.type !== 'file')
+                            : fields}
                         onChange={(name, value) => {
-                            setFormValues((current) => ({ ...current, [name]: value }));
+                            const field = fields.find((candidate) => candidate.name === name);
+                            setFormValues((current) => {
+                                const next = { ...current, [name]: value };
+
+                                if (name === 'award_target') {
+                                    if (value === 'jock') next.show_id = '';
+                                    if (value === 'show') next.jock_id = '';
+                                }
+                                (field?.clears ?? []).forEach((cleared) => {
+                                    next[cleared] = '';
+                                });
+
+                                return next;
+                            });
                             setFormErrors((current) => ({ ...current, [name]: undefined }));
                         }}
-                        readOnly={!resource.can_write}
+                        onCropStatusChange={(name, ready) => {
+                            setCropStatus((current) => ({ ...current, [name]: ready }));
+                            if (ready) {
+                                setFormMessage('');
+                            }
+                        }}
+                        readOnly={!modalCanEdit}
                         values={formValues}
                     />
                 </form>
+                {selectedRecord && detailResources.has(item.slug) && (
+                    <ResourceDetails
+                        canWrite={resource.can_write}
+                        details={details}
+                        endpoint={`${endpoint}/${selectedRecord.id}`}
+                        error={detailsError}
+                        itemSlug={item.slug}
+                        loading={detailsLoading}
+                        record={selectedRecord}
+                        reload={() => {
+                            setDetailsToken((current) => current + 1);
+                            setRefreshToken((current) => current + 1);
+                        }}
+                    />
+                )}
             </PersistentModal>
         </div>
     );
@@ -457,11 +675,11 @@ export default function Workspace({ sectionSlug, itemSlug = null }) {
 
             <div className="mx-auto max-w-[96rem] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
                 <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.14em] text-ink-muted">
-                    <Link className="transition-colors hover:text-rx-blue" href="/dashboard">Dashboard</Link>
+                    <Link className="transition-colors hover:text-rx-blue" href={appPath('/dashboard')}>Dashboard</Link>
                     <span>/</span>
                     {item ? (
                         <>
-                            <Link className="transition-colors hover:text-rx-blue" href={`/workspace/${section.slug}`}>{section.label}</Link>
+                            <Link className="transition-colors hover:text-rx-blue" href={appPath(`/workspace/${section.slug}`)}>{section.label}</Link>
                             <span>/</span>
                             <span className="text-ink">{item.label}</span>
                         </>
@@ -484,13 +702,19 @@ export default function Workspace({ sectionSlug, itemSlug = null }) {
                         </div>
                     </div>
                     {item && (
-                        <Link className="rx-button-secondary self-start lg:self-auto" href={`/workspace/${section.slug}`}>
+                        <Link className="rx-button-secondary self-start lg:self-auto" href={appPath(`/workspace/${section.slug}`)}>
                             Module overview
                         </Link>
                     )}
                 </section>
 
-                {item ? <ItemWorkspace item={item} section={section} /> : <SectionOverview section={section} />}
+                {item ? (
+                    item.slug === 'votes'
+                        ? <VoteWorkspace />
+                        : chartResources.has(item.slug)
+                        ? <ChartWorkspace item={item} />
+                        : <ItemWorkspace item={item} section={section} />
+                ) : <SectionOverview section={section} />}
             </div>
         </AppShell>
     );

@@ -6,6 +6,7 @@ use App\Models\Designation;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -136,6 +137,28 @@ class ExampleTest extends TestCase
         $this->actingAs($this->authenticatedUser());
 
         $this->get('/workspace/music/not-a-real-tool')->assertNotFound();
+    }
+
+    public function test_show_editor_uses_a_dedicated_authenticated_page(): void
+    {
+        $this->actingAs($this->authenticatedUser());
+
+        $this->get('/workspace/digital-content-programs/shows/17')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Shows/Edit')
+                ->where('recordId', 17));
+    }
+
+    public function test_article_editor_uses_a_dedicated_authenticated_page(): void
+    {
+        $this->actingAs($this->authenticatedUser());
+
+        $this->get('/workspace/digital-content-programs/articles/10')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Articles/Edit')
+                ->where('recordId', 10));
     }
 
     private function authenticatedUser(): User

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import CardDropdown from './CardDropdown';
+import ImageCropField from './ImageCropField';
+import RichTextEditor from './RichTextEditor';
 
 function normalizeDateValue(value, type) {
     if (!value) {
@@ -23,6 +25,14 @@ function hasValue(value) {
     return value !== null && value !== undefined && String(value).trim() !== '';
 }
 
+function cropFieldForValues(field, values) {
+    const variants = field.crop_variants;
+    const selector = variants?.selector;
+    const selected = selector ? variants[values[selector]] : null;
+
+    return selected ? { ...field, crop: selected } : field;
+}
+
 function FloatingLabel({ error, field, floated, focused, required }) {
     const color = error
         ? 'text-red-500'
@@ -44,9 +54,23 @@ function FloatingLabel({ error, field, floated, focused, required }) {
     );
 }
 
-export default function ResourceForm({ errors, fields, onChange, readOnly, values }) {
+export default function ResourceForm({
+    errors,
+    fields,
+    onChange,
+    onCropStatusChange,
+    readOnly,
+    values,
+}) {
     const [focusedField, setFocusedField] = useState(null);
-    const formFields = fields.filter((field) => field.form);
+    const formFields = fields.filter((field) => {
+        if (!field.form) {
+            return false;
+        }
+
+        const condition = field.show_when;
+        return !condition || String(values[condition.field] ?? '') === String(condition.value);
+    });
 
     return (
         <div className="grid pt-2 md:grid-cols-2" style={{ columnGap: '1.5rem', rowGap: '2rem' }}>
@@ -66,6 +90,20 @@ export default function ResourceForm({ errors, fields, onChange, readOnly, value
                 const controlClass = `block min-h-14 w-full rounded-md border bg-transparent px-3 pb-2 pt-5 text-sm text-ink shadow-none outline-none transition-[border-color,background-color,opacity] duration-200 placeholder:text-transparent hover:bg-canvas/40 focus:ring-0 disabled:cursor-not-allowed disabled:bg-canvas/40 disabled:opacity-60 ${activeState}`;
 
                 if (field.type === 'file') {
+                    if (field.upload_supported && field.crop) {
+                        return (
+                            <ImageCropField
+                                disabled={disabled}
+                                error={error}
+                                field={cropFieldForValues(field, values)}
+                                key={field.name}
+                                onChange={onChange}
+                                onCropStatusChange={onCropStatusChange}
+                                value={value}
+                            />
+                        );
+                    }
+
                     return (
                         <div className="md:col-span-2" key={field.name}>
                             <label className="font-heading text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-ink-muted" htmlFor={`field-${field.name}`}>
@@ -78,9 +116,23 @@ export default function ResourceForm({ errors, fields, onChange, readOnly, value
                                 type="file"
                             />
                             <p className="mt-2 text-xs leading-5 text-ink-muted">
-                                Existing value: {values[field.name] || 'No file assigned'}. Upload handling is intentionally deferred for this module.
+                                Existing value: {values[field.name] || 'No file assigned'}. This module does not have an approved crop size yet.
                             </p>
                         </div>
+                    );
+                }
+
+                if (field.type === 'rich-text') {
+                    return (
+                        <RichTextEditor
+                            disabled={disabled}
+                            error={error}
+                            field={field}
+                            key={field.name}
+                            onChange={onChange}
+                            required={required}
+                            value={value}
+                        />
                     );
                 }
 
@@ -163,6 +215,7 @@ export default function ResourceForm({ errors, fields, onChange, readOnly, value
                             <FloatingLabel error={error} field={field} floated={floated} focused={focused} required={required} />
                         </div>
 
+                        {field.help && <p className="mt-2 text-xs leading-5 text-ink-muted">{field.help}</p>}
                         {error && <p className="mt-1.5 text-xs text-red-500" id={errorId}>{error}</p>}
                     </div>
                 );

@@ -3,6 +3,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import AppShell from '../Components/AppShell';
 import Icon from '../Components/Icon';
+import { appPath } from '../lib/appUrl';
 import { translateError } from '../lib/errorTranslator';
 
 function formatTimestamp(value) {
@@ -67,13 +68,13 @@ export default function Dashboard() {
                             Manage station staff, music, digital content, programs, events, promos, and system records.
                         </p>
                     </div>
-                    <Link className="rx-button self-start lg:self-auto" href="/workspace/digital-content-programs/articles">
+                    <Link className="rx-button self-start lg:self-auto" href={appPath('/workspace/digital-content-programs/articles')}>
                         Create article
                         <Icon className="h-4 w-4" name="plus" />
                     </Link>
                 </section>
 
-                <section aria-label="CMS summary" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                <section aria-label="Content summary" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                     {[
                         ['Management areas', String(navigation.length).padStart(2, '0'), 'Workspace modules', 'blue'],
                         ['Destinations', String(destinations).padStart(2, '0'), 'Tools and registries', 'yellow'],
@@ -106,7 +107,7 @@ export default function Dashboard() {
                         {navigation.map((section, index) => (
                             <Link
                                 className="rx-panel group flex min-h-52 flex-col p-6 hover:-translate-y-1"
-                                href={`/workspace/${section.slug}`}
+                                href={appPath(`/workspace/${section.slug}`)}
                                 key={section.slug}
                             >
                                 <div className="flex items-start justify-between gap-4">
@@ -139,7 +140,7 @@ export default function Dashboard() {
                                 <p className="rx-kicker">Across the station</p>
                                 <h2 className="mt-1 font-heading text-lg font-semibold uppercase tracking-wide" id="activity-heading">Recent activity</h2>
                             </div>
-                            <Link className="text-sm font-semibold uppercase tracking-wide text-rx-blue transition-colors hover:text-rx-yellow" href="/workspace/utilities/logs">
+                            <Link className="text-sm font-semibold uppercase tracking-wide text-rx-blue transition-colors hover:text-rx-yellow" href={appPath('/workspace/utilities/logs')}>
                                 View logs
                             </Link>
                         </div>
@@ -182,7 +183,7 @@ export default function Dashboard() {
                                 ['Review contestants', '/workspace/promos/contestants', 'gift'],
                                 ['View reports', '/workspace/utilities/reports', 'tools'],
                             ].map(([label, href, icon]) => (
-                                <Link className="group flex items-center gap-3 rounded-lg bg-canvas px-4 py-3 transition-all duration-200 hover:translate-x-1 hover:bg-surface-muted" href={href} key={href}>
+                                <Link className="group flex items-center gap-3 rounded-lg bg-canvas px-4 py-3 transition-all duration-200 hover:translate-x-1 hover:bg-surface-muted" href={appPath(href)} key={href}>
                                     <Icon className="h-5 w-5 text-rx-blue" name={icon} />
                                     <span className="flex-1 font-heading text-sm font-semibold uppercase tracking-wide">{label}</span>
                                     <Icon className="h-4 w-4 text-ink-muted transition-transform group-hover:translate-x-1" name="arrow" />
