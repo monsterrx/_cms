@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Award
@@ -18,10 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $year
  * @property int $is_special
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Jock|null $Jock
- * @property-read \App\Models\Show|null $Show
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Jock|null $Jock
+ * @property-read Show|null $Show
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Award newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Award newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Award query()
@@ -37,6 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Award whereYear($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperAward
  */
@@ -52,14 +55,16 @@ class Award extends Model
         'description',
         'year',
         'special',
-        'location'
+        'location',
     ];
 
-    public function Jock() {
+    public function Jock()
+    {
         return $this->belongsTo(Jock::class);
     }
 
-    public function Show() {
+    public function Show()
+    {
         return $this->belongsTo(Show::class);
     }
 }

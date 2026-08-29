@@ -1,6 +1,9 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\UserLogs
@@ -10,10 +13,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $action
  * @property int $employee_id
  * @property string $location
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Employee $Employee
- * @property-read \App\Models\User $User
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Employee $Employee
+ * @property-read User $User
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|UserLogs newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserLogs newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserLogs query()
@@ -24,27 +28,30 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserLogs whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLogs whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLogs whereUserId($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperUserLogs
  */
-class UserLogs extends Model {
-
+class UserLogs extends Model
+{
     protected $dates = [
-        'deleted_at'
+        'deleted_at',
     ];
 
-	protected $fillable = [
-	    'user_id',
+    protected $fillable = [
+        'user_id',
         'action',
         'employee_id',
-        'location'
+        'location',
     ];
 
-	public function User(){
-		return $this->belongsTo(User::class);
-	}
+    public function User()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-	public function Employee(){
-		return $this->belongsTo(Employee::class);
-	}
+    public function Employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
 }

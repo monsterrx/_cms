@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Contest
@@ -21,10 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $line2
  * @property string|null $line3
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contestant> $Contestant
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Contestant> $Contestant
  * @property-read int|null $contestant_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Contest newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contest newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contest query()
@@ -43,6 +46,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Contest whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contest whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contest whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperContest
  */
@@ -63,10 +67,11 @@ class Contest extends Model
         'image',
         'code',
         'is_active',
-        'location'
+        'location',
     ];
 
-    public function Contestant() {
+    public function Contestant()
+    {
         return $this->belongsToMany(Contestant::class, 'contestant_giveaway', 'contestant_id', 'giveaway_id');
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Employee
@@ -21,18 +23,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $address
  * @property string $location
  * @property int|null $is_active
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Article> $Article
+ * @property Carbon|null $deleted_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Article> $Article
  * @property-read int|null $article_count
- * @property-read \App\Models\Designation $Designation
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Jock> $Jock
+ * @property-read Designation $Designation
+ * @property-read Collection<int, Jock> $Jock
  * @property-read int|null $jock_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $User
+ * @property-read Collection<int, User> $User
  * @property-read int|null $user_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Vote> $Votes
+ * @property-read Collection<int, Vote> $Votes
  * @property-read int|null $votes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Employee newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Employee newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Employee onlyTrashed()
@@ -54,6 +57,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Employee whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Employee withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Employee withoutTrashed()
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperEmployee
  */
@@ -71,26 +75,31 @@ class Employee extends Model
         'contact_number',
         'address',
         'is_active',
-        'location'
+        'location',
     ];
 
-    public function User() {
+    public function User()
+    {
         return $this->hasMany(User::class);
     }
 
-    public function Designation() {
+    public function Designation()
+    {
         return $this->belongsTo(Designation::class);
     }
 
-    public function Jock() {
+    public function Jock()
+    {
         return $this->hasMany(Jock::class);
     }
 
-    public function Article() {
+    public function Article()
+    {
         return $this->hasMany(Article::class);
     }
 
-    public function Votes() {
+    public function Votes()
+    {
         return $this->hasMany(Vote::class);
     }
 }

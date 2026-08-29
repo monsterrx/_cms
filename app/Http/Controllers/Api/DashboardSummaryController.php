@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 final class DashboardSummaryController extends Controller
 {
-    public function __construct(private StationContext $stations)
-    {
-    }
+    public function __construct(private StationContext $stations) {}
 
     public function __invoke(): JsonResponse
     {

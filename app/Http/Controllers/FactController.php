@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class FactController extends Controller {
-
+class FactController extends Controller
+{
     public function index()
     {
         $jock_id = Jock::where('employee_id', Auth::user()->Employee->id)->pluck('id');
@@ -25,7 +25,8 @@ class FactController extends Controller {
         return redirect()->back()->withErrors('Restricted Access!');
     }
 
-    public function show(Request $request) {
+    public function show(Request $request)
+    {
         $facts = Fact::findOrFail($request['id']);
 
         return response()->json(['fact' => $facts]);
@@ -35,13 +36,14 @@ class FactController extends Controller {
     {
         $this->validate($request, [
             'jock_id' => 'required',
-            'content' => 'required|max:255'
+            'content' => 'required|max:255',
         ]);
 
         $fact = new Fact($request->all());
         $fact->save();
 
         session()->flash('success', 'Fact has been successfully added!');
+
         return redirect()->back();
     }
 
@@ -49,7 +51,7 @@ class FactController extends Controller {
     {
         $this->validate($request, [
             'jock_id' => 'required',
-            'content' => 'required|max:255'
+            'content' => 'required|max:255',
         ]);
 
         $fact = Fact::with('Jock')->findOrfail($id);
@@ -57,6 +59,7 @@ class FactController extends Controller {
         $fact->update($request->all());
 
         Session::flash('success', 'Fact has been successfully updated!');
+
         return redirect()->back();
     }
 
@@ -67,6 +70,7 @@ class FactController extends Controller {
         $fact->delete();
 
         Session::flash('success', 'Fact has been successfully removed!');
+
         return redirect()->back();
     }
 }

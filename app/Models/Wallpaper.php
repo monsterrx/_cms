@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Wallpaper
@@ -14,8 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $location
  * @property string $device
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Wallpaper newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallpaper newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Wallpaper query()
@@ -27,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Wallpaper whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wallpaper whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Wallpaper whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperWallpaper
  */

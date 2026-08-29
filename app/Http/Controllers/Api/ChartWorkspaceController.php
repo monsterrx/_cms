@@ -16,9 +16,7 @@ final class ChartWorkspaceController extends Controller
 {
     private const STATION_SHOW_IDS = ['mnl' => 17, 'cbu' => 38, 'dav' => 29];
 
-    public function __construct(private StationContext $stations)
-    {
-    }
+    public function __construct(private StationContext $stations) {}
 
     public function index(Request $request): JsonResponse
     {
@@ -111,8 +109,11 @@ final class ChartWorkspaceController extends Controller
             ->where(fn (Builder $drafts) => $drafts->whereNull('charts.is_posted')->orWhere('charts.is_posted', 0));
         abort_unless($query->count() === count($validated['ids']), 422, 'One or more chart entries do not belong to the selected chart.');
         DB::transaction(function () use ($validated): void {
-            foreach ($validated['ids'] as $index => $id) DB::table('charts')->where('id', $id)->update(['position' => $index + 1, 'updated_at' => now()]);
+            foreach ($validated['ids'] as $index => $id) {
+                DB::table('charts')->where('id', $id)->update(['position' => $index + 1, 'updated_at' => now()]);
+            }
         });
+
         return $this->successResponse(null, 'Chart order saved successfully.');
     }
 
@@ -126,6 +127,7 @@ final class ChartWorkspaceController extends Controller
             ->where(fn (Builder $query) => $query->whereNull('charts.is_posted')->orWhere('charts.is_posted', 0))
             ->update(['is_posted' => 1, 'updated_at' => now()]);
         abort_if($count === 0, 422, 'No draft entries were found for this chart date.');
+
         return $this->successResponse(['published_entries' => $count], 'The complete chart draft was published.');
     }
 
@@ -157,6 +159,7 @@ final class ChartWorkspaceController extends Controller
             'location' => $station, 'chart_date' => $validated['date'], 'chart_type' => $chartType,
             'publish_at' => $validated['publish_at'], 'status' => 'pending', 'created_at' => now(), 'updated_at' => now(),
         ]);
+
         return $this->successResponse(['id' => $id], 'Chart publication scheduled successfully.', 201);
     }
 
@@ -167,6 +170,7 @@ final class ChartWorkspaceController extends Controller
         abort_if($record === null, 404);
         abort_if((int) $record->is_posted === 1, 422, 'Published chart entries cannot be removed.');
         DB::table('charts')->where('id', $id)->update(['deleted_at' => now(), 'updated_at' => now()]);
+
         return $this->successResponse(null, 'Chart entry removed successfully.');
     }
 
@@ -255,18 +259,23 @@ final class ChartWorkspaceController extends Controller
     {
         $query = DB::table('charts')->where('charts.location', $station)->whereNull('charts.deleted_at');
         ChartType::apply($query, $flags);
+
         return $query;
     }
 
     private function applyStatus(Builder $query, string $status): void
     {
-        if ($status === 'draft') $query->where(fn (Builder $q) => $q->whereNull('charts.is_posted')->orWhere('charts.is_posted', 0));
-        elseif ($status === 'posted') $query->where('charts.is_posted', 1);
+        if ($status === 'draft') {
+            $query->where(fn (Builder $q) => $q->whereNull('charts.is_posted')->orWhere('charts.is_posted', 0));
+        } elseif ($status === 'posted') {
+            $query->where('charts.is_posted', 1);
+        }
     }
 
     private function canWrite(Request $request): bool
     {
         $level = $request->user()?->Employee?->Designation?->level;
+
         return $level !== null && in_array((int) $level, [1, 2, 5, 6, 7], true);
     }
 

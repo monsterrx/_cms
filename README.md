@@ -1,64 +1,77 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Monster CMS 13
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Monster RX's administration application, migrated to Laravel 13 with Inertia, React, Sanctum, and Vite.
 
-## About Laravel
+## Architecture
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 13 uses the slim application configuration in `bootstrap/app.php`.
+- Blade provides the Inertia root view; React renders authenticated CMS pages.
+- Browser routes are split under `routes/cms`.
+- API routes are split under `routes/api`.
+- Existing Eloquent models and controllers are retained while modules are migrated incrementally.
+- Production frontend assets are compiled into `public/build`; Node.js is not required at runtime.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3 or newer with the Laravel-required extensions
+- Composer 2
+- MySQL 5.7 for production-schema compatibility
+- Node.js 24 only for local or CI frontend builds
+- Docker Desktop for the containerized environment
 
-## Learning Laravel
+Composer resolves dependencies against PHP 8.3 so the lockfile remains compatible with Docker and shared hosting.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Local Docker setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Create the ignored local environment file and application key:
 
-## Laravel Sponsors
+```powershell
+Copy-Item .env.example .env
+docker compose build
+docker compose run --rm --no-deps app php artisan key:generate --force
+docker compose up -d
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Services:
 
-### Premium Partners
+- CMS: http://localhost:9001
+- MySQL: localhost:3309
+- Mailpit: http://localhost:8025
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+The database volume is initialized from `C:\Users\noree\Documents\dumps\rxninthr_monster_20260827.sql` the first time it is created. Existing database volumes are not re-imported automatically.
 
-## Contributing
+Check the stack:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```powershell
+docker compose ps
+docker compose logs --tail=100 app
+```
 
-## Code of Conduct
+## Development
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```powershell
+composer install
+npm ci
+npm run dev
+```
 
-## Security Vulnerabilities
+Production asset build:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```powershell
+npm run build
+```
 
-## License
+Tests and formatting:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```powershell
+php artisan test
+vendor\bin\pint --test
+```
+
+The local PHP CLI must have `mbstring` enabled to run PHPUnit and Pint.
+
+## Shared-hosting deployment
+
+Build assets locally or in CI with `npm ci && npm run build`. Deploy the Laravel application with `vendor` and `public/build`, point the domain document root to `public`, configure the production `.env`, and ensure `storage` plus `bootstrap/cache` are writable. No Node.js process is required on the server.
+
+Never commit `.env`, credentials, database dumps, `vendor`, or `node_modules`.

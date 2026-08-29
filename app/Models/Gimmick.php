@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Gimmick
@@ -19,9 +20,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $school_id
  * @property int|null $is_published
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\School $School
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read School $School
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Gimmick newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Gimmick newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Gimmick query()
@@ -38,6 +40,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Gimmick whereSubDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Gimmick whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Gimmick whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperGimmick
  */
@@ -56,10 +59,11 @@ class Gimmick extends Model
         'school_id',
         'image',
         'location',
-        'is_published'
+        'is_published',
     ];
 
-    public function School() {
+    public function School()
+    {
         return $this->belongsTo(School::class);
     }
 }

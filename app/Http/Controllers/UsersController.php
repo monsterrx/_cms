@@ -10,21 +10,20 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 
-class UsersController extends Controller {
-
+class UsersController extends Controller
+{
     public function index(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $users = User::with('Employee.Designation')
                 ->whereNull('deleted_at')
                 ->where('id', '!=', Auth::user()->id)
                 ->get();
 
             foreach ($users as $user) {
-                switch($user->Employee->location) {
+                switch ($user->Employee->location) {
                     case 'dav':
                         $user->Employee->location = '<div class="badge badge-dark">Davao</div>';
                         break;
@@ -38,7 +37,7 @@ class UsersController extends Controller {
 
                 $user->updated_at = date('Y-m-d', strtotime($user->updated_at));
 
-                $user->name = $user->Employee->first_name . ' ' . $user->Employee->last_name;
+                $user->name = $user->Employee->first_name.' '.$user->Employee->last_name;
             }
 
             return response()->json($users);
@@ -46,18 +45,19 @@ class UsersController extends Controller {
 
         $designation = Designation::orderBy('level')->get();
 
-        return view('_cms.system-views.users.index', compact( 'designation'));
+        return view('_cms.system-views.users.index', compact('designation'));
     }
 
     public function show($id)
     {
         $user = User::findOrFail($id);
+
         return view('_cms.system-views.users.show', compact('user'));
     }
 
     public function profile($employeeNumber, Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $employee = Employee::where('employee_number', '=', $employeeNumber)
                 ->get()
                 ->first();
@@ -75,35 +75,38 @@ class UsersController extends Controller {
             4 => 'Tumblr',
             5 => 'Spotify',
             6 => 'Tiktok',
-            7 => 'Other'
+            7 => 'Other',
         ];
 
         return view('_cms.system-views.employeeUI.profile', compact('employee', 'designation', 'websites'));
     }
 
-    public function changeHeader($jock_id) {
+    public function changeHeader($jock_id)
+    {
         $jock = Jock::with('Show', 'Employee')->findOrFail($jock_id);
 
         return view('_cms.system-views.employees.jocks.header', compact('jock'));
     }
 
-    public function changePassword(Request $request){
+    public function changePassword(Request $request)
+    {
         $user = User::findOrfail(Auth::user()->id);
 
         $this->validate($request, [
             'current_password' => 'required',
             'password' => ['required', 'min:6', 'confirmed'],
-            'password_confirmation' => 'required'
+            'password_confirmation' => 'required',
         ]);
 
         $current = $request['current_password'];
 
-        if(Hash::check($current, $user['password'])) {
+        if (Hash::check($current, $user['password'])) {
             $user->update([
-                'password' => Hash::make($request['password'])
+                'password' => Hash::make($request['password']),
             ]);
 
             Session::flash('success', 'Password successfully changed');
+
             return redirect()->route('users.profile', Auth::user()->Employee->employee_number);
         }
 
@@ -118,13 +121,13 @@ class UsersController extends Controller {
             $jock = Jock::findOrFail($request['jock_id']);
         } catch (ModelNotFoundException $modelNotFoundException) {
             return response()->json([
-                'error' => 'Jock not found'
+                'error' => 'Jock not found',
             ], 404);
         }
 
         $imageName = $request['imageName'];
 
-        $file = 'images/jocks/'. $imageName;
+        $file = 'images/jocks/'.$imageName;
 
         $this->storeAsset('jocks', $imageName, $file);
 
@@ -139,16 +142,17 @@ class UsersController extends Controller {
         return redirect()->route('jocks.profile', $jock['id']);
     }
 
-    public function addProfile(Request $request) {
+    public function addProfile(Request $request)
+    {
         $data = $request['image'];
 
-        list($type, $data) = explode(';', $data);
-        list(, $data)      = explode(',', $data);
+        [$type, $data] = explode(';', $data);
+        [, $data] = explode(',', $data);
 
         $data = base64_decode($data);
-        $imageName = date('Ymd').'-'. mt_rand() . '.png';
+        $imageName = date('Ymd').'-'.mt_rand().'.png';
 
-        $path = 'images/jocks/'. $imageName;
+        $path = 'images/jocks/'.$imageName;
 
         file_put_contents($path, $data);
 
@@ -167,7 +171,7 @@ class UsersController extends Controller {
 
         $headerImageName = $request['headerImageName'];
 
-        $file = 'images/jocks/'. $headerImageName;
+        $file = 'images/jocks/'.$headerImageName;
 
         $this->storeAsset('jocks', $headerImageName, $file);
 
@@ -178,14 +182,15 @@ class UsersController extends Controller {
 
         if ($level == 1 || $level == 2) {
             return redirect()->route('users.header', $jock['id']);
-            //return response()->json(['success' => 'Image Uploaded to Database'], 200);
+            // return response()->json(['success' => 'Image Uploaded to Database'], 200);
         }
 
         return redirect()->route('jocks.profile', $jock['id']);
-        //return response()->json(['success' => 'Image Uploaded to Database'], 200);
+        // return response()->json(['success' => 'Image Uploaded to Database'], 200);
     }
 
-    public function saveMainImageToDatabase(Request $request) {
+    public function saveMainImageToDatabase(Request $request)
+    {
         $level = Auth::user()->Employee->Designation->level;
 
         try {
@@ -196,7 +201,7 @@ class UsersController extends Controller {
 
         $mainImageName = $request['mainImageName'];
 
-        $file = 'images/jocks/' . $mainImageName;
+        $file = 'images/jocks/'.$mainImageName;
 
         $this->storeAsset('jocks', $mainImageName, $file);
 
@@ -207,7 +212,7 @@ class UsersController extends Controller {
         if ($level == 1 || $level == 2) {
 
             return redirect()->route('jocks.show', $jock['id']);
-            //return response()->json(['success' => 'Image Uploaded to Database'], 200);
+            // return response()->json(['success' => 'Image Uploaded to Database'], 200);
         }
 
         return redirect()->route('jocks.profile', $jock['id']);

@@ -7,13 +7,14 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
-trait JockFunctions {
+trait JockFunctions
+{
     use SystemFunctions;
 
     public function jocksQuery()
     {
         return Jock::with('Timeslot', 'Employee', 'Show')
-            ->whereHas('Timeslot', function($builder) {
+            ->whereHas('Timeslot', function ($builder) {
                 $day = Carbon::now()->format('l');
                 $getTime = Carbon::now('Asia/Manila');
                 $time = date('H:i', strtotime($getTime));
@@ -23,9 +24,9 @@ trait JockFunctions {
                     ->where('start', '<=', $time)
                     ->where('day', '=', $day)
                     ->where('location', $this->getStationCode());
-            })->whereHas('Employee', function($builder) {
+            })->whereHas('Employee', function ($builder) {
                 $builder->where('employees.deleted_at', '=', null);
-            })->whereHas('Show', function($builder) {
+            })->whereHas('Show', function ($builder) {
                 $builder->where('shows.deleted_at', '=', null);
             })->whereNull('deleted_at')
             ->get();

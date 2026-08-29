@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asset;
+use App\Models\Title;
 use App\Traits\AssetProcessors;
 use App\Traits\MediaProcessors;
 use App\Traits\SystemFunctions;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use App\Models\Title;
-use App\Models\Asset;
-use Exception;
 use Illuminate\Support\Facades\Validator;
 
 class MobileAppAssetController extends Controller
 {
     use AssetProcessors, MediaProcessors, SystemFunctions;
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $monster_assets = Title::with('Asset')
             ->get();
 
@@ -27,7 +28,8 @@ class MobileAppAssetController extends Controller
         return view('_cms.system-views.digital.mobileApp.index', compact('monster_assets'));
     }
 
-    public function show($id, Request $request) {
+    public function show($id, Request $request)
+    {
         try {
             $title = Title::with('Asset')
                 ->findOrFail($id);
@@ -55,7 +57,8 @@ class MobileAppAssetController extends Controller
         return view('_cms.system-views.digital.mobileApp.show', compact('title'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request['location'] = $this->getStationCode();
 
         $validator = Validator::make($request->all(), [
@@ -68,7 +71,7 @@ class MobileAppAssetController extends Controller
             'articles_main_page_title' => 'required',
             'podcast_main_page_title' => 'required',
             'youtube_main_page_title' => 'required',
-            'location' => 'required'
+            'location' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -83,7 +86,8 @@ class MobileAppAssetController extends Controller
         return view('_cms.system-views.digital.mobileApp.show', compact('monster_asset'));
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         $request['location'] = $this->getStationCode();
 
         $validator = Validator::make($request->all(), [
@@ -97,7 +101,7 @@ class MobileAppAssetController extends Controller
             'podcast_main_page_title' => 'required',
             'youtube_main_page_title' => 'required',
             'asset_type' => 'required',
-            'location' => 'required'
+            'location' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -167,7 +171,8 @@ class MobileAppAssetController extends Controller
         return redirect()->back()->withErrors('Unknown asset type, please coordinate to the IT - Developer');
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $monster_asset = Title::with('Asset')->findOrFail($id);
         } catch (ModelNotFoundException $exception) {
@@ -181,10 +186,11 @@ class MobileAppAssetController extends Controller
         return view('_cms.system-views.digital.mobileApp.index')->with('success', 'Mobile asset has been deleted!');
     }
 
-    public function uploadImage(Request $request) {
+    public function uploadImage(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'asset_type' => 'required',
-            'image' => ['mimes:jpg,jpeg,png,webp', 'file']
+            'image' => ['mimes:jpg,jpeg,png,webp', 'file'],
         ]);
 
         if ($validator->fails()) {
@@ -198,29 +204,29 @@ class MobileAppAssetController extends Controller
         $icon = $this->storePhoto($request, $path, $directory);
         $asset_type = $request['asset_type'];
         $title_id = $request['id'];
-        $is_dark_mode = $request['is_dark_mode'] == "1" ? 1 : 0;
+        $is_dark_mode = $request['is_dark_mode'] == '1' ? 1 : 0;
 
         try {
             $asset = Asset::where('title_id', $title_id)
                 ->where('is_dark_mode', $is_dark_mode)
                 ->firstOrFail();
 
-            if ($asset_type == "main logo") {
+            if ($asset_type == 'main logo') {
                 $asset['logo'] = $icon;
                 $asset->save();
-            } else if ($asset_type == "charts") {
+            } elseif ($asset_type == 'charts') {
                 $asset['chart_icon'] = $icon;
                 $asset->save();
-            } else if ($asset_type == "articles") {
+            } elseif ($asset_type == 'articles') {
                 $asset['article_icon'] = $icon;
                 $asset->save();
-            } else if ($asset_type == "podcasts") {
+            } elseif ($asset_type == 'podcasts') {
                 $asset['podcast_icon'] = $icon;
                 $asset->save();
-            } else if ($asset_type == "articlesMain") {
+            } elseif ($asset_type == 'articlesMain') {
                 $asset['article_page_icon'] = $icon;
                 $asset->save();
-            } else if ($asset_type == "youtube") {
+            } elseif ($asset_type == 'youtube') {
                 $asset['youtube_page_icon'] = $icon;
                 $asset->save();
             }
@@ -232,6 +238,6 @@ class MobileAppAssetController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Icon for '. $request['asset_type'] . ' has been uploaded!');
+            ->with('success', 'Icon for '.$request['asset_type'].' has been uploaded!');
     }
 }

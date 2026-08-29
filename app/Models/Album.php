@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Album
@@ -16,12 +18,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $genre_id
  * @property string $image
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Artist $Artist
- * @property-read \App\Models\Genre $Genre
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Song> $Song
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Artist $Artist
+ * @property-read Genre $Genre
+ * @property-read Collection<int, Song> $Song
  * @property-read int|null $song_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Album newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Album newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Album query()
@@ -35,6 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Album whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Album whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Album whereYear($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperAlbum
  */
@@ -51,15 +55,18 @@ class Album extends Model
         'image',
     ];
 
-    public function Artist() {
+    public function Artist()
+    {
         return $this->belongsTo(Artist::class);
     }
 
-    public function Genre() {
+    public function Genre()
+    {
         return $this->belongsTo(Genre::class);
     }
 
-    public function Song() {
+    public function Song()
+    {
         return $this->hasMany(Song::class);
     }
 }

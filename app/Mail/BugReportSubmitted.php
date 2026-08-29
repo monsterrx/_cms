@@ -14,8 +14,7 @@ final class BugReportSubmitted extends Mailable
     public function __construct(
         public BugReport $bugReport,
         public string $reviewUrl
-    ) {
-    }
+    ) {}
 
     public function build(): self
     {

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Timeslot
@@ -15,11 +17,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $end
  * @property string $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Jock> $Jock
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ * @property-read Collection<int, Jock> $Jock
  * @property-read int|null $jock_count
- * @property-read \App\Models\Show|null $Show
+ * @property-read Show|null $Show
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot query()
@@ -32,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereShowId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Timeslot whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperTimeslot
  */
@@ -44,14 +48,16 @@ class Timeslot extends Model
         'day',
         'start',
         'end',
-        'location'
+        'location',
     ];
 
-    public function Show() {
+    public function Show()
+    {
         return $this->belongsTo(Show::class);
     }
 
-    public function Jock() {
+    public function Jock()
+    {
         return $this->belongsToMany(Jock::class);
     }
 }

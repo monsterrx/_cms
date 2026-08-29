@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Tally
@@ -13,9 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $last_result
  * @property int|null $chart_id
  * @property string|null $dated
- * @property \Illuminate\Support\Carbon $updated_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property-read \App\Models\Chart|null $Chart
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ * @property-read Chart|null $Chart
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Tally newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tally newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Tally query()
@@ -26,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereLastResult($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereResult($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Tally whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperTally
  */
@@ -40,10 +43,11 @@ class Tally extends Model
         'result',
         'chart_type',
         'last_result',
-        'dated'
+        'dated',
     ];
 
-    public function Chart() {
+    public function Chart()
+    {
         return $this->belongsTo(Chart::class);
     }
 }

@@ -5,25 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Photo;
 use App\Models\School;
 use App\Models\Social;
-use App\Models\Student;
 use App\Models\StudentJock;
 use App\Models\StudentJockBatch;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class StudentJockController extends Controller
 {
     public function studentJocks(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $student = StudentJock::with('Batch')
                 ->findOrFail($request['student_jock_id']);
 
-            if($request['remove']) {
+            if ($request['remove']) {
                 return $student;
             }
 
@@ -40,16 +38,16 @@ class StudentJockController extends Controller
             ->whereNull('deleted_at')
             ->get();
 
-        foreach ($studentJocks as $studentJock)
-        {
+        foreach ($studentJocks as $studentJock) {
             $studentJock['image'] = $this->verifyPhoto($studentJock['image'], 'studentJocks');
         }
 
         return view('_cms.system-views.radioOne.studentJocks.index', compact('studentJocks', 'school'));
     }
 
-    public function showStudentJock($id, Request $request) {
-        $student = StudentJock::with("Batch", "Link", "Image")
+    public function showStudentJock($id, Request $request)
+    {
+        $student = StudentJock::with('Batch', 'Link', 'Image')
             ->findOrFail($id);
 
         $student->image = $this->verifyPhoto($student['image'], 'studentJocks');
@@ -63,7 +61,7 @@ class StudentJockController extends Controller
         if ($request->ajax()) {
             if ($request['type'] == 'socials') {
                 foreach ($student->Link as $social) {
-                    $social->options = '' .
+                    $social->options = ''.
                         '<div class="btn-group">
                             <a href="#view-r1-social" data-toggle="modal" data-id="'.$social->id.'" data-link="'.route('radioOne.view.social', $social->id).'" data-open="radio1.jocks.social" class="btn btn-outline-dark"><i class="fa fa-eye"></i></a>
                             <a href="#delete-r1-social" data-toggle="modal" data-id="'.$social->id.'" data-link="'.route('radioOne.view.social', $social->id).'" data-open="radio1.jocks.social" class="btn btn-outline-dark"><i class="fa fa-trash"></i></a>
@@ -75,12 +73,13 @@ class StudentJockController extends Controller
                 foreach ($student->Image as $photo) {
                     $photo->date_created = Carbon::createFromFormat('Y-m-d H:i:s', $photo->created_at)->format('F d, Y h:i A');
 
-                    $photo->options = '' .
+                    $photo->options = ''.
                         '<div class="btn-group">
                             <a href="#view-r1-photo" data-toggle="modal" data-id="'.$photo->id.'" data-link="'.route('radioOne.view.photo', $photo->id).'" data-open="radio1.jocks.photo" class="btn btn-outline-dark"><i class="fa fa-eye"></i></a>
                             <a href="#delete-r1-photo" data-toggle="modal" data-id="'.$photo->id.'" data-link="'.route('radioOne.view.photo', $photo->id).'" data-open="radio1.jocks.photo" class="btn btn-outline-dark"><i class="fa fa-trash"></i></a>
                         </div>';
                 }
+
                 return response()->json($student);
             } else {
                 return response()->json($student);
@@ -99,17 +98,18 @@ class StudentJockController extends Controller
             'last_name' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $img = $request->file('image');
             $path = 'images/studentJocks';
 
             $studentJock = new StudentJock($request->all());
 
-            if($img) {
+            if ($img) {
                 $studentJock['image'] = $this->storePhoto($request, $path, 'studentJocks', false);
                 $studentJock->save();
 
                 Session::flash('success', 'Successfully saved with Image');
+
                 return redirect()->route('radioOne.jocks');
             }
 
@@ -117,6 +117,7 @@ class StudentJockController extends Controller
             $studentJock->save();
 
             Session::flash('success', 'Successfully saved without Image');
+
             return redirect()->route('radioOne.jocks');
         }
 
@@ -131,30 +132,33 @@ class StudentJockController extends Controller
             'last_name' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $img = $request->file('image');
             $path = 'images/studentJocks';
 
             $studentJock = StudentJock::with('Batch', 'School')->findOrFail($id);
 
-            if($img) {
-                $studentJock['image'] = $this->storePhoto($request, $path, 'studentJocks', false);;
+            if ($img) {
+                $studentJock['image'] = $this->storePhoto($request, $path, 'studentJocks', false);
                 $studentJock->save();
 
                 Session::flash('success', 'Student jock has been updated');
+
                 return redirect()->back();
             }
 
             $studentJock->update($request->except('image'));
 
             session()->flash('success', 'Student jock has been updated');
+
             return redirect()->back();
         }
 
         return redirect()->back()->withErrors($validator->errors()->all());
     }
 
-    public function deleteJock($id){
+    public function deleteJock($id)
+    {
         $student_jock = StudentJock::findOrFail($id);
 
         DB::table('student_jock_student_jock_batch')->where('student_jock_id', $id)->delete();
@@ -162,10 +166,12 @@ class StudentJockController extends Controller
         $student_jock->delete();
 
         Session::flash('success', 'Student Jock has been deleted!');
+
         return redirect()->route('radioOne.jocks');
     }
 
-    public function addStudentToBatch($id, Request $request) {
+    public function addStudentToBatch($id, Request $request)
+    {
         $batch = StudentJockBatch::with('Student')->findOrFail($id);
 
         $hits = DB::table('student_jock_student_jock_batch')
@@ -173,7 +179,7 @@ class StudentJockController extends Controller
             ->where('student_jock_id', $request['student_jock_id'])
             ->count();
 
-        if($hits > 0) {
+        if ($hits > 0) {
             return redirect()->back()->withErrors('The student jock is already in the batch');
         }
 
@@ -186,19 +192,23 @@ class StudentJockController extends Controller
         $batch->Student()->attach($studentJock['id']);
 
         session()->flash('success', 'A student jock has been added to the batch');
+
         return redirect()->route('radioOne.batch', $id);
     }
 
-    public function removeStudentFromBatch($id, Request $request) {
+    public function removeStudentFromBatch($id, Request $request)
+    {
         $batch = StudentJockBatch::findOrFail($id);
 
         $batch->Student()->detach($request['remove_student_jock_id']);
 
         session()->flash('success', 'A student jock has been removed to the batch');
+
         return redirect()->route('radioOne.batch', $id);
     }
 
-    public function showImage($id) {
+    public function showImage($id)
+    {
         $photo = Photo::with('StudentJock')
             ->findOrFail($id);
 
@@ -207,7 +217,8 @@ class StudentJockController extends Controller
         return response()->json($photo);
     }
 
-    public function viewSocial($id) {
+    public function viewSocial($id)
+    {
         $social = Social::with('StudentJock')
             ->findOrFail($id);
 

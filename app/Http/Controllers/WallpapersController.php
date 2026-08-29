@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Wallpaper;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class WallpapersController extends Controller {
-
+class WallpapersController extends Controller
+{
     public function index(Request $request)
     {
         $wallpapers = Wallpaper::whereNull('deleted_at')
             ->where('location', $this->getStationCode())
             ->get();
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
             foreach ($wallpapers as $wallpaper) {
                 switch ($wallpaper->location) {
                     case 'mnl':
@@ -41,7 +39,7 @@ class WallpapersController extends Controller {
                     default:
                 }
 
-                $wallpaper->options.= '<a href="'.route('wallpapers.show', $wallpaper->id).'" class="btn btn-outline-dark"><i class="fas fa-search"></i>  View</a>';
+                $wallpaper->options .= '<a href="'.route('wallpapers.show', $wallpaper->id).'" class="btn btn-outline-dark"><i class="fas fa-search"></i>  View</a>';
             }
 
             return response()->json($wallpapers);
@@ -63,7 +61,7 @@ class WallpapersController extends Controller {
             'device' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $path = 'images/wallpapers';
             $request['location'] = $this->getStationCode();
 
@@ -98,20 +96,20 @@ class WallpapersController extends Controller {
             'device' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $img = $request->file('image');
             $path = 'images/wallpapers';
 
             $wallpaper = Wallpaper::findOrFail($id);
 
-            if($img) {
+            if ($img) {
                 $wallpaper['image'] = $this->storePhoto($request, $path, 'wallpapers', false);
                 $wallpaper->save();
 
                 return response()->json(['status' => 'success', 'message' => 'A wallpaper has been updated', 'wallpaper' => $wallpaper]);
             }
 
-            $wallpaper['name'] = $request['name'];;
+            $wallpaper['name'] = $request['name'];
             $wallpaper['device'] = $request['device'];
 
             $wallpaper->update($request->except('image'));

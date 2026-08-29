@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\StudentJock
@@ -17,15 +19,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $school_id
  * @property int|null $position
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StudentJockBatch> $Batch
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, StudentJockBatch> $Batch
  * @property-read int|null $batch_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Photo> $Image
+ * @property-read Collection<int, Photo> $Image
  * @property-read int|null $image_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Social> $Link
+ * @property-read Collection<int, Social> $Link
  * @property-read int|null $link_count
- * @property-read \App\Models\School $School
+ * @property-read School $School
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJock newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJock newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJock query()
@@ -40,6 +43,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJock wherePosition($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJock whereSchoolId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJock whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperStudentJock
  */
@@ -59,19 +63,23 @@ class StudentJock extends Model
         'position',
     ];
 
-    public function Batch() {
+    public function Batch()
+    {
         return $this->belongsToMany(StudentJockBatch::class);
     }
 
-    public function School() {
+    public function School()
+    {
         return $this->belongsTo(School::class);
     }
 
-    public function Link() {
+    public function Link()
+    {
         return $this->hasMany(Social::class);
     }
 
-    public function Image() {
+    public function Image()
+    {
         return $this->hasMany(Photo::class);
     }
 }

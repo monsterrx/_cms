@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Batch;
-use App\Models\School;
-use App\Models\Student;
 use App\Models\StudentJock;
 use App\Models\StudentJockBatch;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
-class RadioOneController extends Controller {
-
+class RadioOneController extends Controller
+{
     public function batches()
     {
         $batches = StudentJockBatch::orderBy('batch_number')
@@ -31,27 +27,28 @@ class RadioOneController extends Controller {
 
         $jocks = StudentJock::whereNull('deleted_at')->get();
 
-        foreach ($batch->Student as $studentJock)
-        {
+        foreach ($batch->Student as $studentJock) {
             $studentJock['image'] = $this->verifyPhoto($studentJock['image'], 'studentJocks');
         }
 
         return view('_cms.system-views.radioOne.batches.show', compact('batch', 'jocks'));
     }
 
-    public function storeBatch(Request $request){
+    public function storeBatch(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'batch_number' => 'required',
             'start_year' => 'required',
-            'end_year' => 'required'
+            'end_year' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $batch = new StudentJockBatch($request->all());
 
             $batch->save();
 
             Session::flash('success', 'RadioOne batch Added!');
+
             return redirect()->route('radioOne.batches');
         }
 
@@ -65,13 +62,14 @@ class RadioOneController extends Controller {
         $validator = Validator::make($request->all(), [
             'batch_number' => 'required',
             'start_year' => 'required',
-            'end_year' => 'required'
+            'end_year' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $batch->update($request->all());
 
             Session::flash('success', 'Batch has been successfully updated!');
+
             return redirect()->route('radioOne.batches');
         }
 
@@ -87,6 +85,7 @@ class RadioOneController extends Controller {
         $batch->delete();
 
         Session::flash('success', 'RadioOne batch deleted!');
+
         return redirect()->route('radioOne.batches');
     }
 }

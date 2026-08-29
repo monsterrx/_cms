@@ -50,6 +50,7 @@ final class RichTextSanitizer
     {
         if ($node instanceof DOMComment) {
             $node->parentNode?->removeChild($node);
+
             return;
         }
 
@@ -60,6 +61,7 @@ final class RichTextSanitizer
         $tag = strtolower($node->tagName);
         if (in_array($tag, self::REMOVED_WITH_CONTENT, true)) {
             $node->parentNode?->removeChild($node);
+
             return;
         }
 
@@ -77,6 +79,7 @@ final class RichTextSanitizer
                 $parent->insertBefore($node->firstChild, $node);
             }
             $parent->removeChild($node);
+
             return;
         }
 
@@ -123,6 +126,7 @@ final class RichTextSanitizer
 
         if ($source === '' || (! $safeRelativePath && ! in_array($scheme, ['http', 'https'], true))) {
             $image->parentNode?->removeChild($image);
+
             return;
         }
 

@@ -12,11 +12,11 @@ class SouthsidesController extends Controller
     public function index(Request $request)
     {
         // Southside sounds are the local songs in Monster Cebu
-        if($request->ajax()) {
-            if($request->has('load')) {
+        if ($request->ajax()) {
+            if ($request->has('load')) {
                 $load = $request['load'];
 
-                if($load == 'charts') {
+                if ($load == 'charts') {
                     // for the local charts obviously
                     $latestChartDate = DB::table('charts')
                         ->whereNull('deleted_at')
@@ -26,7 +26,7 @@ class SouthsidesController extends Controller
                         ->select('dated')
                         ->max('dated');
 
-                    if($latestChartDate == null) {
+                    if ($latestChartDate == null) {
                         $latestChartDate = DB::table('charts')
                             ->whereNull('deleted_at')
                             ->where('daily', 0)
@@ -76,7 +76,7 @@ class SouthsidesController extends Controller
 
     public function create(Request $request)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             // for southside charts date
             $latestChartDates = DB::table('charts')
                 ->whereNull('deleted_at')
@@ -88,10 +88,10 @@ class SouthsidesController extends Controller
                 ->orderBy('dated', 'desc')
                 ->get();
 
-            $options = "";
+            $options = '';
 
             foreach ($latestChartDates as $dates) {
-                $options.= '<option value="'.$dates->dated.'">'.date('M d Y', strtotime($dates->dated)).'</option>';
+                $options .= '<option value="'.$dates->dated.'">'.date('M d Y', strtotime($dates->dated)).'</option>';
             }
 
             $latestChart = $latestChartDates->first()->dated;

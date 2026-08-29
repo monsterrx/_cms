@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Content
@@ -13,9 +14,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $content
  * @property string|null $image
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Article $Article
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Article $Article
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Content newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Content newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Content query()
@@ -26,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Content whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperContent
  */
@@ -38,10 +41,11 @@ class Content extends Model
     protected $fillable = [
         'article_id',
         'content',
-        'image'
+        'image',
     ];
 
-    public function Article() {
+    public function Article()
+    {
         return $this->belongsTo(Article::class, 'article_id');
     }
 }

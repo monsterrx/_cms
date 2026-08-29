@@ -2,108 +2,125 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use function PHPUnit\Framework\countOf;
-
 class DraftController extends Controller
 {
     // for draft purposes
 
-    public function home() {
+    public function home()
+    {
         return view('draft.landing.home');
     }
 
     // under what's hot
-    public function wallpapers() {
+    public function wallpapers()
+    {
         return view('draft.landing.wallpapers');
     }
 
-    public function articles() {
+    public function articles()
+    {
         return view('draft.landing.articles');
     }
 
-    public function articleDetails($name) {
+    public function articleDetails($name)
+    {
         return view('draft.subpages.article', compact('name'));
     }
 
-    public function podcasts() {
+    public function podcasts()
+    {
         return view('draft.landing.podcasts');
     }
 
-    public function podcastDetails($name) {
+    public function podcastDetails($name)
+    {
         return view('draft.subpages.podcast', compact('name'));
     }
     // end
 
-    public function shows() {
+    public function shows()
+    {
         return view('draft.landing.shows');
     }
 
-    public function showDetails($name) {
+    public function showDetails($name)
+    {
         return view('draft.subpages.show', compact('name'));
     }
 
     // under jocks
-    public function jocks() {
+    public function jocks()
+    {
         return view('draft.landing.jocks');
     }
 
-    public function jockDetails($name) {
+    public function jockDetails($name)
+    {
         return view('draft.subpages.jock', compact('name'));
     }
 
-    public function studentJocks() {
+    public function studentJocks()
+    {
         return view('draft.landing.radio1');
     }
     // end
 
     // under charts
-    public function charts() {
+    public function charts()
+    {
         return view('draft.landing.charts');
     }
 
-    public function allTimeHits() {
+    public function allTimeHits()
+    {
         return view('draft.landing.chartHits');
     }
 
-    public function daily() {
+    public function daily()
+    {
         return view('draft.landing.dailycharts');
     }
 
-    public function voting() {
+    public function voting()
+    {
         return view('draft.landing.voting');
     }
     // end
 
-    public function indieground() {
+    public function indieground()
+    {
         return view('draft.landing.indiegrounds');
     }
 
     // under others
-    public function gimikboard() {
+    public function gimikboard()
+    {
         return view('draft.landing.gimikboard');
     }
 
-    public function gimikboardDetails($name) {
+    public function gimikboardDetails($name)
+    {
         return view('draft.subpages.gimikboard', compact('name'));
     }
 
-    public function scholars() {
+    public function scholars()
+    {
         return view('draft.landing.scholars');
     }
 
-    public function about() {
+    public function about()
+    {
         return view('draft.landing.about');
     }
 
-    public function contact() {
+    public function contact()
+    {
         return view('draft.landing.contact');
     }
     // end
 
-
-    public function live() {
+    public function live()
+    {
         return view('draft.landing.live');
     }
 }

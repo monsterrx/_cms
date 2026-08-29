@@ -12,15 +12,17 @@ class MobileAppTitleController extends Controller
 {
     use SystemFunctions;
 
-    public function index() {
+    public function index()
+    {
         $monster_titles = Title::all();
 
         return response()->json([
-            'monster_titles' => $monster_titles
+            'monster_titles' => $monster_titles,
         ]);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         try {
             $monster_titles = Title::findOrFail($id);
         } catch (ModelNotFoundException $exception) {
@@ -28,11 +30,12 @@ class MobileAppTitleController extends Controller
         }
 
         return response()->json([
-            'monster_title' => $monster_titles
+            'monster_title' => $monster_titles,
         ]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request['location'] = $this->getStationCode();
 
         $validator = Validator::make($request->all(), [
@@ -58,7 +61,7 @@ class MobileAppTitleController extends Controller
         if ($website_entry > 0) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'This website already has an existing entry.'
+                'message' => 'This website already has an existing entry.',
             ], 400);
         }
 
@@ -68,11 +71,12 @@ class MobileAppTitleController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Mobile app titles for ' . $this->getStationName() . ' has been created!'
+            'message' => 'Mobile app titles for '.$this->getStationName().' has been created!',
         ], 201);
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         $request['location'] = $this->getStationCode();
 
         $validator = Validator::make($request->all(), [
@@ -84,7 +88,7 @@ class MobileAppTitleController extends Controller
             'podcast_sub_title' => 'required',
             'articles_main_page_title' => 'required',
             'podcast_main_page_title' => 'required',
-            'youtube_main_page_title' => 'required'
+            'youtube_main_page_title' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -101,11 +105,12 @@ class MobileAppTitleController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Mobile app titles for ' . $this->getStationName() . ' has been updated!'
+            'message' => 'Mobile app titles for '.$this->getStationName().' has been updated!',
         ]);
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $monster_titles = Title::findOrFail($id);
         } catch (ModelNotFoundException $exception) {
@@ -116,7 +121,7 @@ class MobileAppTitleController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Mobile app title for ' . $this->getStationName() . ' has been deleted!'
+            'message' => 'Mobile app title for '.$this->getStationName().' has been deleted!',
         ]);
     }
 }

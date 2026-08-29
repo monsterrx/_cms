@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Asset
@@ -16,9 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $article_page_icon
  * @property string $youtube_page_icon
  * @property string $location
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Title|null $Title
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Title|null $Title
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Asset newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Asset newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Asset query()
@@ -32,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Asset wherePodcastIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Asset whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Asset whereYoutubePageIcon($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperAsset
  */
@@ -50,10 +53,11 @@ class Asset extends Model
         'article_page_icon',
         'youtube_page_icon',
         'is_dark_mode',
-        'location'
+        'location',
     ];
 
-    public function Title() {
+    public function Title()
+    {
         return $this->belongsTo(Title::class, 'title_id');
     }
 }

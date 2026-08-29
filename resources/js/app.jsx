@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createInertiaApp } from '@inertiajs/react';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { AppStateProvider } from './Contexts/AppStateContext';
 import { getAppBasePath } from './lib/appUrl';
@@ -22,11 +23,10 @@ if (csrfToken) {
 }
 
 createInertiaApp({
-    resolve: (name) => {
-        const pages = require.context('./Pages', true, /\.jsx$/);
-
-        return pages(`./${name}.jsx`);
-    },
+    resolve: (name) => resolvePageComponent(
+        `./Pages/${name}.jsx`,
+        import.meta.glob('./Pages/**/*.jsx'),
+    ),
     setup({ el, App, props }) {
         createRoot(el).render(
             <AppStateProvider>

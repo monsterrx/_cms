@@ -61,7 +61,7 @@ class MusicAwardsController extends Controller
             });
 
         return response()->json([
-            'releases' => $releases
+            'releases' => $releases,
         ]);
     }
 
@@ -76,7 +76,7 @@ class MusicAwardsController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $validator->errors()->all()
+                'message' => $validator->errors()->all(),
             ], 422);
         }
 
@@ -95,7 +95,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Music awards release has been added'
+            'message' => 'Music awards release has been added',
         ], 201);
     }
 
@@ -103,10 +103,10 @@ class MusicAwardsController extends Controller
     {
         $release = MusicAwardsReleases::with('MusicAward')->find($id);
 
-        if (!$release) {
+        if (! $release) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No release found'
+                'message' => 'No release found',
             ], 422);
         }
 
@@ -115,7 +115,7 @@ class MusicAwardsController extends Controller
         }
 
         return response()->json([
-            'release' => $release
+            'release' => $release,
         ]);
     }
 
@@ -123,10 +123,10 @@ class MusicAwardsController extends Controller
     {
         $release = MusicAwardsReleases::find($id);
 
-        if (!$release) {
+        if (! $release) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No release found'
+                'message' => 'No release found',
             ], 422);
         }
 
@@ -139,7 +139,7 @@ class MusicAwardsController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $validator->errors()->all()
+                'message' => $validator->errors()->all(),
             ], 422);
         }
 
@@ -156,7 +156,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Music awards release has been updated'
+            'message' => 'Music awards release has been updated',
         ]);
     }
 
@@ -164,10 +164,10 @@ class MusicAwardsController extends Controller
     {
         $release = MusicAwardsReleases::find($id);
 
-        if (!$release) {
+        if (! $release) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No release found'
+                'message' => 'No release found',
             ], 422);
         }
 
@@ -175,7 +175,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Music awards release has been deleted'
+            'message' => 'Music awards release has been deleted',
         ]);
     }
 
@@ -185,13 +185,13 @@ class MusicAwardsController extends Controller
             'MusicAward',
             'MusicAward.Artist',
             'MusicAward.Album.Artist',
-            'MusicAward.Song.Album.Artist'
+            'MusicAward.Song.Album.Artist',
         ])->find($id);
 
-        if (!$release) {
+        if (! $release) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No release found'
+                'message' => 'No release found',
             ], 422);
         }
 
@@ -247,7 +247,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'awards' => $awards,
-            'release' => $release->release
+            'release' => $release->release,
         ]);
     }
 
@@ -255,7 +255,7 @@ class MusicAwardsController extends Controller
     {
         $release = MusicAwardsReleases::find($id);
 
-        if (!$release) {
+        if (! $release) {
             abort(404);
         }
 
@@ -266,10 +266,10 @@ class MusicAwardsController extends Controller
     {
         $release = MusicAwardsReleases::find($id);
 
-        if (!$release) {
+        if (! $release) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No release found'
+                'message' => 'No release found',
             ], 422);
         }
 
@@ -285,7 +285,7 @@ class MusicAwardsController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $validator->errors()->all()
+                'message' => $validator->errors()->all(),
             ], 422);
         }
 
@@ -302,7 +302,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Award has been added'
+            'message' => 'Award has been added',
         ], 201);
     }
 
@@ -310,10 +310,10 @@ class MusicAwardsController extends Controller
     {
         $award = MusicAward::with(['Artist', 'Album.Artist', 'Song.Album.Artist'])->find($awardId);
 
-        if (!$award) {
+        if (! $award) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No award found'
+                'message' => 'No award found',
             ], 422);
         }
 
@@ -332,7 +332,7 @@ class MusicAwardsController extends Controller
         }
 
         return response()->json([
-            'award' => $award
+            'award' => $award,
         ]);
     }
 
@@ -340,10 +340,10 @@ class MusicAwardsController extends Controller
     {
         $award = MusicAward::find($awardId);
 
-        if (!$award) {
+        if (! $award) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No award found'
+                'message' => 'No award found',
             ], 422);
         }
 
@@ -359,7 +359,7 @@ class MusicAwardsController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $validator->errors()->all()
+                'message' => $validator->errors()->all(),
             ], 422);
         }
 
@@ -373,7 +373,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Award has been updated'
+            'message' => 'Award has been updated',
         ]);
     }
 
@@ -381,10 +381,10 @@ class MusicAwardsController extends Controller
     {
         $award = MusicAward::find($awardId);
 
-        if (!$award) {
+        if (! $award) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'No award found'
+                'message' => 'No award found',
             ], 422);
         }
 
@@ -392,7 +392,7 @@ class MusicAwardsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Award has been deleted'
+            'message' => 'Award has been deleted',
         ]);
     }
 

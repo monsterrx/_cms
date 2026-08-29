@@ -1,31 +1,32 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Models\School;
+namespace App\Http\Controllers;
+
 use App\Models\Gimmick;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class GimikBoardController extends Controller {
-
-	public function index()
-	{
-		$gimikboards = Gimmick::whereNull('deleted_at')
+class GimikBoardController extends Controller
+{
+    public function index()
+    {
+        $gimikboards = Gimmick::whereNull('deleted_at')
             ->orderBy('created_at', 'desc')
             ->where('location', $this->getStationCode())
             ->get();
 
-		$school = School::whereNull('deleted_at')
+        $school = School::whereNull('deleted_at')
             ->orderBy('name')
             ->get();
 
-		return view('_cms.system-views.education.gimikboards.index',compact('gimikboards','school'));
-	}
+        return view('_cms.system-views.education.gimikboards.index', compact('gimikboards', 'school'));
+    }
 
-	public function store(Request $request)
-	{
-		$validator = Validator::make($request->all(), [
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'start_date' => 'required',
             'description' => 'required',
@@ -33,20 +34,20 @@ class GimikBoardController extends Controller {
             'image' => 'required|image|file|max:2048',
         ]);
 
-		if($validator->passes()) {
-            $img = $request->file('image'); //file for School Seal
+        if ($validator->passes()) {
+            $img = $request->file('image'); // file for School Seal
             $path = 'images/schools';
             $request['location'] = $this->getStationCode();
 
             $gimikboard = new Gimmick($request->all());
 
             if ($request['end_date']) {
-                if($request['end_date'] <= $request['start_date']){
+                if ($request['end_date'] <= $request['start_date']) {
                     return redirect()->back()->withErrors(['Date is not valid.']);
                 }
             }
 
-            if($img) {
+            if ($img) {
                 $gimikboard['image'] = $this->storePhoto($request, $path, 'schools', false);
             } else {
                 $gimikboard['image'] = 'default.png';
@@ -55,23 +56,24 @@ class GimikBoardController extends Controller {
             $gimikboard->save();
 
             Session::flash('success', 'A new gimikboard has been posted!');
+
             return redirect()->route('gimikboards.show', Gimmick::with('School')->latest()->whereNull('deleted_at')->first()->id);
         }
 
-		return redirect()->back()->withErrors($validator->errors()->all());
-	}
+        return redirect()->back()->withErrors($validator->errors()->all());
+    }
 
-	public function show($id)
-	{
-		$gimikboard = Gimmick::with('School')->findOrfail($id);
-		$school = School::whereNull('deleted_at')->orderBy('name')->get();
+    public function show($id)
+    {
+        $gimikboard = Gimmick::with('School')->findOrfail($id);
+        $school = School::whereNull('deleted_at')->orderBy('name')->get();
 
-		return view('_cms.system-views.education.gimikboards.show',compact('gimikboard','school'));
-	}
+        return view('_cms.system-views.education.gimikboards.show', compact('gimikboard', 'school'));
+    }
 
-	public function update(Request $request, $id)
-	{
-		$validator = Validator::make($request->all(), [
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
             'title' => 'required',
             'start_date' => 'required',
             'description' => 'required',
@@ -79,36 +81,39 @@ class GimikBoardController extends Controller {
             'image' => 'image|file|max:2048',
         ]);
 
-		if($validator->passes()) {
+        if ($validator->passes()) {
             $img = $request->file('image'); // file for School Seal
             $path = 'images/schools';
 
             $gimikboard = Gimmick::findOrfail($id);
 
-            if($img) {
+            if ($img) {
                 $gimikboard['image'] = $this->storePhoto($request, $path, 'schools', false);
                 $gimikboard->save();
 
                 Session::flash('success', 'A gimikboard has been updated!');
+
                 return redirect()->route('gimikboards.show', $id);
             }
 
             $gimikboard->update($request->except('image'));
 
             Session::flash('success', 'A gimikboard has been updated!');
+
             return redirect()->route('gimikboards.show', $id);
         }
 
-		return redirect()->back()->withErrors($validator->errors()->all());
+        return redirect()->back()->withErrors($validator->errors()->all());
     }
 
-	public function destroy($id)
-	{
-		$gimikboard = Gimmick::findOrfail($id);
+    public function destroy($id)
+    {
+        $gimikboard = Gimmick::findOrfail($id);
 
-		$gimikboard->delete();
+        $gimikboard->delete();
 
-		Session::flash('success', 'A gimikboard has been removed!');
-		return redirect()->route('gimikboards.index');
-	}
+        Session::flash('success', 'A gimikboard has been removed!');
+
+        return redirect()->route('gimikboards.index');
+    }
 }

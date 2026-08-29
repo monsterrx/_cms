@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\StudentJockBatch
@@ -14,10 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $end_year
  * @property string $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\StudentJock> $Student
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, StudentJock> $Student
  * @property-read int|null $student_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJockBatch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJockBatch newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJockBatch query()
@@ -29,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJockBatch whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJockBatch whereStartYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder|StudentJockBatch whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperStudentJockBatch
  */
@@ -41,10 +45,11 @@ class StudentJockBatch extends Model
     protected $fillable = [
         'batch_number',
         'start_year',
-        'end_year'
+        'end_year',
     ];
 
-    public function Student() {
+    public function Student()
+    {
         return $this->belongsToMany(StudentJock::class);
     }
 }

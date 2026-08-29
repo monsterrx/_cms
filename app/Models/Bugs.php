@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Bugs
@@ -15,10 +16,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $employee_id
  * @property string|null $location
  * @property int $is_resolved
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property-read \App\Models\Employee $Employee
+ * @property Carbon|null $deleted_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property-read Employee $Employee
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Bugs newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bugs newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Bugs query()
@@ -32,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Bugs whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bugs whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Bugs whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperBugs
  */
@@ -42,7 +45,7 @@ class Bugs extends Model
     protected $table = 'reports';
 
     protected $dates = [
-        'deleted_at'
+        'deleted_at',
     ];
 
     protected $fillable = [
@@ -51,10 +54,11 @@ class Bugs extends Model
         'image',
         'employee_id',
         'location',
-        'is_resolved'
+        'is_resolved',
     ];
 
-    public function Employee() {
+    public function Employee()
+    {
         return $this->belongsTo(Employee::class);
     }
 }

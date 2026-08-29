@@ -2,32 +2,27 @@
 
 namespace App\Providers;
 
-use App\Support\Inertia\ApplicationResponseFactory;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
-use Inertia\Inertia;
-use Inertia\ResponseFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        // Inertia 0.6 duplicates Laravel's base URL when hosted in a subdirectory.
-        $this->app->singleton(ResponseFactory::class, ApplicationResponseFactory::class);
-        Inertia::clearResolvedInstance(ResponseFactory::class);
+        RateLimiter::for('api', static fn (Request $request): Limit => Limit::perMinute(60)
+            ->by($request->user()?->getAuthIdentifier() ?? $request->ip()));
     }
 }

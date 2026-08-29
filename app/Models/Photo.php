@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Photo
@@ -17,13 +18,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $file
  * @property string|null $name
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Article|null $Article
- * @property-read \App\Models\Batch|null $Batch
- * @property-read \App\Models\Jock|null $Jock
- * @property-read \App\Models\Show|null $Show
- * @property-read \App\Models\StudentJock|null $StudentJock
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Article|null $Article
+ * @property-read Batch|null $Batch
+ * @property-read Jock|null $Jock
+ * @property-read Show|null $Show
+ * @property-read StudentJock|null $StudentJock
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Photo newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Photo newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Photo query()
@@ -38,6 +40,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Photo whereShowId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Photo whereStudentJockId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Photo whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperPhoto
  */
@@ -57,23 +60,28 @@ class Photo extends Model
         'name',
     ];
 
-    public function Show() {
+    public function Show()
+    {
         return $this->belongsTo(Show::class);
     }
 
-    public function Jock() {
+    public function Jock()
+    {
         return $this->belongsTo(Jock::class);
     }
 
-    public function Article() {
+    public function Article()
+    {
         return $this->belongsTo(Article::class);
     }
 
-    public function Batch() {
+    public function Batch()
+    {
         return $this->belongsTo(Batch::class);
     }
 
-    public function StudentJock() {
+    public function StudentJock()
+    {
         return $this->belongsTo(StudentJock::class);
     }
 }

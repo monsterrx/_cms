@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Designation
@@ -13,10 +15,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $level
  * @property string $description
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Employee> $Employee
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Employee> $Employee
  * @property-read int|null $employee_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Designation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Designation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Designation query()
@@ -27,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Designation whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Designation whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Designation whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperDesignation
  */
@@ -40,7 +44,8 @@ class Designation extends Model
         'level',
     ];
 
-    public function Employee() {
+    public function Employee()
+    {
         return $this->hasMany(Employee::class);
     }
 }

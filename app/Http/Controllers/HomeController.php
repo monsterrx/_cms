@@ -6,15 +6,15 @@ use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Bugs;
 use App\Models\Chart;
-use App\Models\Employee;
 use App\Models\Contest;
+use App\Models\Employee;
 use App\Models\Message;
 use App\Models\Outbreak;
 use App\Models\Podcast;
 use App\Models\Song;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -22,7 +22,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $level = Auth::user()->Employee->Designation->level;
-        
+
         if ($level == 1 || $level == 2 || $level == 6 || $level == 7 || $level == 9) {
             $where = DB::table('charts')
                 ->whereNull('deleted_at')
@@ -37,7 +37,7 @@ class HomeController extends Controller
                 ->where('daily', 0)
                 ->where('local', 0)
                 ->where('location', $this->getStationCode())
-                ->orderBy('dated','desc')
+                ->orderBy('dated', 'desc')
                 ->orderBy('position')
                 ->get()
                 ->take(10);
@@ -59,7 +59,6 @@ class HomeController extends Controller
             $artists = Artist::whereNull('deleted_at')->count();
             $albums = Album::whereNull('deleted_at')->count();
             $songs = Song::whereNull('deleted_at')->count();
-
 
             //
             $recentArtist = Artist::orderBy('created_at', 'desc')
@@ -101,8 +100,8 @@ class HomeController extends Controller
                 ->where('dated', $where)
                 ->get();
 
-            if($this->getStationCode() !== 'mnl') {
-                $data = array(
+            if ($this->getStationCode() !== 'mnl') {
+                $data = [
                     'artists' => $artists,
                     'albums' => $albums,
                     'songs' => $songs,
@@ -112,13 +111,13 @@ class HomeController extends Controller
                     'recGiveaway' => $recGiveaway,
                     'message' => $messages,
                     'podcasts' => $podcasts,
-                    'outbreaks' => $outbreaks
-                );
+                    'outbreaks' => $outbreaks,
+                ];
 
                 return view('_cms.system-views.dashboard', compact('chart', 'employees', 'where', 'inactiveEmployees', 'data'));
             }
 
-            $data = array(
+            $data = [
                 'artists' => $artists,
                 'albums' => $albums,
                 'songs' => $songs,
@@ -127,13 +126,13 @@ class HomeController extends Controller
                 'recSong' => $recentSong,
                 'recGiveaway' => $recGiveaway,
                 'message' => $messages,
-                'podcasts' => $podcasts
-            );
+                'podcasts' => $podcasts,
+            ];
 
             return view('_cms.system-views.dashboard', compact('chart', 'employees', 'where', 'inactiveEmployees', 'data'));
         }
 
-        switch ($level){
+        switch ($level) {
             case 3:
                 return redirect()->route('articles.index');
             case 4:
@@ -149,14 +148,15 @@ class HomeController extends Controller
         }
     }
 
-    public function reports(Request $request) {
-        if($request->ajax()) {
-            if($request['report_id']) {
+    public function reports(Request $request)
+    {
+        if ($request->ajax()) {
+            if ($request['report_id']) {
                 $report = Bugs::with('Employee')
                     ->where('id', $request['report_id'])
                     ->first();
 
-                $report['image'] = url('images/reports/'. $report['image']);
+                $report['image'] = url('images/reports/'.$report['image']);
 
                 return response()->json($report);
             }
@@ -165,8 +165,8 @@ class HomeController extends Controller
                 ->whereNull('deleted_at')
                 ->get();
 
-            foreach($reports as $report) {
-                $report->name = $report->Employee->first_name . ' ' . $report->Employee->last_name;
+            foreach ($reports as $report) {
+                $report->name = $report->Employee->first_name.' '.$report->Employee->last_name;
                 $report->option = '<a href="#reportModal" id="openReport" data-report-id="'.$report->id.'" class="btn btn-outline-dark" data-toggle="modal"><i class="fas fa-envelope-open"></i></a>';
             }
 
@@ -176,11 +176,12 @@ class HomeController extends Controller
         return view('_cms.system-views.users.reports');
     }
 
-    public function reportBug(Request $request) {
+    public function reportBug(Request $request)
+    {
         $this->validate($request, [
             'title' => ['required', 'min:6'],
             'description' => 'required',
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg']
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg'],
         ]);
 
         $employee = Auth::user()->Employee->id;
@@ -188,29 +189,29 @@ class HomeController extends Controller
         $image = $request['image'];
         $path = 'images/reports';
 
-        if($image) {
-            $imageName = date('Ymd') . '-' . mt_rand() . '.' . $image->getClientOriginalExtension();
+        if ($image) {
+            $imageName = date('Ymd').'-'.mt_rand().'.'.$image->getClientOriginalExtension();
 
             $image->move($path, $imageName);
 
             $file = 'images/reports/'.$imageName;
             Storage::disk('reports')->put($imageName, file_get_contents($file));
 
-            if($this->getStationCode() == 'dav') {
+            if ($this->getStationCode() == 'dav') {
                 copy($file, '../monsterdavao/images/reports/'.$imageName);
             }
 
-            if($this->getStationCode() == 'cbu') {
+            if ($this->getStationCode() == 'cbu') {
                 copy($file, '../monstercebu/images/reports/'.$imageName);
             }
 
-            if($request->ajax()) {
+            if ($request->ajax()) {
                 $bugs = new Bugs([
                     'title' => $request['title'],
                     'description' => $request['description'],
                     'image' => $imageName,
                     'location' => $this->getStationCode(),
-                    'employee_id' => $employee
+                    'employee_id' => $employee,
                 ]);
 
                 $bugs->save();

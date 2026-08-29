@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Chart
@@ -28,13 +29,14 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
  * @property string|null $voted_at
  * @property int $is_posted
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Song $Song
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tally> $Tally
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Song $Song
+ * @property-read Collection<int, Tally> $Tally
  * @property-read int|null $tally_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Vote> $Votes
+ * @property-read Collection<int, Vote> $Votes
  * @property-read int|null $votes_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Chart newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chart newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Chart query()
@@ -58,6 +60,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
  * @method static \Illuminate\Database\Eloquent\Builder|Chart whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chart whereVotedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Chart whereVotes($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperChart
  */
@@ -83,28 +86,33 @@ class Chart extends Model
         'online_votes',
         'voted_at',
         'is_posted',
-        'location'
+        'location',
     ];
 
-    public function Song() {
+    public function Song()
+    {
         return $this->belongsTo(Song::class);
     }
 
-    public function Votes() {
+    public function Votes()
+    {
         return $this->hasMany(Vote::class);
     }
 
-    public function Tally() {
+    public function Tally()
+    {
         return $this->hasMany(Tally::class);
     }
 
-    public function LatestChartTally() {
+    public function LatestChartTally()
+    {
         return $this->hasOne(Tally::class)
             ->where('chart_type', '=', 'charts')
             ->latest('dated');
     }
 
-    public function LatestDailyTally() {
+    public function LatestDailyTally()
+    {
         return $this->hasOne(Tally::class)
             ->where('chart_type', '=', 'daily')
             ->latest('dated');

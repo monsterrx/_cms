@@ -7,13 +7,11 @@ use Illuminate\Support\Str;
 
 final class ResourcePresenter
 {
-    public function __construct(private MediaUrlResolver $media)
-    {
-    }
+    public function __construct(private MediaUrlResolver $media) {}
 
     /**
-     * @param array<string, mixed> $resource
-     * @param array<int, array<string, mixed>> $records
+     * @param  array<string, mixed>  $resource
+     * @param  array<int, array<string, mixed>>  $records
      * @return array<int, array<string, mixed>>
      */
     public function decorate(array $resource, array $records): array
@@ -387,6 +385,7 @@ final class ResourcePresenter
                 'show' => $shows[$record['show_id']] ?? null,
                 'jocks' => collect($jocks[$record['id']] ?? [])->pluck('name')->values()->all(),
             ];
+
             return $record;
         }, $records);
     }

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\School
@@ -14,12 +16,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $seal
  * @property string|null $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Gimmick> $Gimikboard
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Gimmick> $Gimikboard
  * @property-read int|null $gimikboard_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Student> $Student
+ * @property-read Collection<int, Student> $Student
  * @property-read int|null $student_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|School newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|School newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|School query()
@@ -31,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|School whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|School whereSeal($value)
  * @method static \Illuminate\Database\Eloquent\Builder|School whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperSchool
  */
@@ -42,14 +46,16 @@ class School extends Model
         'name',
         'address',
         'seal',
-        'location'
+        'location',
     ];
 
-    public function Gimikboard() {
+    public function Gimikboard()
+    {
         return $this->hasMany(Gimmick::class);
     }
 
-    public function Student() {
+    public function Student()
+    {
         return $this->hasMany(Student::class);
     }
 }

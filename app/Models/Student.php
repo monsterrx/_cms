@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Student
@@ -19,13 +21,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $data
  * @property string|null $image
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Batch> $Batch
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Batch> $Batch
  * @property-read int|null $batch_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Scholar> $Scholar
+ * @property-read Collection<int, Scholar> $Scholar
  * @property-read int|null $scholar_count
- * @property-read \App\Models\School $School
+ * @property-read School $School
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Student newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Student newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Student query()
@@ -42,6 +45,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereSchoolId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Student whereYearLevel($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperStudent
  */
@@ -57,18 +61,21 @@ class Student extends Model
         'year_level',
         'data',
         'scholar_type',
-        'image'
+        'image',
     ];
 
-    public function School() {
+    public function School()
+    {
         return $this->belongsTo(School::class);
     }
 
-    public function Batch() {
+    public function Batch()
+    {
         return $this->belongsToMany(Batch::class);
     }
 
-    public function Scholar() {
+    public function Scholar()
+    {
         return $this->hasMany(Scholar::class);
     }
 }

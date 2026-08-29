@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Batch
@@ -17,14 +19,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $image
  * @property string|null $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Photo> $Image
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Photo> $Image
  * @property-read int|null $image_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Sponsor> $Sponsor
+ * @property-read Collection<int, Sponsor> $Sponsor
  * @property-read int|null $sponsor_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Student> $Student
+ * @property-read Collection<int, Student> $Student
  * @property-read int|null $student_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Batch newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Batch newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Batch query()
@@ -39,6 +42,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereSemester($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereStartYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Batch whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperBatch
  */
@@ -53,18 +57,21 @@ class Batch extends Model
         'end_year',
         'description',
         'image',
-        'location'
+        'location',
     ];
 
-    public function Student() {
+    public function Student()
+    {
         return $this->belongsToMany(Student::class);
     }
 
-    public function Image() {
+    public function Image()
+    {
         return $this->hasMany(Photo::class);
     }
 
-    public function Sponsor() {
+    public function Sponsor()
+    {
         return $this->belongsToMany(Sponsor::class);
     }
 }

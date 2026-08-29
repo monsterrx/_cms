@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Feature
@@ -14,9 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $month
  * @property string|null $year
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Indie $Indie
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Indie $Indie
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Feature newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feature newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Feature query()
@@ -29,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Feature whereMonth($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feature whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Feature whereYear($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperFeature
  */
@@ -42,10 +45,11 @@ class Feature extends Model
         'content',
         'month',
         'year',
-        'location'
+        'location',
     ];
 
-    public function Indie() {
+    public function Indie()
+    {
         return $this->belongsTo(Indie::class, 'indieground_id');
     }
 }

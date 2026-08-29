@@ -1,22 +1,21 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Models\Show;
+namespace App\Http\Controllers;
+
 use App\Models\Podcast;
-use App\Traits\MediaProcessors;
-use App\Traits\SystemFunctions;
+use App\Models\Show;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 
-class PodcastController extends Controller {
-
-	public function index(Request $request)
-	{
-	    if($request->ajax()) {
+class PodcastController extends Controller
+{
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
             $podcast = Podcast::with('Show')
                 ->whereNull('deleted_at')
                 ->where('location', $this->getStationCode())
@@ -28,52 +27,52 @@ class PodcastController extends Controller {
                 ->where('location', $this->getStationCode())
                 ->get();
 
-            $options = "";
+            $options = '';
 
             foreach ($show as $shows) {
-                $options.= '<option value="'.$shows->id.'">'.$shows->title.'</option>';
+                $options .= '<option value="'.$shows->id.'">'.$shows->title.'</option>';
             }
 
             foreach ($podcast as $podcasts) {
-                $podcasts->options = '' .
-                    '<div class="btn-group">' .
-                    '   <a href="#update_podcast_modal" id="update-podcast-modal" data-id="'.$podcasts->id.'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-search"></i></a>' .
-                    '   <a href="#delete_podcast_modal" id="delete-podcast-modal" data-id="'.$podcasts->id.'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-trash-alt"></i></a>' .
+                $podcasts->options = ''.
+                    '<div class="btn-group">'.
+                    '   <a href="#update_podcast_modal" id="update-podcast-modal" data-id="'.$podcasts->id.'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-search"></i></a>'.
+                    '   <a href="#delete_podcast_modal" id="delete-podcast-modal" data-id="'.$podcasts->id.'" data-toggle="modal" class="btn btn-outline-dark"><i class="fas fa-trash-alt"></i></a>'.
                     '</div>';
             }
 
             return response()->json(['podcasts' => $podcast, 'shows' => $options]);
         }
 
-		$podcast = Podcast::orderBy('date', 'desc')
+        $podcast = Podcast::orderBy('date', 'desc')
             ->whereNull('deleted_at')
             ->where('location', $this->getStationCode())
             ->get();
 
-		$show = Show::orderBy('title')->get();
-		$user = Auth::user()->Employee->Designation;
+        $show = Show::orderBy('title')->get();
+        $user = Auth::user()->Employee->Designation;
 
-		$data = array('podcast' => $podcast, 'show' => $show, 'user' => $user);
+        $data = ['podcast' => $podcast, 'show' => $show, 'user' => $user];
 
-		return view('_cms.system-views.programs.podcast.index', compact('data'));
-	}
+        return view('_cms.system-views.programs.podcast.index', compact('data'));
+    }
 
-	public function store(Request $request)
-	{
-		$validator = Validator::make($request->all(), [
-		    'show_id' => 'required',
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'show_id' => 'required',
             'episode' => 'required',
             'date' => 'required',
-            'link' => 'required'
+            'link' => 'required',
         ]);
 
-		if($validator->passes()) {
-            $img = $request->file('image'); //file for image
+        if ($validator->passes()) {
+            $img = $request->file('image'); // file for image
             $path = 'images/podcasts';
 
             $podcast = new Podcast($request->all());
 
-            if($img) {
+            if ($img) {
                 $podcast['image'] = $this->storePhoto($request, $path, 'podcasts', false);
             } else {
                 $podcast['image'] = 'tmr-default.png';
@@ -84,65 +83,67 @@ class PodcastController extends Controller {
             return response()->json(['status' => ' success', 'message' => 'A podcast episode has been updated'], 200);
         }
 
-		return response()->json(['status' => 'error' ,'errors' => $validator->errors()->all()], 403);
-	}
+        return response()->json(['status' => 'error', 'errors' => $validator->errors()->all()], 403);
+    }
 
-	public function show($id)
-	{
-		try {
+    public function show($id)
+    {
+        try {
 
             $podcast = Podcast::with('Show')->findOrfail($id);
 
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
 
-			return redirect()->back()->withErrors(['Model Error','Data not Found!']);
-		}
+            return redirect()->back()->withErrors(['Model Error', 'Data not Found!']);
+        }
 
         $podcast['image'] = $this->verifyPhoto($podcast['image'], 'podcasts');
 
-		return response()->json(['podcast' => $podcast]);
-	}
+        return response()->json(['podcast' => $podcast]);
+    }
 
-	public function update($id, Request $request)
-	{
-		try {
-			$podcast = Podcast::findOrfail($id);
-		} catch(ModelNotFoundException $e) {
-			return redirect()->back()->withErrors(trans('response.model.not.found'));
-		}
+    public function update($id, Request $request)
+    {
+        try {
+            $podcast = Podcast::findOrfail($id);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->withErrors(trans('response.model.not.found'));
+        }
 
-		$this->validate($request, [
-		    'show_id' => 'required',
+        $this->validate($request, [
+            'show_id' => 'required',
             'episode' => 'required',
             'date' => 'required',
-            'link' => 'required'
+            'link' => 'required',
         ]);
 
-		$img = $request->file('image'); //file for image
-		$path = 'images/podcasts';
+        $img = $request->file('image'); // file for image
+        $path = 'images/podcasts';
 
-		if($img) {
+        if ($img) {
             $podcast['image'] = $this->storePhoto($request, $path, 'podcasts', false);
             $podcast->save();
-		} else {
-			$podcast->update($request->except('image'));
-		}
+        } else {
+            $podcast->update($request->except('image'));
+        }
 
-		Session::flash('success', 'Podcast has been successfully updated');
-		return redirect()->route('podcasts.index');
-	}
+        Session::flash('success', 'Podcast has been successfully updated');
 
-	public function destroy($id)
-	{
-		try {
-			$podcast = Podcast::findOrfail($id);
-		} catch(ModelNotFoundException $e) {
-			return redirect()->back()->withErrors(['Model Error','Data not Found!']);
-		}
+        return redirect()->route('podcasts.index');
+    }
 
-		$podcast->delete();
+    public function destroy($id)
+    {
+        try {
+            $podcast = Podcast::findOrfail($id);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->withErrors(['Model Error', 'Data not Found!']);
+        }
 
-		Session::flash('success', 'Podcast episode has been successfully removed!');
-		return redirect()->route('podcasts.index');
-	}
+        $podcast->delete();
+
+        Session::flash('success', 'Podcast episode has been successfully removed!');
+
+        return redirect()->route('podcasts.index');
+    }
 }

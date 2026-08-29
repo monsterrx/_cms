@@ -68,7 +68,6 @@ class StreamLinkController extends Controller
             ], 404);
         }
 
-
         $streamingLink->update($request->all());
 
         return response()->json([

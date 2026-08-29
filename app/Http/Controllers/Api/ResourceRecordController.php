@@ -27,8 +27,7 @@ final class ResourceRecordController extends Controller
         private ResourceImageStorage $images,
         private RichTextSanitizer $richText,
         private ResourcePresenter $presenter
-    ) {
-    }
+    ) {}
 
     public function index(Request $request, string $section, string $item): JsonResponse
     {
@@ -318,9 +317,9 @@ final class ResourceRecordController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $payload
-     * @param array<string, mixed> $resource
-     * @param array<int, array<string, mixed>> $fields
+     * @param  array<string, mixed>  $payload
+     * @param  array<string, mixed>  $resource
+     * @param  array<int, array<string, mixed>>  $fields
      */
     private function applySystemValues(
         Request $request,
@@ -328,8 +327,7 @@ final class ResourceRecordController extends Controller
         array $resource,
         array $fields,
         bool $creating
-    ): void
-    {
+    ): void {
         $columnNames = array_column($fields, 'name');
         $tableColumns = array_column($this->registry->columns($resource['table']), 'name');
 
@@ -400,8 +398,8 @@ final class ResourceRecordController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $payload
-     * @param array<string, mixed> $resource
+     * @param  array<string, mixed>  $payload
+     * @param  array<string, mixed>  $resource
      * @return array{
      *     stored: array<int, array{name: string, path: string}>,
      *     related: array<int, array{field: string, name: string, definition: array<string, mixed>}>
@@ -439,8 +437,8 @@ final class ResourceRecordController extends Controller
     }
 
     /**
-     * @param array<int, array{field: string, name: string, definition: array<string, mixed>}> $images
-     * @param array<string, mixed> $payload
+     * @param  array<int, array{field: string, name: string, definition: array<string, mixed>}>  $images
+     * @param  array<string, mixed>  $payload
      */
     private function applyRelatedImages(array $images, array $payload, ?object $existingRecord = null): void
     {

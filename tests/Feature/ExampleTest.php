@@ -168,14 +168,14 @@ class ExampleTest extends TestCase
 
     private function authenticatedUserAtLevel(int $level): User
     {
-        $user = (new User())->forceFill([
+        $user = (new User)->forceFill([
             'id' => 1,
             'employee_id' => 1,
             'employee_number' => 'TEST0001',
             'email' => 'cms@example.com',
         ]);
-        $employee = (new Employee())->forceFill(['id' => 1]);
-        $designation = (new Designation())->forceFill(['id' => $level, 'level' => $level]);
+        $employee = (new Employee)->forceFill(['id' => 1]);
+        $designation = (new Designation)->forceFill(['id' => $level, 'level' => $level]);
 
         $employee->setRelation('Designation', $designation);
         $user->setRelation('Employee', $employee);

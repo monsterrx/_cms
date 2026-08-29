@@ -13,6 +13,10 @@ class CreateMusicAwardsReleasesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('music_awards_releases')) {
+            return;
+        }
+
         Schema::create('music_awards_releases', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

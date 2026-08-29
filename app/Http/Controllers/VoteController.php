@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class VoteController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $latestChartDate = DB::table('charts')
             ->whereNull('deleted_at')
             ->where('daily', 0)
@@ -29,8 +30,8 @@ class VoteController extends Controller
             ->orderBy('position')
             ->get();
 
-        if($request->ajax()) {
-            $vote = Vote::with('Chart.Song','Employee')
+        if ($request->ajax()) {
+            $vote = Vote::with('Chart.Song', 'Employee')
                 ->get();
 
             return view('_cms.system-views.music._chart.charts_voting', compact('latestChartDate', 'chart', 'vote'));
@@ -49,7 +50,7 @@ class VoteController extends Controller
 
         $userLevel = Auth::user()->Employee->Designation->level;
 
-        if($userlevel == 5 || $userlevel == 8) {
+        if ($userlevel == 5 || $userlevel == 8) {
             return view('_cms.system-views.employeeUI.Jocks.survey', compact('chart', 'show', 'jock_id', 'latestChartDate'));
         }
 
@@ -65,11 +66,10 @@ class VoteController extends Controller
 
         $this->voteLog('Added votes from '.$device, $chartId, $userId);
 
-        if($device == 'phone')
-        {
+        if ($device == 'phone') {
             $vote = Chart::findOrFail($chartId);
 
-            ++$vote->phone_votes;
+            $vote->phone_votes++;
             $vote->voted_at = date('Y-m-d H:i:s');
 
             $vote->save();
@@ -77,11 +77,11 @@ class VoteController extends Controller
             return response()->json(['status' => 'success', 'message' => 'Phone call vote added'], 201);
         }
 
-        if($device == 'socmed') {
+        if ($device == 'socmed') {
 
             $vote = Chart::findOrFail($chartId);
 
-            ++$vote->social_votes;
+            $vote->social_votes++;
             $vote->voted_at = date('Y-m-d H:i:s');
 
             $vote->save();
@@ -92,8 +92,9 @@ class VoteController extends Controller
         return response()->json(['status' => 'warning', 'message' => 'Request Unknown'], 302);
     }
 
-    public function refreshLogsTable(Request $request) {
-        if($request->ajax()) {
+    public function refreshLogsTable(Request $request)
+    {
+        if ($request->ajax()) {
             $vote = Vote::join('charts', 'votes.chart_id', '=', 'charts.id')
                 ->join('songs', 'charts.song_id', '=', 'songs.id')
                 ->join('employees', 'votes.employee_id', '=', 'employees.id')
@@ -107,8 +108,9 @@ class VoteController extends Controller
         return back('403')->withErrors('Restricted Access!');
     }
 
-    public function refreshTallyLogsTable(Request $request) {
-        if($request->ajax()) {
+    public function refreshTallyLogsTable(Request $request)
+    {
+        if ($request->ajax()) {
             $tally = Tally::with('Chart.Song')
                 ->get();
 
@@ -118,7 +120,8 @@ class VoteController extends Controller
         return back('403')->withErrors('Restricted Access!');
     }
 
-    public function refreshVotesTable(Request $request) {
+    public function refreshVotesTable(Request $request)
+    {
         // TODO: You need to plan this one out.
     }
 
@@ -130,7 +133,7 @@ class VoteController extends Controller
             'action' => $action,
             'chart_id' => $chartId,
             'employee_id' => $userId,
-            'dated' => $date
+            'dated' => $date,
         ]);
 
         $create->save();

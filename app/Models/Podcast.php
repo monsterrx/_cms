@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Podcast
@@ -16,9 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $image
  * @property string|null $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Show $Show
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Show $Show
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Podcast newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Podcast newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Podcast query()
@@ -32,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Podcast whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Podcast whereShowId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Podcast whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperPodcast
  */
@@ -45,10 +48,11 @@ class Podcast extends Model
         'date',
         'link',
         'image',
-        'location'
+        'location',
     ];
 
-    public function Show() {
+    public function Show()
+    {
         return $this->belongsTo(Show::class);
     }
 }

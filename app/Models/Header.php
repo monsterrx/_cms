@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Header
@@ -16,8 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $location
  * @property string|null $link
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Header newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Header newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Header query()
@@ -31,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Header whereSubTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Header whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Header whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperHeader
  */
@@ -44,6 +47,6 @@ class Header extends Model
         'title',
         'sub_title',
         'link',
-        'location'
+        'location',
     ];
 }

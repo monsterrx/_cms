@@ -6,8 +6,10 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Contestant
@@ -25,10 +27,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $image
  * @property string|null $remember_token
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Contest> $Contest
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Contest> $Contest
  * @property-read int|null $contest_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Contestant newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contestant newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Contestant query()
@@ -47,12 +50,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Contestant wherePhoneNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contestant whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contestant whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperContestant
  */
 class Contestant extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use HasFactory, Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword, HasFactory;
 
     protected $fillable = [
         'phone_number',
@@ -61,10 +65,11 @@ class Contestant extends Model implements AuthenticatableContract, CanResetPassw
         'birthday',
         'city',
         'email',
-        'password'
+        'password',
     ];
 
-    public function Contest() {
+    public function Contest()
+    {
         return $this->belongsToMany(Contest::class, 'contestant_giveaway', 'giveaway_id', 'contestant_id');
     }
 }

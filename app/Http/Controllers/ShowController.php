@@ -1,23 +1,20 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Photo;
-use App\Models\Jock;
 use App\Models\Show;
-use App\Models\StudentJock;
 use App\Models\Timeslot;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ShowController extends Controller
 {
-
     public function index()
     {
         $show = Show::where('deleted_at')
@@ -38,7 +35,7 @@ class ShowController extends Controller
         $this->validate($request, [
             'image' => 'image|file|max:2048',
             'background_image' => 'image|file|max:2048',
-            'header_image' => 'image|file|max:2048'
+            'header_image' => 'image|file|max:2048',
         ]);
 
         if ($request['is_special'] == 2 || $request['is_special'] == '2') {
@@ -49,6 +46,7 @@ class ShowController extends Controller
             $show->save();
 
             Session::flash('success', 'Show successfully Added');
+
             return redirect()->route('shows.index');
         }
 
@@ -76,7 +74,7 @@ class ShowController extends Controller
 
         $show = new Show($request->all());
         $show->icon = $icon_name;
-        
+
         // If header_image is not present
         if ($request['is_special'] == '2') {
             if ($request->exists('background_image')) {
@@ -89,10 +87,11 @@ class ShowController extends Controller
                 $show = Show::latest()->first();
 
                 Session::flash('success', 'Show has been successfully added');
+
                 return redirect()->route('shows.show', $show->id);
             }
 
-            return redirect()->back()->withErrors('There is no provided show picture');   
+            return redirect()->back()->withErrors('There is no provided show picture');
         }
 
         $show->save();
@@ -100,6 +99,7 @@ class ShowController extends Controller
         $show = Show::latest()->first();
 
         Session::flash('success', 'Show has been successfully added, please add the necessary images.');
+
         return redirect()->route('shows.show', $show->id);
     }
 
@@ -146,7 +146,7 @@ class ShowController extends Controller
             $img = $request->file('image'); // file for header Image
 
             $this->validate($request, [
-                'image' => 'image|file|max:2048'
+                'image' => 'image|file|max:2048',
             ]);
 
             $path = 'images/shows';
@@ -159,6 +159,7 @@ class ShowController extends Controller
                 $show->save();
 
                 Session::flash('success', 'Show has been successfully Updated');
+
                 return redirect()->route('shows.show', $show['id']);
             }
 
@@ -167,6 +168,7 @@ class ShowController extends Controller
             $show->update($request->all());
 
             Session::flash('success', 'Show has been successfully Updated');
+
             return redirect()->route('shows.show', $show['id']);
         }
 
@@ -180,6 +182,7 @@ class ShowController extends Controller
         $show->delete();
 
         Session::flash('success', 'Show has been successfully Deleted');
+
         return redirect()->route('shows.index');
     }
 
@@ -200,10 +203,11 @@ class ShowController extends Controller
             return redirect()->back()->withErrors(['The jock is already on the show']);
         }
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $show->Jock()->attach($request['jock_id']);
 
             Session::flash('success', 'Jock has been successfully added to the Show');
+
             return redirect()->route('shows.show', $show['id']);
         }
 
@@ -218,22 +222,24 @@ class ShowController extends Controller
 
         $show = Show::with('Jock')->findOrfail($id);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $show->Jock()->detach($request['jock_id']);
 
             Session::flash('success', 'Jock has been successfully added to the Show');
+
             return redirect()->route('shows.show', $show['id']);
         }
 
         return redirect()->route('shows.show', $show['id'])->withErrors($validator->errors()->all());
     }
 
-    public function storeBackgroundImage($id, Request $request) {
+    public function storeBackgroundImage($id, Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'image' => 'image|file|max:2048|required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $show = Show::with('Timeslot')->findOrFail($id);
             $path = 'images/shows';
 
@@ -246,12 +252,13 @@ class ShowController extends Controller
         return response()->json(['status' => 'error', 'message' => $validator->errors()->all()], 400);
     }
 
-    public function storeHeaderImage($id, Request $request) {
+    public function storeHeaderImage($id, Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'image' => 'image|file|max:2048|required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $show = Show::with('Timeslot')->findOrFail($id);
             $path = 'images/shows';
 

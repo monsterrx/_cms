@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Artist
@@ -14,12 +16,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $type
  * @property string|null $image
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Album> $Album
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Album> $Album
  * @property-read int|null $album_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Indie> $Indie
+ * @property-read Collection<int, Indie> $Indie
  * @property-read int|null $indie_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Artist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Artist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Artist query()
@@ -31,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Artist whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Artist whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Artist whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperArtist
  */
@@ -42,14 +46,16 @@ class Artist extends Model
         'name',
         'country',
         'type',
-        'image'
+        'image',
     ];
 
-    public function Album() {
+    public function Album()
+    {
         return $this->hasMany(Album::class);
     }
 
-    public function Indie() {
+    public function Indie()
+    {
         return $this->hasMany(Indie::class);
     }
 }

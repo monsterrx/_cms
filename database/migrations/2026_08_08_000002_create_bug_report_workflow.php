@@ -85,6 +85,7 @@ return new class extends Migration
     {
         if (DB::getDriverName() !== 'mysql') {
             $operation();
+
             return;
         }
 

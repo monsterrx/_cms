@@ -15,7 +15,7 @@ class MusicAwardsReleases extends Model
     protected $fillable = [
         'release',
         'banner_image',
-        'is_live'
+        'is_live',
     ];
 
     public function MusicAward()

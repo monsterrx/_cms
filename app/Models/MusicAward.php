@@ -16,22 +16,26 @@ class MusicAward extends Model
         'album_id',
         'song_id',
         'image',
-        'is_featured'
+        'is_featured',
     ];
 
-    public function Release() {
+    public function Release()
+    {
         return $this->belongsTo(MusicAwardsReleases::class);
     }
 
-    public function Artist() {
+    public function Artist()
+    {
         return $this->belongsTo(Artist::class);
     }
 
-    public function Album() {
+    public function Album()
+    {
         return $this->belongsTo(Album::class);
     }
 
-    public function Song() {
+    public function Song()
+    {
         return $this->belongsTo(Song::class);
     }
 }

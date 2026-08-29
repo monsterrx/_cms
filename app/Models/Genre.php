@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Genre
@@ -12,10 +14,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string|null $description
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Album> $Album
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Album> $Album
  * @property-read int|null $album_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Genre newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Genre newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Genre query()
@@ -25,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Genre whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Genre whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Genre whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperGenre
  */
@@ -34,10 +38,11 @@ class Genre extends Model
 
     protected $fillable = [
         'name',
-        'description'
+        'description',
     ];
 
-    public function Album() {
+    public function Album()
+    {
         return $this->hasMany(Album::class);
     }
 }

@@ -96,7 +96,8 @@ class MediaUrlResolverTest extends TestCase
         Http::fake([
             'https://media.example.test/images/articles/article.jpg' => Http::response('', 200),
         ]);
-        $consumer = new class {
+        $consumer = new class
+        {
             use MediaProcessors;
         };
 

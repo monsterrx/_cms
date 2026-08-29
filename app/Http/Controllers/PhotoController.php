@@ -12,11 +12,12 @@ class PhotoController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:4',
-            'image' => 'image|file|max:2048|required'
+            'image' => 'image|file|max:2048|required',
         ]);
 
         if ($validator->fails()) {
             session()->flash('errors', $validator->errors());
+
             return redirect()->back();
         }
 
@@ -34,6 +35,7 @@ class PhotoController extends Controller
             $photo->save();
 
             session()->flash('success', 'Added the batch\'s photo!');
+
             return redirect()->route('articles.show', $article_id);
         } elseif ($show_id) {
             $request['file'] = $this->storePhoto($request, 'images/shows', 'shows', true);
@@ -43,6 +45,7 @@ class PhotoController extends Controller
             $photo->save();
 
             session()->flash('success', 'Added a show\'s photo!');
+
             return redirect()->route('shows.show', $show_id);
         } elseif ($jock_id) {
             $request['file'] = $this->storePhoto($request, 'images/jocks', 'jocks', true);
@@ -52,6 +55,7 @@ class PhotoController extends Controller
             $photo->save();
 
             session()->flash('success', 'Added a jock\'s photo!');
+
             return redirect()->route('jocks.show', $jock_id);
         } elseif ($student_jock_id) {
             $request['file'] = $this->storePhoto($request, 'images/studentJocks', 'studentJocks', true);
@@ -61,6 +65,7 @@ class PhotoController extends Controller
             $photo->save();
 
             session()->flash('success', 'Added a student jock\'s photo!');
+
             return redirect()->route('radioOne.jocks.show', $student_jock_id);
         } elseif ($article_id) {
             $request['file'] = $this->storePhoto($request, 'images/articles', 'articles');
@@ -70,20 +75,24 @@ class PhotoController extends Controller
             $photo->save();
 
             session()->flash('success', 'Added an article\'s image!');
+
             return redirect()->route('articles.show', $article_id);
         }
 
         session()->flash('error', 'Id not found nor registered, please contact your it developer');
+
         return redirect()->back();
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|min:6'
+            'name' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
             session()->flash('errors', $validator->errors());
+
             return redirect()->back();
         }
 
@@ -91,15 +100,18 @@ class PhotoController extends Controller
         $photo->update($request->all());
 
         session()->flash('success', 'Image data has been updated.');
+
         return redirect()->back();
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $photo = Photo::with('Show', 'Jock', 'Batch', 'Article')->findOrFail($id);
 
         $photo->delete();
 
         session()->flash('success', 'Image has been deleted');
+
         return redirect()->back();
     }
 }

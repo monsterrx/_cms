@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Song
@@ -16,12 +18,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $votes
  * @property int $is_charted
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Album $Album
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Chart> $Chart
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Album $Album
+ * @property-read Collection<int, Chart> $Chart
  * @property-read int|null $chart_count
- * @property-read \App\Models\User|null $User
+ * @property-read User|null $User
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Song newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Song newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Song query()
@@ -34,6 +37,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Song whereTrackLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Song whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Song whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperSong
  */
@@ -50,15 +54,18 @@ class Song extends Model
         'is_charted',
     ];
 
-    public function Chart() {
+    public function Chart()
+    {
         return $this->hasMany(Chart::class);
     }
 
-    public function Album() {
+    public function Album()
+    {
         return $this->belongsTo(Album::class);
     }
 
-    public function User() {
+    public function User()
+    {
         return $this->belongsTo(User::class);
     }
 }

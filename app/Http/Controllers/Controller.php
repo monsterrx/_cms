@@ -16,12 +16,10 @@ use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, SystemFunctions, MediaProcessors, AssetProcessors, ChartFunctions, JockFunctions, LogsUsers;
+    use AssetProcessors, AuthorizesRequests, ChartFunctions, DispatchesJobs, JockFunctions, LogsUsers, MediaProcessors, SystemFunctions, ValidatesRequests;
 
     /**
      * Return a consistent successful API response.
-     *
-     * @param  mixed  $data
      */
     protected function successResponse(
         mixed $data = null,

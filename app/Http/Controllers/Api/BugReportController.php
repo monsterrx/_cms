@@ -21,8 +21,7 @@ final class BugReportController extends Controller
     public function __construct(
         private RichTextSanitizer $richText,
         private StationContext $stations
-    ) {
-    }
+    ) {}
 
     public function store(Request $request): JsonResponse
     {
@@ -86,6 +85,7 @@ final class BugReportController extends Controller
                 }
 
                 $report->save();
+
                 return $report;
             });
         } catch (Throwable $exception) {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Title
@@ -21,9 +22,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $podcast_main_page_title
  * @property string $youtube_main_page_title
  * @property string $location
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Asset|null $Asset
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Asset|null $Asset
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Title newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Title newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Title query()
@@ -42,6 +44,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Title wherePodcastTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Title whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Title whereYoutubeMainPageTitle($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperTitle
  */
@@ -61,10 +64,11 @@ class Title extends Model
         'articles_main_page_title',
         'podcast_main_page_title',
         'youtube_main_page_title',
-        'location'
+        'location',
     ];
 
-    public function Asset() {
+    public function Asset()
+    {
         return $this->hasMany(Asset::class);
     }
 }

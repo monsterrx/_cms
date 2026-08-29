@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Models\Jock;
 use App\Models\Show;
@@ -9,24 +11,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Ramsey\Uuid\Type\Time;
 
-class TimeslotController extends Controller {
-
-	public function index(Request $request)
-	{
-		$day = date('l');
+class TimeslotController extends Controller
+{
+    public function index(Request $request)
+    {
+        $day = date('l');
         $station = $this->getStationCode();
 
-        $jocks = Jock::with('Employee')->whereHas('Employee', function(Builder $query) {
+        $jocks = Jock::with('Employee')->whereHas('Employee', function (Builder $query) {
             $query->where('location', $this->getStationCode());
         })->whereNull('deleted_at')
             ->where('is_active', '=', 1)
             ->orderBy('name')
             ->get();
 
-		if($request->ajax()) {
-            if($request->has('day')) {
+        if ($request->ajax()) {
+            if ($request->has('day')) {
                 return $day;
             }
 
@@ -40,7 +41,7 @@ class TimeslotController extends Controller {
             return view('_cms.system-views.programs.timeslot.showTable', compact('timeslots', 'jocks', 'station'));
         }
 
-        $jocks = Jock::with('Employee')->whereHas('Employee', function(Builder $query) {
+        $jocks = Jock::with('Employee')->whereHas('Employee', function (Builder $query) {
             $query->where('location', $this->getStationCode());
         })->whereNull('deleted_at')
             ->where('is_active', '=', 1)
@@ -53,65 +54,66 @@ class TimeslotController extends Controller {
             ->orderBy('title')
             ->get();
 
-		$timeslots = Timeslot::with('Show', 'Jock')
+        $timeslots = Timeslot::with('Show', 'Jock')
             ->whereNull('deleted_at')
             ->where('day', $day)
             ->where('location', $this->getStationCode())
             ->orderBy('start')
             ->get();
 
-		// Getting current user's level
-		$level = Auth::user()->Employee->Designation->level;
-		if ($level == 1 || $level == 2) {
-			return view('_cms.system-views.programs.timeslot.index', compact('shows', 'jocks', 'timeslots', 'day', 'station'));
-		}
+        // Getting current user's level
+        $level = Auth::user()->Employee->Designation->level;
+        if ($level == 1 || $level == 2) {
+            return view('_cms.system-views.programs.timeslot.index', compact('shows', 'jocks', 'timeslots', 'day', 'station'));
+        }
 
         return redirect()->back()->withErrors(trans('response.restricted'));
     }
 
-	public function store(Request $request)
-	{
-		$validator = Validator::make($request->all(), [
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'day' => 'required',
             'start' => 'required',
-            'end' => 'required'
+            'end' => 'required',
         ]);
 
-		$request['location'] = $this->getStationCode();
+        $request['location'] = $this->getStationCode();
 
-		if($validator->passes()) {
+        if ($validator->passes()) {
             $timeslot = new Timeslot($request->all());
             $timeslot->save();
 
             Session::flash('success', 'Timeslot has been successfully Added');
+
             return redirect()->route('timeslots.index');
         }
 
-		return redirect()->back()->withErrors($validator->errors()->all());
-	}
+        return redirect()->back()->withErrors($validator->errors()->all());
+    }
 
-	public function show($id, Request $request)
-	{
-		if($request->ajax()) {
+    public function show($id, Request $request)
+    {
+        if ($request->ajax()) {
             $timeslots = Timeslot::with('Show', 'Jock')->findOrfail($id);
 
             return response()->json($timeslots);
         }
 
-		return response()->json(['message' => 'Bad request'], 400);
+        return response()->json(['message' => 'Bad request'], 400);
     }
 
-	public function update($id, Request $request)
-	{
-		if($request->ajax()) {
+    public function update($id, Request $request)
+    {
+        if ($request->ajax()) {
             $validator = Validator::make($request->all(), [
                 'show_id' => 'required',
                 'day' => 'required',
                 'start' => 'required',
-                'end' => 'required'
+                'end' => 'required',
             ]);
 
-            if($validator->passes()) {
+            if ($validator->passes()) {
                 $timeslot = Timeslot::findOrfail($id);
                 $timeslot->update($request->all());
 
@@ -122,17 +124,17 @@ class TimeslotController extends Controller {
         }
 
         return redirect()->back()->withErrors('No direct script access!');
-	}
+    }
 
-	public function destroy($id)
-	{
-		$timeslot = Timeslot::with('Show', 'Jock')->findOrfail($id);
-		$timeslot->delete();
+    public function destroy($id)
+    {
+        $timeslot = Timeslot::with('Show', 'Jock')->findOrfail($id);
+        $timeslot->delete();
 
-		return response()->json(['status' => 'success']);
-	}
+        return response()->json(['status' => 'success']);
+    }
 
-	public function selectDay(Request $request)
+    public function selectDay(Request $request)
     {
         $timeslots = Timeslot::with('Show')
             ->has('Show')
@@ -142,7 +144,7 @@ class TimeslotController extends Controller {
             ->orderBy('start')
             ->get();
 
-        $jocks = Jock::with('Employee')->whereHas('Employee', function(Builder $query) {
+        $jocks = Jock::with('Employee')->whereHas('Employee', function (Builder $query) {
             $query->where('location', $this->getStationCode());
         })->whereNull('deleted_at')
             ->where('is_active', '=', 1)
@@ -151,8 +153,8 @@ class TimeslotController extends Controller {
 
         $station = $this->getStationCode();
 
-		if($request->ajax()) {
-            if($request['type'] == 'jock') {
+        if ($request->ajax()) {
+            if ($request['type'] == 'jock') {
                 $timeslots = Timeslot::with('Jock')
                     ->has('Jock')
                     ->whereNull('deleted_at')
@@ -165,12 +167,13 @@ class TimeslotController extends Controller {
             }
 
             return view('_cms.system-views.programs.timeslot.showTable', compact('timeslots', 'jocks', 'station'));
-		}
+        }
 
         return redirect()->route('timeslots.index')->withErrors(trans('response.restricted'));
-	}
+    }
 
-    public function addJock($timeslot_id, $jock_id) {
+    public function addJock($timeslot_id, $jock_id)
+    {
         $timeslot = Timeslot::with('Show', 'Jock')->findOrFail($timeslot_id);
 
         $count = DB::table('jock_timeslot')
@@ -187,7 +190,8 @@ class TimeslotController extends Controller {
         return redirect()->back()->with('success', 'Jock has been added to the show\'s timeslot');
     }
 
-    public function removeJock($timeslot_id, $jock_id) {
+    public function removeJock($timeslot_id, $jock_id)
+    {
         $timeslot = Timeslot::with('Show', 'Jock')->findOrFail($timeslot_id);
 
         $timeslot->Jock()->detach($jock_id);

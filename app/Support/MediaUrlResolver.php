@@ -11,9 +11,7 @@ final class MediaUrlResolver
 {
     private const IMAGE_EXTENSIONS = ['jpeg', 'jpg', 'png', 'webp', 'jfif', 'gif', 'svg'];
 
-    public function __construct(private StationContext $stations)
-    {
-    }
+    public function __construct(private StationContext $stations) {}
 
     public function photo(
         mixed $fileName,

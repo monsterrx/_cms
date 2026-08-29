@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Category
@@ -15,10 +17,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $icon
  * @property string $dark_mode_icon
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Article> $Article
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Collection<int, Article> $Article
  * @property-read int|null $article_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Category query()
@@ -28,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperCategory
  */
@@ -41,10 +45,11 @@ class Category extends Model
         'name',
         'description',
         'icon',
-        'dark_mode_icon'
+        'dark_mode_icon',
     ];
 
-    public function Article() {
+    public function Article()
+    {
         return $this->hasMany(Article::class);
     }
 }

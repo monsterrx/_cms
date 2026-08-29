@@ -4,7 +4,8 @@ namespace App\Traits;
 
 use App\Support\MediaUrlResolver;
 
-trait MediaProcessors {
+trait MediaProcessors
+{
     public function verifyAudio($fileName): ?string
     {
         return app(MediaUrlResolver::class)->audio($fileName);

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Jock
@@ -19,21 +21,22 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $profile_image
  * @property string $is_active
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Award> $Award
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Award> $Award
  * @property-read int|null $award_count
- * @property-read \App\Models\Employee $Employee
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Fact> $Fact
+ * @property-read Employee $Employee
+ * @property-read Collection<int, Fact> $Fact
  * @property-read int|null $fact_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Photo> $Image
+ * @property-read Collection<int, Photo> $Image
  * @property-read int|null $image_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Social> $Link
+ * @property-read Collection<int, Social> $Link
  * @property-read int|null $link_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Show> $Show
+ * @property-read Collection<int, Show> $Show
  * @property-read int|null $show_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Timeslot> $Timeslot
+ * @property-read Collection<int, Timeslot> $Timeslot
  * @property-read int|null $timeslot_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Jock newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Jock newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Jock query()
@@ -50,6 +53,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Jock whereProfileImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Jock whereSlugString($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Jock whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperJock
  */
@@ -66,35 +70,41 @@ class Jock extends Model
         'profile_image',
         'background_image',
         'main_image',
-        'is_active'
+        'is_active',
     ];
 
-    public function Employee() {
+    public function Employee()
+    {
         return $this->belongsTo(Employee::class);
     }
 
-    public function Fact() {
+    public function Fact()
+    {
         return $this->hasMany(Fact::class, 'jock_id');
     }
 
-    public function Show() {
+    public function Show()
+    {
         return $this->belongsToMany(Show::class);
     }
 
-    public function Image() {
+    public function Image()
+    {
         return $this->hasMany(Photo::class, 'jock_id');
     }
 
-    public function Link() {
+    public function Link()
+    {
         return $this->hasMany(Social::class, 'jock_id');
     }
 
-    public function Award() {
+    public function Award()
+    {
         return $this->hasMany(Award::class, 'jock_id');
     }
 
-    public function Timeslot() {
+    public function Timeslot()
+    {
         return $this->belongsToMany(Timeslot::class);
     }
-
 }

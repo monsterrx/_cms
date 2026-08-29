@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Support\MediaUrlResolver;
+use App\Support\ResourceAudioStorage;
 use App\Support\ResourceDefinitionRegistry;
 use App\Support\ResourceImageStorage;
-use App\Support\ResourceAudioStorage;
 use App\Support\ResourcePresenter;
 use App\Support\RichTextSanitizer;
 use App\Support\StationContext;
@@ -27,8 +28,7 @@ final class ResourceModuleController extends Controller
         private ResourceAudioStorage $audio,
         private RichTextSanitizer $richText,
         private ResourcePresenter $presenter
-    ) {
-    }
+    ) {}
 
     public function details(Request $request, string $section, string $item, int $id): JsonResponse
     {
@@ -217,7 +217,7 @@ final class ResourceModuleController extends Controller
                 throw $exception;
             }
 
-            return $this->successResponse(['track_url' => app(\App\Support\MediaUrlResolver::class)->audio($stored['name'])], 'Track sample saved successfully.');
+            return $this->successResponse(['track_url' => app(MediaUrlResolver::class)->audio($stored['name'])], 'Track sample saved successfully.');
         }
 
         throw ValidationException::withMessages(['action' => 'This module action is not supported.']);
@@ -230,6 +230,7 @@ final class ResourceModuleController extends Controller
             ->map(function (object $image): object {
                 $image->image_url = $this->presenter->imageUrl('jocks', $image->file);
                 $image->fallback_image_url = $this->presenter->fallbackImageUrl();
+
                 return $image;
             });
         $links = DB::table('links')->where('jock_id', $id)->whereNull('deleted_at')->orderBy('website')->get();
@@ -266,6 +267,7 @@ final class ResourceModuleController extends Controller
                 $student->image_url = $this->presenter->imageUrl('studentJocks', $student->image);
                 $student->fallback_image_url = $this->presenter->fallbackImageUrl();
                 $student->position_label = $this->positionLabel($student->position);
+
                 return $student;
             });
         $availableStudents = DB::table('student_jocks')->whereNull('deleted_at')
@@ -373,6 +375,7 @@ final class ResourceModuleController extends Controller
         $awards = DB::table('music_awards')->where('music_awards_releases_id', $id)->orderBy('id')->get()
             ->map(function (object $award): object {
                 [$award->awardee_type, $award->awardee_name] = $this->musicAwardee($award);
+
                 return $award;
             });
 
@@ -394,7 +397,7 @@ final class ResourceModuleController extends Controller
             'type' => $type,
             'track_url' => $type === 'spotify'
                 ? ($record->track_link ?: null)
-                : app(\App\Support\MediaUrlResolver::class)->audio($record->track_link),
+                : app(MediaUrlResolver::class)->audio($record->track_link),
         ];
     }
 
@@ -405,6 +408,7 @@ final class ResourceModuleController extends Controller
             ->get(['jocks.id', 'jocks.name', 'jocks.profile_image'])
             ->map(function (object $jock): object {
                 $jock->image_url = $this->presenter->imageUrl('jocks', $jock->profile_image);
+
                 return $jock;
             });
         $availableJocks = DB::table('jocks')->join('employees', 'employees.id', '=', 'jocks.employee_id')
@@ -417,12 +421,14 @@ final class ResourceModuleController extends Controller
         $images = DB::table('images')->where('show_id', $id)->whereNull('deleted_at')->latest('id')->get()
             ->map(function (object $image): object {
                 $image->image_url = $this->presenter->imageUrl('shows', $image->file);
+
                 return $image;
             });
         $podcasts = DB::table('podcasts')->where('show_id', $id)->whereNull('deleted_at')
             ->orderByDesc('date')->limit(100)->get()
             ->map(function (object $podcast): object {
                 $podcast->image_url = $this->presenter->imageUrl('podcasts', $podcast->image);
+
                 return $podcast;
             });
 
@@ -448,6 +454,7 @@ final class ResourceModuleController extends Controller
     {
         $validated = $request->validate(['content' => ['required', 'string', 'max:5000']]);
         $id = DB::table('facts')->insertGetId($validated + ['jock_id' => $jockId, 'created_at' => now(), 'updated_at' => now()]);
+
         return DB::table('facts')->find($id);
     }
 
@@ -456,6 +463,7 @@ final class ResourceModuleController extends Controller
         $validated = $request->validate(['content' => ['required', 'string', 'max:5000']]);
         $this->scopedChild('facts', 'jock_id', $jockId, $id);
         DB::table('facts')->where('id', $id)->update($validated + ['updated_at' => now()]);
+
         return DB::table('facts')->find($id);
     }
 
@@ -512,6 +520,7 @@ final class ResourceModuleController extends Controller
     {
         $validated = $this->validateSocial($request);
         $id = DB::table('links')->insertGetId($validated + [$foreignKey => $parentId, 'created_at' => now(), 'updated_at' => now()]);
+
         return DB::table('links')->find($id);
     }
 
@@ -520,6 +529,7 @@ final class ResourceModuleController extends Controller
         $validated = $this->validateSocial($request);
         $this->scopedChild('links', $foreignKey, $parentId, $id);
         DB::table('links')->where('id', $id)->update($validated + ['updated_at' => now()]);
+
         return DB::table('links')->find($id);
     }
 
@@ -538,6 +548,7 @@ final class ResourceModuleController extends Controller
             ['jock_id' => $jockId, 'show_id' => $validated['show_id']],
             ['updated_at' => now(), 'created_at' => now()]
         );
+
         return DB::table('shows')->find($validated['show_id']);
     }
 
@@ -557,6 +568,7 @@ final class ResourceModuleController extends Controller
                 ['deleted_at' => null, 'created_at' => now()]
             );
         });
+
         return DB::table('student_jocks')->find($validated['student_jock_id']);
     }
 
@@ -579,6 +591,7 @@ final class ResourceModuleController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         return DB::table('relateds')->find($id);
     }
 
@@ -637,6 +650,7 @@ final class ResourceModuleController extends Controller
         $rules = array_fill_keys($fields, ['nullable', 'string', 'max:500']);
         $validated = $request->validate($rules);
         DB::table('mobile_app_titles')->where('id', $titleId)->update($validated + ['updated_at' => now()]);
+
         return DB::table('mobile_app_titles')->find($titleId);
     }
 
@@ -648,6 +662,7 @@ final class ResourceModuleController extends Controller
             'updated_at' => now(),
         ];
         $id = DB::table('music_awards')->insertGetId($payload);
+
         return DB::table('music_awards')->find($id);
     }
 
@@ -655,6 +670,7 @@ final class ResourceModuleController extends Controller
     {
         $this->scopedChild('music_awards', 'music_awards_releases_id', $releaseId, $id, false);
         DB::table('music_awards')->where('id', $id)->update($this->musicAwardPayload($request) + ['updated_at' => now()]);
+
         return DB::table('music_awards')->find($id);
     }
 
@@ -688,6 +704,7 @@ final class ResourceModuleController extends Controller
                 return [$type, DB::table($table)->where('id', $id)->value('name') ?? 'Unknown'];
             }
         }
+
         return ['', 'Unassigned'];
     }
 
@@ -1047,6 +1064,7 @@ final class ResourceModuleController extends Controller
         }
         $record = $query->first();
         abort_if($record === null, 404);
+
         return $record;
     }
 
@@ -1057,6 +1075,7 @@ final class ResourceModuleController extends Controller
         $this->registry->applyScopes($query, $resource);
         $record = $query->first();
         abort_if($record === null, 404);
+
         return $record;
     }
 
@@ -1069,6 +1088,7 @@ final class ResourceModuleController extends Controller
             ! $resource['read_only'] && $level !== null && in_array((int) $level, $resource['write_levels'], true),
             403
         );
+
         return $resource;
     }
 

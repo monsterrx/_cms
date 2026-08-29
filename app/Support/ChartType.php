@@ -72,10 +72,19 @@ final class ChartType
 
     public static function key(array $flags): string
     {
-        if ($flags['is_dropped']) return 'dropouts';
-        if ($flags['local']) return 'local';
-        if ($flags['throwback']) return $flags['daily'] ? 'daily-throwback' : 'throwback';
-        if ($flags['playlist']) return $flags['daily'] ? 'daily-playlist' : 'playlist';
+        if ($flags['is_dropped']) {
+            return 'dropouts';
+        }
+        if ($flags['local']) {
+            return 'local';
+        }
+        if ($flags['throwback']) {
+            return $flags['daily'] ? 'daily-throwback' : 'throwback';
+        }
+        if ($flags['playlist']) {
+            return $flags['daily'] ? 'daily-playlist' : 'playlist';
+        }
+
         return $flags['daily'] ? 'daily' : 'official';
     }
 

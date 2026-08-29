@@ -35,9 +35,7 @@ final class ResourceDefinitionRegistry
     /** @var array<string, array<int, array<string, mixed>>> */
     private static array $columnCache = [];
 
-    public function __construct(private StationContext $stations)
-    {
-    }
+    public function __construct(private StationContext $stations) {}
 
     /** @return array<string, mixed> */
     public function resolve(string $section, string $item): array
@@ -189,7 +187,6 @@ final class ResourceDefinitionRegistry
                 'options' => [],
             ];
         }
-
 
         foreach ($resource['virtual_fields'] ?? [] as $name => $definition) {
             if (! is_array($definition)) {

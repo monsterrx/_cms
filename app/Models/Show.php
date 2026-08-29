@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Show
@@ -19,19 +21,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $is_special
  * @property int $is_active
  * @property string|null $location
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Photo> $Image
+ * @property-read Collection<int, Photo> $Image
  * @property-read int|null $image_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Jock> $Jock
+ * @property-read Collection<int, Jock> $Jock
  * @property-read int|null $jock_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Social> $Link
+ * @property-read Collection<int, Social> $Link
  * @property-read int|null $link_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Podcast> $Podcast
+ * @property-read Collection<int, Podcast> $Podcast
  * @property-read int|null $podcast_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Timeslot> $Timeslot
+ * @property-read Collection<int, Timeslot> $Timeslot
  * @property-read int|null $timeslot_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Show newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Show newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Show query()
@@ -49,6 +52,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Show whereSlugString($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Show whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Show whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperShow
  */
@@ -66,26 +70,31 @@ class Show extends Model
         'background_image',
         'is_special',
         'is_active',
-        'location'
+        'location',
     ];
 
-    public function Jock() {
+    public function Jock()
+    {
         return $this->belongsToMany(Jock::class);
     }
 
-    public function Timeslot() {
+    public function Timeslot()
+    {
         return $this->hasMany(Timeslot::class);
     }
 
-    public function Image() {
+    public function Image()
+    {
         return $this->hasMany(Photo::class);
     }
 
-    public function Link() {
+    public function Link()
+    {
         return $this->hasMany(Social::class);
     }
 
-    public function Podcast() {
+    public function Podcast()
+    {
         return $this->hasMany(Podcast::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Outbreak
@@ -14,9 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $track_link
  * @property string|null $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \App\Models\Song $Song
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property-read Song $Song
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Outbreak newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Outbreak newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Outbreak query()
@@ -28,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Outbreak whereSongId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Outbreak whereTrackLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Outbreak whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperOutbreak
  */
@@ -39,10 +42,11 @@ class Outbreak extends Model
         'song_id',
         'dated',
         'track_link',
-        'location'
+        'location',
     ];
 
-    public function Song() {
+    public function Song()
+    {
         return $this->belongsTo(Song::class);
     }
 }

@@ -1,3 +1,14 @@
+FROM node:24-alpine AS frontend
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+COPY resources ./resources
+COPY postcss.config.js tailwind.config.js vite.config.mjs ./
+RUN mkdir -p public && npm run build
+
 FROM php:8.3-apache
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -29,6 +40,7 @@ RUN composer install \
     --prefer-dist
 
 COPY . .
+COPY --from=frontend /app/public/build ./public/build
 COPY docker/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/php/local.ini /usr/local/etc/php/conf.d/99-monster-cms.ini
 COPY docker/crontab /etc/cron.d/monster-cms

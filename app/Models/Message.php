@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Message
@@ -17,8 +18,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $is_seen
  * @property string $location
  * @property string|null $deleted_at
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|Message newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Message query()
@@ -33,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereTopic($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Message whereUpdatedAt($value)
+ *
  * @mixin \Eloquent
  * @mixin IdeHelperMessage
  */
@@ -47,6 +50,6 @@ class Message extends Model
         'topic',
         'message',
         'is_seen',
-        'location'
+        'location',
     ];
 }

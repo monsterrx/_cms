@@ -1,21 +1,17 @@
-<?php namespace App\Http\Controllers;
+<?php
 
-use App\Models\Album;
+namespace App\Http\Controllers;
+
 use App\Models\Artist;
-use App\Models\Indie;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class ArtistController extends Controller {
-
-	public function index(Request $request)
-	{
-        if($request->ajax())
-        {
-            if($request['artistName']) {
+class ArtistController extends Controller
+{
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            if ($request['artistName']) {
                 $name = $request['artistName'];
 
                 $result = Artist::whereNull('deleted_at')
@@ -33,8 +29,8 @@ class ArtistController extends Controller {
 
             $options = '';
 
-            foreach($artists as $artist) {
-                $options.= '<option value="'.$artist->id.'">'.$artist->name.'</option>';
+            foreach ($artists as $artist) {
+                $options .= '<option value="'.$artist->id.'">'.$artist->name.'</option>';
             }
 
             return response()->json($options);
@@ -47,21 +43,21 @@ class ArtistController extends Controller {
         return view('_cms.system-views.music.artist.index', compact('artist', 'countries'));
     }
 
-	public function store(Request $request)
-	{
-		$validator = Validator::make($request->all(), [
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'country' => 'required',
             'type' => 'required',
         ]);
 
-        if($validator->passes()) {
-            $img = $request->file('image'); //file for Artist Image
+        if ($validator->passes()) {
+            $img = $request->file('image'); // file for Artist Image
             $path = 'images/artists';
 
             $artist = new Artist($request->all());
 
-            if($img) {
+            if ($img) {
                 $artist['image'] = $this->storePhoto($request, $path, 'artists', true);
                 $artist->save();
 
@@ -75,38 +71,38 @@ class ArtistController extends Controller {
         }
 
         return response()->json(['status' => 'error', 'message' => $validator->errors()->all()], 403);
-	}
+    }
 
-	public function show($id, Request $request)
-	{
+    public function show($id, Request $request)
+    {
         $artist = Artist::with('Album.Song')->findOrfail($id);
 
         $artist['image'] = $this->verifyPhoto($artist['image'], 'artists');
 
         // for indiegrounds and albums
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return response()->json($artist);
         }
 
         return redirect()->back()->withErrors('Restricted Access!');
     }
 
-	public function update($id, Request $request)
-	{
-		$artist = Artist::findOrfail($id);
+    public function update($id, Request $request)
+    {
+        $artist = Artist::findOrfail($id);
 
-		$validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'country' => 'required',
             'type' => 'required',
         ]);
 
-        if($validator->passes()) {
+        if ($validator->passes()) {
             $img = $request->file('image');
             $path = 'images/artists';
 
-            if($img){
-                $artist['image'] =  $this->storePhoto($request, $path, 'artists', true);
+            if ($img) {
+                $artist['image'] = $this->storePhoto($request, $path, 'artists', true);
                 $artist->save();
 
                 return response()->json(['status' => 'success', 'message' => 'An artist has been updated']);
@@ -118,56 +114,61 @@ class ArtistController extends Controller {
         }
 
         return response()->json(['status' => 'error', 'message' => $validator->errors()->all()], 403);
-	}
+    }
 
-	public function destroy($id)
-	{
-		$artist = Artist::findOrfail($id);
+    public function destroy($id)
+    {
+        $artist = Artist::findOrfail($id);
 
-		$artist->delete();
+        $artist->delete();
 
-		session()->flash('success', 'Artist has been successfully deleted');
-		return redirect()->route('artists.index');
-	}
+        session()->flash('success', 'Artist has been successfully deleted');
 
-	public function delete(Request $request){
+        return redirect()->route('artists.index');
+    }
 
-		$artist = Artist::findOrfail($request['id']);
+    public function delete(Request $request)
+    {
 
-		$artist->delete();
+        $artist = Artist::findOrfail($request['id']);
 
-		session()->flash('success', 'Artist has been successfully deleted');
-		return redirect()->route('artists.index');
-	}
+        $artist->delete();
 
-	public function reloadTable(){
-	    $artists = Artist::whereNull('deleted_at')->get();
+        session()->flash('success', 'Artist has been successfully deleted');
 
-	    foreach ($artists as $artist) {
-            $artist->options = '' .
-                '<div class="btn-group">' .
-                '    <a href="#update-artist" id="update-artist-modal" data-id="'.$artist->id.'" class="btn btn-outline-dark" data-toggle="modal" data-dismiss="modal"><i class="fas fa-search"></i></a>' .
-                '    <a href="#delete-artist" id="delete-artist-modal" data-id="'.$artist->id.'" class="btn btn-outline-dark" data-toggle="modal" data-dismiss="modal"><i class="fas fa-trash"></i></a>' .
+        return redirect()->route('artists.index');
+    }
+
+    public function reloadTable()
+    {
+        $artists = Artist::whereNull('deleted_at')->get();
+
+        foreach ($artists as $artist) {
+            $artist->options = ''.
+                '<div class="btn-group">'.
+                '    <a href="#update-artist" id="update-artist-modal" data-id="'.$artist->id.'" class="btn btn-outline-dark" data-toggle="modal" data-dismiss="modal"><i class="fas fa-search"></i></a>'.
+                '    <a href="#delete-artist" id="delete-artist-modal" data-id="'.$artist->id.'" class="btn btn-outline-dark" data-toggle="modal" data-dismiss="modal"><i class="fas fa-trash"></i></a>'.
                 '</div>';
         }
 
-	    return response()->json($artists);
+        return response()->json($artists);
     }
 
-    public function addArtistImage(Request $request) {
-	    $data = $request['image'];
+    public function addArtistImage(Request $request)
+    {
+        $data = $request['image'];
 
-        list($type, $data) = explode(';', $data);
-        list(, $data)      = explode(',', $data);
+        [$type, $data] = explode(';', $data);
+        [, $data] = explode(',', $data);
 
         $data = base64_decode($data);
-        $imgname = date('Ymd').'-'. mt_rand() . '.png';
+        $imgname = date('Ymd').'-'.mt_rand().'.png';
 
-        $path = 'images/artists/'. $imgname;
+        $path = 'images/artists/'.$imgname;
         file_put_contents($path, $data);
         $this->storeAsset('artists', $imgname, $path);
 
-        $indie_path = 'images/indie/'. $imgname;
+        $indie_path = 'images/indie/'.$imgname;
         file_put_contents($indie_path, $data);
         $this->storeAsset('indie', $imgname, $indie_path);
 
