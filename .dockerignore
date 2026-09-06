@@ -1,0 +1,16 @@
+.env
+.git
+.gitignore
+.idea
+.phpunit.cache
+.vscode
+node_modules
+npm-debug.log
+public/build
+public/hot
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+tests
+vendor

@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --color-canvas: 244 245 247;
+        --color-surface: 255 255 255;
+        --color-surface-muted: 234 236 239;
+        --color-surface-strong: 24 24 24;
+        --color-ink: 24 24 24;
+        --color-ink-muted: 75 85 99;
+        --color-line: 203 208 214;
+        --color-sidebar: 255 255 255;
+        --color-sidebar-muted: 244 245 247;
+        --color-sidebar-active: 226 232 240;
+        --color-sidebar-ink: 24 24 24;
+        --color-sidebar-ink-muted: 75 85 99;
+        --color-sidebar-line: 226 232 240;
+    }
+
+    :root.dark {
+        --color-canvas: 24 24 24;
+        --color-surface: 40 40 40;
+        --color-surface-muted: 53 53 53;
+        --color-surface-strong: 18 18 18;
+        --color-ink: 255 255 255;
+        --color-ink-muted: 191 191 191;
+        --color-line: 73 73 73;
+        --color-sidebar: 24 24 24;
+        --color-sidebar-muted: 32 32 32;
+        --color-sidebar-active: 53 53 53;
+        --color-sidebar-ink: 255 255 255;
+        --color-sidebar-ink-muted: 163 163 163;
+        --color-sidebar-line: 55 55 55;
+    }
+
+    html {
+        @apply bg-canvas;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply min-h-screen bg-canvas font-sans text-ink antialiased transition-colors duration-300;
+    }
+
+    button,
+    a,
+    input,
+    select,
+    textarea {
+        @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rx-blue focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
+    }
+
+    ::selection {
+        @apply bg-rx-yellow text-neutral-950;
+    }
+}
+
+@layer components {
+    .rx-panel {
+        @apply rounded-xl bg-surface transition-[background-color,transform] duration-300;
+    }
+
+    .rx-kicker {
+        @apply font-heading text-xs font-semibold uppercase tracking-[0.18em] text-rx-blue;
+    }
+
+    .rx-button {
+        @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-lg bg-rx-blue px-4 py-2 font-heading text-sm font-semibold uppercase tracking-wide text-neutral-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-rx-yellow disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0;
+    }
+
+    .rx-button-secondary {
+        @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-lg bg-surface-muted px-4 py-2 font-heading text-sm font-semibold uppercase tracking-wide text-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-rx-blue hover:text-neutral-950;
+    }
+
+    .rx-page {
+        animation: page-in 260ms ease-out both;
+    }
+}
+
+@keyframes page-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes loading-bar {
+    0% {
+        transform: translateX(-120%);
+    }
+
+    100% {
+        transform: translateX(420%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+}
