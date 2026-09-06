@@ -102,12 +102,17 @@ class ExampleTest extends TestCase
 
     public function test_system_health_api_returns_database_status(): void
     {
+        config(['sanctum.stateful' => ['localhost:9001']]);
+
         DB::shouldReceive('select')
             ->once()
             ->with('SELECT 1')
             ->andReturn([['1' => 1]]);
 
-        $this->getJson('/api/system/health')
+        $this->withHeaders([
+            'Origin' => 'http://localhost:9001',
+            'Referer' => 'http://localhost:9001/dashboard',
+        ])->getJson('/api/system/health')
             ->assertOk()
             ->assertJsonPath('success', true)
             ->assertJsonPath('data.application.status', 'operational')
