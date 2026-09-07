@@ -92,9 +92,9 @@ export default function Edit({ recordId }) {
             const payload = resourceRequestPayload(fields, values);
             if (payload instanceof FormData) {
                 payload.append('_method', 'PUT');
-                await axios.post(recordEndpoint, payload, { silent: true });
+                await axios.post(recordEndpoint, payload);
             } else {
-                await axios.put(recordEndpoint, payload, { silent: true });
+                await axios.put(recordEndpoint, payload);
             }
 
             await loadRecord();
@@ -180,8 +180,9 @@ export default function Edit({ recordId }) {
                         </div>
 
                         <aside className="space-y-4">
-                            {record._display?.image && <img alt={`${record.title} main`} className="aspect-square w-full rounded-lg border border-line bg-canvas object-cover" src={record._display.image} />}
                             {record._display?.secondary_image && <img alt={`${record.title} header`} className="aspect-[16/5] w-full rounded-lg border border-line bg-canvas object-cover" src={record._display.secondary_image} />}
+                            {record._display?.background_image && <img alt={`${record.title} background`} className="aspect-square w-full rounded-lg border border-line bg-canvas object-cover" src={record._display.background_image} />}
+                            {record._display?.image && <img alt={`${record.title} icon`} className="aspect-square w-full rounded-lg border border-line bg-canvas object-cover" src={record._display.image} />}
                             <section className="rx-panel p-5 text-sm leading-6 text-ink-muted">
                                 Related records save independently. Use <strong className="text-ink">Save Show</strong> for changes to the main show fields.
                             </section>

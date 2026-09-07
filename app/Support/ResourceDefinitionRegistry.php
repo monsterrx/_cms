@@ -63,6 +63,19 @@ final class ResourceDefinitionRegistry
             return self::$columnCache[$table];
         }
 
+        if (DB::getDriverName() === 'sqlite') {
+            return self::$columnCache[$table] = array_map(static fn (array $column): array => [
+                'name' => $column['name'],
+                'data_type' => strtolower($column['type_name']),
+                'column_type' => strtolower($column['type']),
+                'nullable' => $column['nullable'],
+                'default' => $column['default'],
+                'key' => $column['name'] === 'id' ? 'PRI' : '',
+                'extra' => $column['auto_increment'] ? 'auto_increment' : '',
+                'max_length' => null,
+            ], Schema::getColumns($table));
+        }
+
         $columns = DB::select(
             'SELECT COLUMN_NAME, DATA_TYPE, COLUMN_TYPE, IS_NULLABLE, COLUMN_DEFAULT, COLUMN_KEY, EXTRA, CHARACTER_MAXIMUM_LENGTH
              FROM information_schema.COLUMNS

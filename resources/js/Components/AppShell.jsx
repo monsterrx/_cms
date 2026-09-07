@@ -4,8 +4,8 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import CommandPalette from './CommandPalette';
 import CardDropdown from './CardDropdown';
 import Icon from './Icon';
-import SystemStatus from './SystemStatus';
 import ThemeSwitcher from './ThemeSwitcher';
+import AppVersion from './AppVersion';
 import BugReportModal from './BugReportModal';
 import { useAppState } from '../Contexts/AppStateContext';
 import { appPath, relativeAppPath } from '../lib/appUrl';
@@ -29,13 +29,17 @@ function Brand() {
 
 function findActiveContext(navigation, url) {
     for (const section of navigation) {
-        if (!url.startsWith(`/workspace/${section.slug}`)) {
+        const sectionPath = `/workspace/${section.slug}`;
+        if (url !== sectionPath && !url.startsWith(`${sectionPath}/`)) {
             continue;
         }
 
         const item = section.groups
             .flatMap((group) => group.items)
-            .find((candidate) => url === `/workspace/${section.slug}/${candidate.slug}`);
+            .find((candidate) => {
+                const itemPath = `${sectionPath}/${candidate.slug}`;
+                return url === itemPath || url.startsWith(`${itemPath}/`);
+            });
 
         return { section, item };
     }
@@ -64,6 +68,7 @@ export default function AppShell({ children }) {
         isBusy,
         navigationVisible,
         notify,
+        notifyAfterNavigation,
         setNavigationVisible,
         toggleNavigation,
     } = useAppState();
@@ -157,6 +162,11 @@ export default function AppShell({ children }) {
 
         try {
             await axios.post('/logout', null, { silent: true });
+            notifyAfterNavigation({
+                type: 'success',
+                title: 'Signed out',
+                message: 'Your session has been closed successfully.',
+            });
             window.location.assign(appPath('/login'));
         } catch {
             notify({
@@ -176,7 +186,12 @@ export default function AppShell({ children }) {
         setSwitchingStation(true);
 
         try {
-            await axios.put('/api/station', { station: selectedStation }, { silent: true });
+            const response = await axios.put('/api/station', { station: selectedStation }, { silent: true });
+            notifyAfterNavigation({
+                type: 'success',
+                title: 'Station changed',
+                message: response.data.message,
+            });
             window.location.reload();
         } catch {
             notify({
@@ -306,9 +321,10 @@ export default function AppShell({ children }) {
 
                                                             return (
                                                                 <Link
+                                                                    aria-current={active && activeContext.item?.slug === item.slug ? 'page' : undefined}
                                                                     className={`block rounded-md px-3 py-2 text-sm transition-colors duration-200 ${
-                                                                        currentPath === relativeHref
-                                                                            ? 'bg-sidebar-active text-rx-blue'
+                                                                        active && activeContext.item?.slug === item.slug
+                                                                            ? 'bg-rx-blue font-semibold text-neutral-950'
                                                                             : 'text-sidebar-ink-muted hover:bg-sidebar-muted hover:text-sidebar-ink'
                                                                     }`}
                                                                     href={href}
@@ -331,7 +347,6 @@ export default function AppShell({ children }) {
                 </nav>
 
                 <div className="shrink-0 space-y-3 px-5 py-4">
-                    <SystemStatus authenticated={Boolean(user)} />
                     {user && (
                         <div className="flex items-center gap-3 rounded-lg bg-sidebar-muted px-3 py-3">
                             <div className="min-w-0 flex-1">
@@ -350,6 +365,7 @@ export default function AppShell({ children }) {
                             </button>
                         </div>
                     )}
+                    <AppVersion className="text-sidebar-ink-muted" />
                 </div>
             </aside>
 

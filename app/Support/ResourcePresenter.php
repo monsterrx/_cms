@@ -326,6 +326,7 @@ final class ResourcePresenter
         return array_map(fn (array $record): array => $this->withDisplay($record, [
             'image' => $this->imageUrl('shows', $record['icon'] ?? null),
             'secondary_image' => $this->imageUrl('shows', $record['header_image'] ?? null, 'banner'),
+            'background_image' => $this->imageUrl('shows', $record['background_image'] ?? null, 'banner'),
             'title' => $record['title'] ?? 'Untitled Show',
             'subtitle' => (int) ($record['is_special'] ?? 0) === 1 ? 'Special Show' : 'Daily Show',
             'status' => (int) ($record['is_active'] ?? 0) === 1 ? 'Active' : 'Inactive',

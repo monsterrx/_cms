@@ -75,6 +75,12 @@ export default function BugReportModal({ onClose, open }) {
             const translated = translateError(error);
             setErrors(translated.fieldErrors);
             setMessage(translated.message);
+            notify({
+                type: 'error',
+                title: translated.title,
+                message: translated.message,
+                duration: translated.retryable ? 8000 : 6000,
+            });
         } finally {
             setSaving(false);
         }

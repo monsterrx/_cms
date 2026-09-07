@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DesignationGrantController;
 use App\Http\Controllers\Api\ResourceModuleController;
 use App\Http\Controllers\Api\ResourceRecordController;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,6 @@ Route::prefix('resources')->group(function (): void {
     Route::match(['put', 'patch'], '/{section}/{item}/{id}', [ResourceRecordController::class, 'update'])->whereNumber('id');
     Route::delete('/{section}/{item}/{id}', [ResourceRecordController::class, 'destroy'])->whereNumber('id');
 });
+
+Route::get('/designations/{designation}/grants', [DesignationGrantController::class, 'show']);
+Route::put('/designations/{designation}/grants', [DesignationGrantController::class, 'update']);

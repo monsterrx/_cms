@@ -130,7 +130,7 @@ class ExampleTest extends TestCase
 
     public function test_workspace_route_is_available(): void
     {
-        $this->actingAs($this->authenticatedUser());
+        $this->actingAs($this->authenticatedUserAtLevel(1));
 
         $this->get('/workspace/music/station-chart')
             ->assertOk()
@@ -146,7 +146,7 @@ class ExampleTest extends TestCase
 
     public function test_show_editor_uses_a_dedicated_authenticated_page(): void
     {
-        $this->actingAs($this->authenticatedUser());
+        $this->actingAs($this->authenticatedUserAtLevel(1));
 
         $this->get('/workspace/digital-content-programs/shows/17')
             ->assertOk()
@@ -157,7 +157,7 @@ class ExampleTest extends TestCase
 
     public function test_article_editor_uses_a_dedicated_authenticated_page(): void
     {
-        $this->actingAs($this->authenticatedUser());
+        $this->actingAs($this->authenticatedUserAtLevel(1));
 
         $this->get('/workspace/digital-content-programs/articles/10')
             ->assertOk()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Support\DesignationNavigation;
 use App\Support\ResourceDefinitionRegistry;
 use App\Support\ResourceImageStorage;
 use App\Support\ResourcePresenter;
@@ -32,6 +33,7 @@ final class ResourceRecordController extends Controller
     public function index(Request $request, string $section, string $item): JsonResponse
     {
         $resource = $this->registry->resolve($section, $item);
+        abort_unless(app(DesignationNavigation::class)->canView($request->user(), $section, $item), 403);
         $fields = $this->registry->fields($resource);
         $columns = collect($fields)->where('virtual', false)->pluck('name')->all();
         $tableColumnPositions = array_flip($resource['columns'] ?? []);
@@ -59,6 +61,7 @@ final class ResourceRecordController extends Controller
 
         $query = DB::table($resource['table']);
         $this->registry->applyScopes($query, $resource);
+        $this->scopeOwnedJock($request, $query, $item);
 
         if (($validated['search'] ?? '') !== '' && $searchable !== []) {
             $term = '%'.$this->escapeLike($validated['search']).'%';
@@ -93,6 +96,7 @@ final class ResourceRecordController extends Controller
                 'label' => $resource['label'],
                 'read_only' => (bool) $resource['read_only'],
                 'can_write' => $this->canWrite($request, $resource),
+                'can_export' => in_array($this->level($request), [1, 2], true),
                 'has_uploads' => $this->registry->hasUploads($fields),
                 'presentation' => $resource['presentation'] ?? 'table',
             ],
@@ -115,6 +119,8 @@ final class ResourceRecordController extends Controller
     public function show(Request $request, string $section, string $item, int $id): JsonResponse
     {
         $resource = $this->registry->resolve($section, $item);
+        abort_unless(app(DesignationNavigation::class)->canView($request->user(), $section, $item), 403);
+        $this->authorizeOwnedJock($request, $item, $id);
         $record = $this->findRecord($resource, $id);
         $fields = $this->registry->fields($resource);
         $sanitized = $this->registry->sanitizeRecord((array) $record, $resource);
@@ -129,6 +135,7 @@ final class ResourceRecordController extends Controller
                 'label' => $resource['label'],
                 'read_only' => (bool) $resource['read_only'],
                 'can_write' => $this->canWrite($request, $resource),
+                'can_export' => in_array($this->level($request), [1, 2], true),
                 'has_uploads' => $this->registry->hasUploads($fields),
                 'presentation' => $resource['presentation'] ?? 'table',
             ],
@@ -139,6 +146,7 @@ final class ResourceRecordController extends Controller
     {
         $resource = $this->registry->resolve($section, $item);
         abort_unless($this->canWrite($request, $resource), 403);
+        abort_if($item === 'jocks' && $this->level($request) === 5, 403);
 
         $fields = $this->registry->fields($resource);
         $payload = $this->validatedPayload($request, $resource, $fields, null);
@@ -176,6 +184,7 @@ final class ResourceRecordController extends Controller
     {
         $resource = $this->registry->resolve($section, $item);
         abort_unless($this->canWrite($request, $resource), 403);
+        $this->authorizeOwnedJock($request, $item, $id);
         $existingRecord = $this->findRecord($resource, $id);
 
         $fields = $this->registry->fields($resource);
@@ -216,6 +225,7 @@ final class ResourceRecordController extends Controller
     {
         $resource = $this->registry->resolve($section, $item);
         abort_unless($this->canWrite($request, $resource), 403);
+        abort_if($item === 'jocks' && $this->level($request) === 5, 403);
         $this->findRecord($resource, $id);
 
         $columnNames = array_column($this->registry->columns($resource['table']), 'name');
@@ -497,10 +507,32 @@ final class ResourceRecordController extends Controller
             return false;
         }
 
-        $user = $request->user();
-        $level = $user?->Employee?->Designation?->level;
+        return app(DesignationNavigation::class)->canWrite(
+            $request->user(),
+            $resource['section'],
+            $resource['item'],
+        );
+    }
 
-        return $level !== null && in_array((int) $level, $resource['write_levels'], true);
+    private function scopeOwnedJock(Request $request, Builder $query, string $item): void
+    {
+        if ($item === 'jocks' && $this->level($request) === 5) {
+            $query->where('employee_id', $request->user()->employee_id);
+        }
+    }
+
+    private function authorizeOwnedJock(Request $request, string $item, int $id): void
+    {
+        if ($item === 'jocks' && $this->level($request) === 5) {
+            abort_unless(DB::table('jocks')->where('id', $id)->where('employee_id', $request->user()->employee_id)->exists(), 403);
+        }
+    }
+
+    private function level(Request $request): ?int
+    {
+        $level = $request->user()?->Employee?->Designation?->level;
+
+        return $level === null ? null : (int) $level;
     }
 
     /** @param array<string, mixed> $resource */

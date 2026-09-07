@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Support\ChartType;
+use App\Support\DesignationNavigation;
 use App\Support\StationContext;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
@@ -26,6 +27,7 @@ final class ChartWorkspaceController extends Controller
             'date' => ['nullable', 'date'],
             'status' => ['nullable', Rule::in(['draft', 'posted', 'all'])],
         ]);
+        abort_unless(app(DesignationNavigation::class)->canView($request->user(), 'music', $this->itemForModule($validated['module'])), 403);
         $station = $this->stations->current();
         $options = ChartType::options($validated['module'], $station);
         $type = $validated['type'] ?? $options[0]['value'];
@@ -274,9 +276,18 @@ final class ChartWorkspaceController extends Controller
 
     private function canWrite(Request $request): bool
     {
-        $level = $request->user()?->Employee?->Designation?->level;
+        $module = (string) $request->input('module', $request->query('module', 'daily'));
 
-        return $level !== null && in_array((int) $level, [1, 2, 5, 6, 7], true);
+        return app(DesignationNavigation::class)->canWrite($request->user(), 'music', $this->itemForModule($module));
+    }
+
+    private function itemForModule(string $module): string
+    {
+        return match ($module) {
+            'station' => 'station-chart',
+            'dropouts' => 'dropouts',
+            default => 'daily-survey-top-5',
+        };
     }
 
     private function authorizeWrite(Request $request): void

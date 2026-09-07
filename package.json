@@ -1,5 +1,6 @@
 {
     "name": "monster-cms-v3",
+    "version": "3.0.0",
     "private": true,
     "scripts": {
         "dev": "vite",

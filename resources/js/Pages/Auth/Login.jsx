@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import Icon from '../../Components/Icon';
 import ThemeSwitcher from '../../Components/ThemeSwitcher';
+import AppVersion from '../../Components/AppVersion';
 import { appPath } from '../../lib/appUrl';
 import { translateError } from '../../lib/errorTranslator';
 
@@ -80,11 +81,11 @@ export default function Login() {
 
                     <div className="relative z-10 max-w-lg">
                         <p className="font-heading text-sm font-semibold uppercase tracking-[0.24em] text-rx-yellow">Content management system</p>
-                        <h1 className="mt-5 font-heading text-6xl font-bold uppercase leading-[0.98] tracking-tight">
-                            Keep the Monster on air.
+                        <h1 className="mt-5 font-heading text-5xl font-bold uppercase leading-[0.95] tracking-tight">
+                            Keep it locked in, on the Monster.
                         </h1>
                         <p className="mt-6 max-w-md text-lg leading-7 text-neutral-400">
-                            Manage stories, shows, charts, podcasts, and digital campaigns from one secure workspace.
+                            Manage promos, shows, charts, podcasts, and digital campaigns from one secure workspace.
                         </p>
                     </div>
 
@@ -105,11 +106,11 @@ export default function Login() {
                             <p className="mt-4 font-heading text-sm font-semibold uppercase tracking-[0.2em] text-rx-blue">Monster Content Operations</p>
                         </div>
 
-                        <p className="rx-kicker">Authorized access</p>
+                        {/* <p className="rx-kicker">Authorized access</p> */}
                         <h2 className="mt-3 font-heading text-4xl font-bold uppercase tracking-tight sm:text-5xl">Sign in</h2>
-                        <p className="mt-3 text-base leading-6 text-ink-muted">
+                        {/* <p className="mt-3 text-base leading-6 text-ink-muted">
                             Enter your account credentials to continue.
-                        </p>
+                        </p> */}
 
                         {message && (
                             <div className="mt-6 flex gap-3 border-l-4 border-red-500 bg-surface p-4 text-sm text-ink" role="alert">
@@ -184,6 +185,7 @@ export default function Login() {
                                 {!submitting && <Icon className="h-4 w-4" name="arrow" />}
                             </button>
                         </form>
+                        <AppVersion className="mt-8 text-ink-muted" />
                     </div>
                 </section>
             </main>

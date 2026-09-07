@@ -29,6 +29,8 @@ const emptyMeta = {
 };
 
 const detailResources = new Set([
+    'designations',
+    'messages',
     'jocks',
     'radio1-batches',
     'student-jocks',
@@ -437,9 +439,11 @@ function ItemWorkspace({ section, item }) {
                             <h2 className="mt-1 font-heading text-lg font-semibold" id="records-heading">Live records</h2>
                         </div>
                         <div className="flex flex-col gap-2 sm:flex-row">
-                            <button className="rx-button-secondary" onClick={exportCurrentPage} type="button">
-                                Export current page
-                            </button>
+                            {resource.can_export && (
+                                <button className="rx-button-secondary" onClick={exportCurrentPage} type="button">
+                                    Export current page
+                                </button>
+                            )}
                             {resource.can_write && (
                                 <button className="rx-button" disabled={loading || fields.length === 0} onClick={openCreate} type="button">
                                     <Icon className="h-4 w-4" name="plus" />
@@ -528,17 +532,11 @@ function ItemWorkspace({ section, item }) {
                         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">Resource group</p>
                         <p className="mt-1 font-heading text-sm font-semibold uppercase tracking-wide">{item.group}</p>
                     </div>
-                    <div className="mt-5">
-                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-muted">Data connection</p>
-                        <p className="mt-2 text-sm leading-6 text-ink-muted">
-                            {resource.read_only ? 'This system-managed resource is read-only.' : 'Live CRUD API connected.'}
+                    {resource.has_uploads && (
+                        <p className="mt-5 rounded-lg bg-rx-yellow/10 px-3 py-2 text-xs leading-5 text-ink-muted">
+                            Images will be cropped to the required size before upload.
                         </p>
-                        {resource.has_uploads && (
-                            <p className="mt-2 rounded-lg bg-rx-yellow/10 px-3 py-2 text-xs leading-5 text-ink-muted">
-                                Approved image fields open a cropper and validate their exact output size before upload.
-                            </p>
-                        )}
-                    </div>
+                    )}
                 </section>
 
                 <section className="rx-panel p-5">

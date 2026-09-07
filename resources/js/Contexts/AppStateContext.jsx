@@ -5,6 +5,7 @@ import { translateError } from '../lib/errorTranslator';
 
 const THEME_STORAGE_KEY = 'monster-cms:theme';
 const NAVIGATION_STORAGE_KEY = 'monster-cms:navigation-visible';
+const PENDING_NOTIFICATION_STORAGE_KEY = 'monster-cms:pending-notification';
 const AppStateContext = createContext(null);
 let notificationSequence = 0;
 
@@ -120,6 +121,27 @@ export function AppStateProvider({ children }) {
         return id;
     }, [dismissNotification]);
 
+    const notifyAfterNavigation = useCallback((notification) => {
+        try {
+            window.sessionStorage.setItem(PENDING_NOTIFICATION_STORAGE_KEY, JSON.stringify(notification));
+        } catch {
+            notify(notification);
+        }
+    }, [notify]);
+
+    useEffect(() => {
+        try {
+            const pendingNotification = window.sessionStorage.getItem(PENDING_NOTIFICATION_STORAGE_KEY);
+
+            if (pendingNotification) {
+                window.sessionStorage.removeItem(PENDING_NOTIFICATION_STORAGE_KEY);
+                notify(JSON.parse(pendingNotification));
+            }
+        } catch {
+            // Navigation still succeeds when session storage is unavailable or invalid.
+        }
+    }, [notify]);
+
     const setThemePreference = useCallback((value) => {
         if (!['dark', 'light', 'system'].includes(value)) {
             return;
@@ -233,10 +255,11 @@ export function AppStateProvider({ children }) {
         isBusy: state.pendingRequests > 0,
         dismissNotification,
         notify,
+        notifyAfterNavigation,
         setNavigationVisible,
         setThemePreference,
         toggleNavigation: () => setNavigationVisible(!state.navigationVisible),
-    }), [dismissNotification, notify, resolvedTheme, setNavigationVisible, setThemePreference, state]);
+    }), [dismissNotification, notify, notifyAfterNavigation, resolvedTheme, setNavigationVisible, setThemePreference, state]);
 
     return (
         <AppStateContext.Provider value={value}>

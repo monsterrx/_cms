@@ -139,6 +139,7 @@ return [
                     'label' => 'Logs & Reports',
                     'items' => [
                         ['slug' => 'users', 'label' => 'Users', 'description' => 'Review accounts and profile access.'],
+                        ['slug' => 'messages', 'label' => 'Messages', 'description' => 'Read and reply to messages from the website.'],
                         ['slug' => 'reports', 'label' => 'Reports', 'description' => 'Review operational and issue reports.'],
                         ['slug' => 'logs', 'label' => 'Logs', 'description' => 'Inspect user and system activity.'],
                         ['slug' => 'archives', 'label' => 'Archives', 'description' => 'Browse archived system records.'],
@@ -347,6 +348,9 @@ return [
             'articles' => [
                 'table' => 'articles',
                 'label' => 'Articles',
+                'uploads' => [
+                    'image' => ['directory' => 'articles', 'width' => 800, 'height' => 800, 'label' => 'Article image'],
+                ],
                 'write_levels' => [1, 2, 6],
                 'presentation' => 'article-cards',
                 'hidden_form_fields' => ['employee_id', 'unique_id'],
@@ -537,6 +541,7 @@ return [
         ],
         'utilities' => [
             'users' => ['table' => 'users', 'label' => 'Users', 'read_only' => true],
+            'messages' => ['table' => 'messages', 'label' => 'Website Messages', 'read_only' => true, 'columns' => ['id', 'name', 'email', 'topic', 'content', 'is_seen', 'created_at']],
             'reports' => ['table' => 'reports', 'label' => 'Reports'],
             'logs' => ['table' => 'user_logs', 'label' => 'Activity Logs', 'read_only' => true],
             'archives' => ['table' => 'user_logs', 'label' => 'Archived Logs', 'read_only' => true, 'archive_logs' => true],

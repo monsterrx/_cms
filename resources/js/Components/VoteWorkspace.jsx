@@ -34,7 +34,7 @@ export default function VoteWorkspace() {
         setSavingId(`${record.id}:${channel}`);
         setMessage('');
         try {
-            await axios.post(`/api/charts/workspace/votes/${record.id}/increment`, { channel }, { silent: true });
+            await axios.post(`/api/charts/workspace/votes/${record.id}/increment`, { channel });
             setMessage(`${channel === 'phone' ? 'Phone' : 'Social'} vote added to ${record.song}.`);
             await load();
         } catch (error) {

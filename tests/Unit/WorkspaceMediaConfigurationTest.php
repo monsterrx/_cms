@@ -6,6 +6,14 @@ use Tests\TestCase;
 
 class WorkspaceMediaConfigurationTest extends TestCase
 {
+    public function test_articles_use_the_approved_800_pixel_crop_preset(): void
+    {
+        $preset = config('workspace.resources.digital-content-programs.articles.uploads.image');
+
+        $this->assertSame(800, $preset['width']);
+        $this->assertSame(800, $preset['height']);
+    }
+
     public function test_square_image_modules_use_the_500_pixel_crop_preset(): void
     {
         $paths = [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\DesignationNavigation;
 use App\Support\StationContext;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -32,12 +33,13 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $stations = app(StationContext::class);
+        $navigation = app(DesignationNavigation::class);
 
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
             ],
-            'navigation' => config('workspace.navigation'),
+            'navigation' => $navigation->forUser($request->user(), config('workspace.navigation', [])),
             'station' => [
                 'current' => $stations->current($request),
                 'can_switch' => $stations->canSwitch($request->user()),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Support\DesignationNavigation;
 use App\Support\MediaUrlResolver;
 use App\Support\ResourceAudioStorage;
 use App\Support\ResourceDefinitionRegistry;
@@ -33,7 +34,9 @@ final class ResourceModuleController extends Controller
     public function details(Request $request, string $section, string $item, int $id): JsonResponse
     {
         $resource = $this->registry->resolve($section, $item);
+        abort_unless(app(DesignationNavigation::class)->canView($request->user(), $section, $item), 403);
         $record = $this->findParent($resource, $id);
+        $this->authorizeOwnedJock($request, $item, $record);
 
         $details = match ($item) {
             'jocks' => $this->jockDetails($id),
@@ -60,7 +63,8 @@ final class ResourceModuleController extends Controller
         string $relation
     ): JsonResponse {
         $resource = $this->authorizedResource($request, $section, $item);
-        $this->findParent($resource, $id);
+        $parent = $this->findParent($resource, $id);
+        $this->authorizeOwnedJock($request, $item, $parent);
 
         $record = match ("{$item}:{$relation}") {
             'jocks:facts' => $this->storeFact($request, $id),
@@ -94,7 +98,8 @@ final class ResourceModuleController extends Controller
         int $childId
     ): JsonResponse {
         $resource = $this->authorizedResource($request, $section, $item);
-        $this->findParent($resource, $id);
+        $parent = $this->findParent($resource, $id);
+        $this->authorizeOwnedJock($request, $item, $parent);
 
         $record = match ("{$item}:{$relation}") {
             'jocks:facts' => $this->updateFact($request, $id, $childId),
@@ -124,7 +129,8 @@ final class ResourceModuleController extends Controller
         int $childId
     ): JsonResponse {
         $resource = $this->authorizedResource($request, $section, $item);
-        $this->findParent($resource, $id);
+        $parent = $this->findParent($resource, $id);
+        $this->authorizeOwnedJock($request, $item, $parent);
 
         match ("{$item}:{$relation}") {
             'jocks:facts' => $this->deleteScoped('facts', 'jock_id', $id, $childId),
@@ -160,7 +166,8 @@ final class ResourceModuleController extends Controller
         string $action
     ): JsonResponse {
         $resource = $this->authorizedResource($request, $section, $item);
-        $this->findParent($resource, $id);
+        $parent = $this->findParent($resource, $id);
+        $this->authorizeOwnedJock($request, $item, $parent);
 
         if ($item === 'articles' && in_array($action, ['publish', 'unpublish'], true)) {
             DB::table('articles')->where('id', $id)->update([
@@ -1083,13 +1090,18 @@ final class ResourceModuleController extends Controller
     private function authorizedResource(Request $request, string $section, string $item): array
     {
         $resource = $this->registry->resolve($section, $item);
-        $level = $request->user()?->Employee?->Designation?->level;
-        abort_unless(
-            ! $resource['read_only'] && $level !== null && in_array((int) $level, $resource['write_levels'], true),
-            403
-        );
+        abort_unless(! $resource['read_only'] && app(DesignationNavigation::class)->canWrite($request->user(), $section, $item), 403);
 
         return $resource;
+    }
+
+    private function authorizeOwnedJock(Request $request, string $item, object $record): void
+    {
+        $level = $request->user()?->Employee?->Designation?->level;
+
+        if ($item === 'jocks' && (int) $level === 5) {
+            abort_unless((int) ($record->employee_id ?? 0) === (int) $request->user()->employee_id, 403);
+        }
     }
 
     private function positions(): array

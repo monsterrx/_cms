@@ -23,6 +23,8 @@ export default function Dashboard() {
         active_promos: 0,
         pending_reviews: 0,
         recent_activity: [],
+        can_view_recent_activity: false,
+        recent_workspaces: [],
     });
     const [summaryError, setSummaryError] = useState('');
     const destinations = navigation.reduce((total, section) => total + itemCount(section), 0);
@@ -92,6 +94,34 @@ export default function Dashboard() {
                     ))}
                 </section>
 
+                <section aria-labelledby="recent-workspaces-heading" className="mt-10">
+                    <div className="mb-5">
+                        <p className="rx-kicker">Continue working</p>
+                        <h2 className="mt-1 font-heading text-xl font-semibold uppercase tracking-wide" id="recent-workspaces-heading">
+                            Recently visited
+                        </h2>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                        {summary.recent_workspaces.map((workspace) => (
+                            <Link className="rx-panel group flex items-center gap-4 p-5 hover:-translate-y-0.5" href={appPath(workspace.href)} key={workspace.href}>
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-rx-blue text-neutral-950">
+                                    <Icon className="h-5 w-5" name="arrow" />
+                                </span>
+                                <span className="min-w-0 flex-1">
+                                    <span className="block truncate font-heading text-sm font-semibold uppercase tracking-wide">{workspace.label}</span>
+                                    <span className="mt-1 block truncate text-xs text-ink-muted">{workspace.section} · {formatTimestamp(workspace.visited_at)}</span>
+                                </span>
+                                <Icon className="h-4 w-4 shrink-0 text-ink-muted transition-transform group-hover:translate-x-1" name="arrow" />
+                            </Link>
+                        ))}
+                        {summary.recent_workspaces.length === 0 && (
+                            <div className="rx-panel p-5 text-sm text-ink-muted sm:col-span-2 xl:col-span-3">
+                                Your recently visited workspaces will appear here.
+                            </div>
+                        )}
+                    </div>
+                </section>
+
                 <section aria-labelledby="areas-heading" className="mt-10">
                     <div className="mb-5 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
                         <div>
@@ -100,7 +130,7 @@ export default function Dashboard() {
                                 Management areas
                             </h2>
                         </div>
-                        <p className="text-sm text-ink-muted">Configured from the current navigation and resource permissions.</p>
+                        <p className="text-sm text-ink-muted">Tools available for your account.</p>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
@@ -134,7 +164,7 @@ export default function Dashboard() {
                 </section>
 
                 <div className="mt-10 grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(20rem,0.7fr)]">
-                    <section aria-labelledby="activity-heading" className="rx-panel overflow-hidden">
+                    {summary.can_view_recent_activity && <section aria-labelledby="activity-heading" className="rx-panel overflow-hidden">
                         <div className="flex items-center justify-between px-6 py-5">
                             <div>
                                 <p className="rx-kicker">Across the station</p>
@@ -171,7 +201,7 @@ export default function Dashboard() {
                                 </tbody>
                             </table>
                         </div>
-                    </section>
+                    </section>}
 
                     <aside className="rx-panel p-6" aria-labelledby="shortcuts-heading">
                         <p className="rx-kicker">Daily work</p>

@@ -697,7 +697,7 @@ function PodcastPlayer({ link }) {
     }
 
     return (
-        <audio className="h-10 w-full min-w-48" controls preload="metadata" src={link}>
+        <audio className="h-10 w-full min-w-48" controls controlsList="nodownload" preload="metadata" src={link}>
             Your browser does not support podcast audio playback.
         </audio>
     );
@@ -869,6 +869,84 @@ function TimeslotDetails({ details, endpoint, reload, run }) {
     </Panel>;
 }
 
+function DesignationGrantDetails({ record }) {
+    const [data, setData] = useState(null);
+    const [selected, setSelected] = useState({});
+    const [saving, setSaving] = useState(false);
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        axios.get(`/api/designations/${record.id}/grants`, { silent: true }).then((response) => {
+            const next = response.data.data;
+            setData(next);
+            setSelected(Object.fromEntries(next.grants.map((grant) => [
+                `${grant.section_slug}:${grant.item_slug}`,
+                { enabled: true, can_write: Boolean(grant.can_write) },
+            ])));
+        }).catch((error) => setMessage(translateError(error).message));
+    }, [record.id]);
+
+    if ([1, 2].includes(Number(record.level))) {
+        return <Panel title="Submodule grants"><p className="text-sm text-ink-muted">Developer and Admin always have complete access to every submodule.</p></Panel>;
+    }
+
+    const save = async () => {
+        setSaving(true); setMessage('');
+        try {
+            const grants = Object.entries(selected).filter(([, value]) => value.enabled).map(([key, value]) => ({ key, can_write: value.can_write }));
+            await axios.put(`/api/designations/${record.id}/grants`, { grants });
+            setMessage('Designation grants saved successfully.');
+        } catch (error) {
+            setMessage(translateError(error).message);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    return <Panel title="Submodule grants">
+        <p className="mb-4 text-sm text-ink-muted">Select several submodules, then choose whether each grant may make changes.</p>
+        {message && <p className="mb-4 border-l-4 border-rx-blue bg-canvas px-3 py-2 text-sm">{message}</p>}
+        <div className="max-h-96 space-y-2 overflow-y-auto pr-2">
+            {(data?.available ?? []).map((grant) => {
+                const current = selected[grant.key] ?? { enabled: false, can_write: false };
+                return <div className="flex items-center gap-3 rounded-lg border border-line p-3" key={grant.key}>
+                    <input checked={current.enabled} onChange={(event) => setSelected((values) => ({ ...values, [grant.key]: { ...current, enabled: event.target.checked } }))} type="checkbox" />
+                    <span className="flex-1 text-sm">{grant.label}</span>
+                    <label className="flex items-center gap-2 text-xs font-semibold uppercase text-ink-muted">
+                        <input checked={current.can_write} disabled={!current.enabled || grant.item === 'Messages'} onChange={(event) => setSelected((values) => ({ ...values, [grant.key]: { ...current, can_write: event.target.checked } }))} type="checkbox" /> Edit
+                    </label>
+                </div>;
+            })}
+        </div>
+        <button className="rx-button mt-4" disabled={saving || !data} onClick={save} type="button">{saving ? 'Saving...' : 'Save grants'}</button>
+    </Panel>;
+}
+
+function MessageReplyDetails({ record }) {
+    const [reply, setReply] = useState('');
+    const [sending, setSending] = useState(false);
+    const [message, setMessage] = useState('');
+
+    const send = async () => {
+        setSending(true); setMessage('');
+        try {
+            const response = await axios.post(`/api/messages/${record.id}/reply`, { reply });
+            setReply(''); setMessage(response.data.message);
+        } catch (error) {
+            setMessage(translateError(error).message);
+        } finally {
+            setSending(false);
+        }
+    };
+
+    return <Panel title="Reply to website message">
+        <p className="mb-3 text-sm text-ink-muted">The reply will be sent to <strong>{record.email}</strong> using the configured application email address.</p>
+        {message && <p className="mb-3 border-l-4 border-rx-blue bg-canvas px-3 py-2 text-sm">{message}</p>}
+        <textarea className="min-h-40 w-full rounded-lg border-line bg-canvas text-sm focus:border-rx-blue focus:ring-rx-blue" onChange={(event) => setReply(event.target.value)} placeholder="Write a clear reply..." value={reply} />
+        <button className="rx-button mt-3" disabled={sending || !reply.trim()} onClick={send} type="button">{sending ? 'Sending...' : 'Send reply'}</button>
+    </Panel>;
+}
+
 export default function ResourceDetails({
     canWrite,
     details,
@@ -892,10 +970,12 @@ export default function ResourceDetails({
     };
 
     const content = useMemo(() => {
+        if (itemSlug === 'messages') return <MessageReplyDetails record={record} />;
         if (!canWrite) {
             return null;
         }
         const props = { details, endpoint, onPreviewChange, reload, run, record };
+        if (itemSlug === 'designations') return <DesignationGrantDetails {...props} />;
         if (itemSlug === 'jocks') return <JockDetails {...props} />;
         if (itemSlug === 'radio1-batches') return <BatchDetails {...props} />;
         if (itemSlug === 'student-jocks') return <SocialEditor details={details} endpoint={endpoint} relation="socials" reload={reload} run={run} />;

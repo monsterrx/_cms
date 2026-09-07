@@ -103,9 +103,9 @@ export default function Edit({ recordId }) {
             const payload = resourceRequestPayload(fields, values);
             if (payload instanceof FormData) {
                 payload.append('_method', 'PUT');
-                await axios.post(recordEndpoint, payload, { silent: true });
+                await axios.post(recordEndpoint, payload);
             } else {
-                await axios.put(recordEndpoint, payload, { silent: true });
+                await axios.put(recordEndpoint, payload);
             }
 
             await loadRecord();
