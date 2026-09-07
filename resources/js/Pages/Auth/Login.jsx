@@ -65,7 +65,7 @@ export default function Login() {
 
     return (
         <>
-            <Head title="Sign in" />
+            <Head title="Sign In" />
 
             <main className="grid min-h-screen bg-canvas lg:grid-cols-[0.85fr_1.15fr]">
                 <section className="relative hidden overflow-hidden bg-[#181818] p-12 text-white lg:flex lg:flex-col lg:justify-between">

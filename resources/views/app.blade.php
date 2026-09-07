@@ -8,6 +8,8 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
         <script>
             (() => {
                 const storageKey = 'monster-cms:theme';

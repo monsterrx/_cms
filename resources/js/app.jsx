@@ -23,6 +23,7 @@ if (csrfToken) {
 }
 
 createInertiaApp({
+    title: (title) => title ? `${title} | Monster CMS` : 'Monster CMS',
     resolve: (name) => resolvePageComponent(
         `./Pages/${name}.jsx`,
         import.meta.glob('./Pages/**/*.jsx'),
