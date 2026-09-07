@@ -428,6 +428,9 @@ return [
                 'table' => 'music_awards_releases',
                 'label' => 'Monster Music Awards',
                 'presentation' => 'music-award-cards',
+                'uploads' => [
+                    'banner_image' => ['directory' => 'music_awards', 'width' => 1280, 'height' => 720, 'label' => 'Monster Music Awards banner'],
+                ],
             ],
             'shows' => [
                 'table' => 'shows',

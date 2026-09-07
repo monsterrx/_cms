@@ -5,6 +5,7 @@ namespace App\Support;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Throwable;
 
 final class ResourceImageStorage
 {
@@ -33,15 +34,51 @@ final class ResourceImageStorage
         $name = now()->format('Ymd-His').'-'.Str::lower(Str::random(12)).'.'.$extension;
         $image->move($directory, $name);
 
-        return ['name' => $name, 'path' => $directory.DIRECTORY_SEPARATOR.$name];
+        $stored = ['name' => $name, 'path' => $directory.DIRECTORY_SEPARATOR.$name, 'paths' => []];
+        $stored['paths'][] = $stored['path'];
+
+        try {
+            $root = config('media.server_root');
+            if (is_string($root) && $root !== '') {
+                if (! is_dir($root) || ! preg_match('#^(?:/|[A-Za-z]:[/\\\\])#', $root)) {
+                    throw new RuntimeException('The shared media server root must be an existing absolute directory.');
+                }
+                $stations = in_array($relativeDirectory, config('media.shared_directories', []), true)
+                    ? array_keys(config('media.station_folders'))
+                    : [app(StationContext::class)->current()];
+                foreach ($stations as $station) {
+                    foreach (config('media.station_folders.'.$station, []) as $folder) {
+                        $target = rtrim($root, '/\\').($folder === '' ? '' : '/'.$folder).'/images/'.$relativeDirectory;
+                        if (! is_dir($target) && ! @mkdir($target, 0755, true) && ! is_dir($target)) {
+                            throw new RuntimeException('A required media destination could not be created.');
+                        }
+                        if (realpath($target) === realpath($directory)) {
+                            continue;
+                        }
+                        $path = $target.'/'.$name;
+                        $stored['paths'][] = $path;
+                        if (! @copy($stored['path'], $path)) {
+                            throw new RuntimeException('The image could not be published to all required media destinations.');
+                        }
+                    }
+                }
+            }
+        } catch (Throwable $exception) {
+            $this->discard([$stored]);
+            throw $exception;
+        }
+
+        return $stored;
     }
 
     /** @param array<int, array{name: string, path: string}> $images */
     public function discard(array $images): void
     {
         foreach ($images as $image) {
-            if (is_file($image['path'])) {
-                @unlink($image['path']);
+            foreach ($image['paths'] ?? [$image['path']] as $path) {
+                if (is_file($path)) {
+                    @unlink($path);
+                }
             }
         }
     }

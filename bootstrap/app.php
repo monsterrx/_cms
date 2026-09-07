@@ -28,7 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->redirectGuestsTo(fn (Request $request): string => route('login'));
-        $middleware->redirectUsersTo(fn (Request $request): string => route('dashboard', [], false));
+        $middleware->redirectUsersTo(fn (Request $request): string => route('dashboard'));
         $middleware->trimStrings(except: [
             'current_password',
             'password',

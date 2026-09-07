@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="app-base-path" content="{{ rtrim(request()->getBaseUrl(), '/') }}">
+        <meta name="app-base-path" content="{{ rtrim(parse_url(config('app.url'), PHP_URL_PATH) ?: request()->getBaseUrl(), '/') }}">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 

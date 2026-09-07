@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::redirect('/', '/dashboard');
+Route::get('/', static fn () => redirect()->route('dashboard'));
 
 Route::get('/login', static fn () => Inertia::render('Auth/Login'))
     ->middleware('guest')

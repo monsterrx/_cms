@@ -1,6 +1,18 @@
 <?php
 
 return [
+    // The deployed rxcms folder is directly inside the shared document root.
+    // Other layouts (including Docker) may supply an absolute mounted path.
+    'server_root' => env('MEDIA_SERVER_ROOT') ?: (
+        basename(base_path()) === 'rxcms' ? dirname(base_path()) : null
+    ),
+    'station_folders' => [
+        'mnl' => ['', 'rxcms'],
+        'cbu' => ['monstercebu', 'monstercebu/cebucms'],
+        'dav' => ['monsterdavao', 'monsterdavao/davaocms'],
+    ],
+    'shared_directories' => ['jocks', 'shows', 'artists', 'albums', 'indie'],
+
     /*
     |--------------------------------------------------------------------------
     | Station media origins
