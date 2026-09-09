@@ -961,6 +961,10 @@ export default function ResourceDetails({
     const [message, setMessage] = useState('');
 
     const run = async (operation) => {
+        if (document.querySelector('[data-uploading="true"]')) {
+            setMessage('Wait for the image upload to finish before saving.');
+            return;
+        }
         setMessage('');
         try {
             await operation();

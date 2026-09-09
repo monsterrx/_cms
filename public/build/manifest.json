@@ -1,0 +1,127 @@
+{
+  "_AppShell-BPeR_Pd4.js": {
+    "file": "assets/AppShell-BPeR_Pd4.js",
+    "name": "AppShell",
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppVersion-D9pIpgJa.js"
+    ]
+  },
+  "_AppVersion-D9pIpgJa.js": {
+    "file": "assets/AppVersion-D9pIpgJa.js",
+    "name": "AppVersion",
+    "imports": [
+      "resources/js/app.jsx"
+    ]
+  },
+  "_ResourceForm-CEF-5lW2.js": {
+    "file": "assets/ResourceForm-CEF-5lW2.js",
+    "name": "ResourceForm",
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js"
+    ]
+  },
+  "resources/js/Pages/Articles/Edit.jsx": {
+    "file": "assets/Edit-d4VgQoj0.js",
+    "name": "Edit",
+    "src": "resources/js/Pages/Articles/Edit.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js",
+      "_ResourceForm-CEF-5lW2.js"
+    ]
+  },
+  "resources/js/Pages/Auth/Login.jsx": {
+    "file": "assets/Login-BK02HxqY.js",
+    "name": "Login",
+    "src": "resources/js/Pages/Auth/Login.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppVersion-D9pIpgJa.js"
+    ]
+  },
+  "resources/js/Pages/BugReports/Show.jsx": {
+    "file": "assets/Show-B8eTGDUV.js",
+    "name": "Show",
+    "src": "resources/js/Pages/BugReports/Show.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js"
+    ]
+  },
+  "resources/js/Pages/Dashboard.jsx": {
+    "file": "assets/Dashboard-BbJzBuuZ.js",
+    "name": "Dashboard",
+    "src": "resources/js/Pages/Dashboard.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js"
+    ]
+  },
+  "resources/js/Pages/Shows/Edit.jsx": {
+    "file": "assets/Edit-CBhdggUt.js",
+    "name": "Edit",
+    "src": "resources/js/Pages/Shows/Edit.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js",
+      "_ResourceForm-CEF-5lW2.js"
+    ]
+  },
+  "resources/js/Pages/Status/StatusPage.jsx": {
+    "file": "assets/StatusPage-C48k3F_R.js",
+    "name": "StatusPage",
+    "src": "resources/js/Pages/Status/StatusPage.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js"
+    ]
+  },
+  "resources/js/Pages/Status/UnderConstruction.jsx": {
+    "file": "assets/UnderConstruction-D3sD7VAg.js",
+    "name": "UnderConstruction",
+    "src": "resources/js/Pages/Status/UnderConstruction.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js"
+    ]
+  },
+  "resources/js/Pages/Workspace.jsx": {
+    "file": "assets/Workspace-BiSLYpnC.js",
+    "name": "Workspace",
+    "src": "resources/js/Pages/Workspace.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.jsx",
+      "_AppShell-BPeR_Pd4.js",
+      "_ResourceForm-CEF-5lW2.js"
+    ]
+  },
+  "resources/js/app.jsx": {
+    "file": "assets/app-DmBomFEx.js",
+    "name": "app",
+    "src": "resources/js/app.jsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/Pages/Articles/Edit.jsx",
+      "resources/js/Pages/Auth/Login.jsx",
+      "resources/js/Pages/BugReports/Show.jsx",
+      "resources/js/Pages/Dashboard.jsx",
+      "resources/js/Pages/Shows/Edit.jsx",
+      "resources/js/Pages/Status/StatusPage.jsx",
+      "resources/js/Pages/Status/UnderConstruction.jsx",
+      "resources/js/Pages/Workspace.jsx"
+    ],
+    "css": [
+      "assets/app-CFINMO_I.css"
+    ]
+  }
+}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BugReportController;
 use App\Http\Controllers\Api\DashboardSummaryController;
+use App\Http\Controllers\Api\EditorImageController;
 use App\Http\Controllers\Api\MessageReplyController;
 use App\Http\Controllers\Api\StationController;
 use Illuminate\Http\Request;
@@ -18,3 +19,5 @@ Route::post('/messages/{message}/reply', MessageReplyController::class);
 Route::put('/station', [StationController::class, 'update']);
 Route::post('/bug-reports', [BugReportController::class, 'store'])
     ->middleware('throttle:10,1');
+
+Route::post('/editor-images', EditorImageController::class)->middleware('throttle:30,1');

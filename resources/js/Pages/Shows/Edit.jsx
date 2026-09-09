@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAppState } from '../../Contexts/AppStateContext';
 import { Head, Link } from '@inertiajs/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import AppShell from '../../Components/AppShell';
@@ -6,11 +7,12 @@ import ResourceDetails from '../../Components/ResourceDetails';
 import ResourceForm from '../../Components/ResourceForm';
 import { appPath } from '../../lib/appUrl';
 import { translateError } from '../../lib/errorTranslator';
-import { resourceFormValues, resourceRequestPayload } from '../../lib/resourceForm';
+import { resourceFormValues, resourceRequestPayload, validateResourceForm } from '../../lib/resourceForm';
 
 const endpoint = '/api/resources/digital-content-programs/shows';
 
 export default function Edit({ recordId }) {
+    const { notify } = useAppState();
     const [record, setRecord] = useState(null);
     const [resource, setResource] = useState({ can_write: false });
     const [fields, setFields] = useState([]);
@@ -71,6 +73,18 @@ export default function Edit({ recordId }) {
         const warnBeforeLeaving = (event) => {
             if (!dirty) return;
             event.preventDefault();
+        if (saving) return;
+        if (event.currentTarget.querySelector('[data-uploading="true"]')) {
+            notify({ type: 'error', title: 'Upload in progress', message: 'Wait for the image upload to finish before saving.' });
+            return;
+        }
+        const validationErrors = validateResourceForm(fields, values, true);
+        if (Object.keys(validationErrors).length) {
+            setErrors(validationErrors);
+            setMessage('Please correct the highlighted fields before saving.');
+            notify({ type: 'error', title: 'Form needs attention', message: 'Please correct the highlighted fields before submitting.' });
+            return;
+        }
             event.returnValue = '';
         };
 
@@ -147,9 +161,9 @@ export default function Edit({ recordId }) {
                     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
                         <div className="min-w-0">
                             <section className="rx-panel p-5 sm:p-7">
-                                <form id="show-record-form" onSubmit={save}>
+                                <form noValidate id="show-record-form" onSubmit={save}>
                                     <ResourceForm
-                                        errors={errors}
+                                        editing errors={errors}
                                         fields={fields}
                                         onChange={(name, value) => {
                                             setValues((current) => ({ ...current, [name]: value }));

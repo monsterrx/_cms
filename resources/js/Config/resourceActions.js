@@ -7,8 +7,8 @@ const createActions = {
     giveaways: 'New giveaway',
     'graphics-artist': 'New slider',
     jocks: 'New jock',
-    'mobile-application': 'New asset',
-    'monster-music-awards': 'New release',
+    'mobile-application': 'New Mobile App Setting',
+    'monster-music-awards': 'New MMA Entry',
     shows: 'New show',
     songs: 'New song',
     'station-chart': 'New chart entry',
@@ -16,6 +16,6 @@ const createActions = {
     timeslots: 'New timeslot',
 };
 
-export function getCreateAction(resourceName) {
-    return createActions[resourceName] ?? 'New record';
+export function getCreateAction(resourceName, singularLabel = 'Record') {
+    return createActions[resourceName] ?? `New ${singularLabel}`;
 }

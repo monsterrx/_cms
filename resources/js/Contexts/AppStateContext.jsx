@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createPortal } from 'react-dom';
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
 import Icon from '../Components/Icon';
 import { translateError } from '../lib/errorTranslator';
@@ -59,10 +60,10 @@ function reducer(state, action) {
 }
 
 function NotificationCenter({ notifications, onDismiss }) {
-    return (
+    return createPortal(
         <div
             aria-live="polite"
-            className="pointer-events-none fixed inset-x-4 top-4 z-[70] flex flex-col items-end gap-3 sm:left-auto sm:w-96"
+            className="pointer-events-none fixed inset-x-4 top-4 z-[200] flex flex-col items-end gap-3 sm:left-auto sm:w-96"
         >
             {notifications.map((notification) => (
                 <div
@@ -94,7 +95,7 @@ function NotificationCenter({ notifications, onDismiss }) {
                     </div>
                 </div>
             ))}
-        </div>
+        </div>, document.body
     );
 }
 

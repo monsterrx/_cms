@@ -19,6 +19,11 @@ final class StationContext
 
         $request ??= app('request');
 
+        $employeeStation = $request->user()?->Employee?->location;
+        if ($this->isSupported($employeeStation)) {
+            $default = $employeeStation;
+        }
+
         if (! $request->hasSession() || ! $this->canSwitch($request->user())) {
             return $default;
         }

@@ -19,3 +19,10 @@ Route::get('/workspace/digital-content-programs/articles/{record}', static funct
 
     return Inertia::render('Articles/Edit', ['recordId' => $record]);
 })->whereNumber('record')->name('articles.edit');
+
+Route::get('/workspace/events-scholarship/gimik-board/{record}', static function (Request $request, DesignationNavigation $navigation, WorkspaceVisitRecorder $visits, int $record) {
+    abort_unless($navigation->canView($request->user(), 'events-scholarship', 'gimik-board'), 403);
+    $visits->record($request->user(), 'events-scholarship', 'gimik-board');
+
+    return Inertia::render('Articles/Edit', ['recordId' => $record, 'resourceSection' => 'events-scholarship', 'resourceItem' => 'gimik-board']);
+})->whereNumber('record')->name('gimikboards.edit');

@@ -159,19 +159,24 @@ return [
         'staff' => [
             'staffs' => [
                 'table' => 'employees',
+                'hidden_form_fields' => ['employee_number'],
+                'readonly_fields' => ['employee_number'],
+                'generated_fields' => ['employee_number' => ['generator' => 'random_code', 'length' => 8, 'prefix' => 'RX', 'suffix' => '931', 'create_only' => true]],
                 'label' => 'Staff',
                 'write_levels' => [1, 2, 6],
                 'columns' => ['id', 'employee_number', 'first_name', 'last_name', 'designation_id', 'is_active'],
             ],
-            'designations' => ['table' => 'designations', 'label' => 'Designations'],
+            'designations' => ['table' => 'designations', 'label' => 'Designations', 'field_options' => ['level' => array_map(static fn (int $level): array => ['value' => $level, 'label' => (string) $level], range(1, 9))]],
             'jocks' => [
                 'table' => 'jocks',
                 'label' => 'Jocks',
                 'presentation' => 'jock-cards',
+                'field_overrides' => ['is_active' => ['create_hidden' => true, 'default' => 1]],
                 'rich_text_fields' => ['description'],
                 'hidden_fields' => ['slug_string', 'jock_type'],
                 'generated_fields' => [
                     'slug_string' => ['source' => 'name', 'transform' => 'studly'],
+                    'is_active' => ['value' => 1, 'create_only' => true],
                     'jock_type' => ['value' => 'jock', 'create_only' => true],
                 ],
                 'station_via' => [
@@ -255,6 +260,11 @@ return [
                 'label' => 'Songs',
                 'columns' => ['id', 'name', 'album_id', 'type', 'track_link', 'is_charted'],
                 'hidden_fields' => ['votes'],
+                'hidden_form_fields' => ['is_charted'],
+                'readonly_fields' => ['is_charted'],
+                'generated_fields' => ['is_charted' => ['value' => 0, 'create_only' => true]],
+                'field_order' => ['name', 'artist_id', 'album_id', 'type', 'track_link', 'sample'],
+                'virtual_fields' => ['artist_id' => ['label' => 'Artist', 'type' => 'select', 'relation' => 'artists', 'clears' => ['album_id']], 'sample' => ['label' => 'Sample Track', 'type' => 'audio', 'nullable' => true, 'show_when' => ['field' => 'type', 'value' => 'sample']]],
                 'field_options' => [
                     'type' => [
                         ['value' => 'spotify', 'label' => 'Spotify'],
@@ -353,6 +363,7 @@ return [
                 ],
                 'write_levels' => [1, 2, 6],
                 'presentation' => 'article-cards',
+                'field_order' => ['title', 'category_id'],
                 'hidden_form_fields' => ['employee_id', 'unique_id'],
                 'readonly_fields' => ['employee_id', 'unique_id'],
                 'generated_fields' => [
@@ -383,6 +394,8 @@ return [
                 'table' => 'headers',
                 'label' => 'Graphics',
                 'presentation' => 'sortable-graphic-cards',
+                'field_labels' => ['number' => 'Order'],
+                'readonly_fields' => ['number'],
                 'uploads' => [
                     'image' => ['directory' => 'headers', 'width' => 1697, 'height' => 625, 'label' => 'Website header graphic'],
                 ],
@@ -478,13 +491,18 @@ return [
                 'table' => 'schools',
                 'label' => 'Schools',
                 'columns' => ['id', 'seal', 'name', 'address'],
+                'uploads' => ['seal' => ['directory' => 'schools', 'width' => 300, 'height' => 300, 'label' => 'School seal']],
             ],
             'gimik-board' => [
                 'table' => 'gimikboards',
                 'label' => 'Gimik Board',
+                'presentation' => 'article-cards',
+                'hidden_form_fields' => ['is_published'],
+                'readonly_fields' => ['is_published', 'event_duration'],
+                'uploads' => ['image' => ['directory' => 'schools', 'width' => 800, 'height' => 800, 'label' => 'Event image']],
                 'rich_text_fields' => ['title', 'description'],
                 'columns' => ['id', 'school_name', 'name', 'start_date', 'end_date'],
-                'field_order' => ['school_id', 'name', 'start_date', 'end_date', 'title', 'description', 'image', 'is_published'],
+                'field_order' => ['school_id', 'name', 'start_date', 'end_date', 'title', 'description', 'event_duration', 'published_at', 'image'],
                 'field_labels' => ['id' => 'ID', 'school_id' => 'School'],
                 'virtual_fields' => [
                     'school_name' => [
@@ -499,11 +517,12 @@ return [
                 'table' => 'batches',
                 'label' => 'Monster Scholars',
                 'presentation' => 'scholar-batch-cards',
+                'field_labels' => ['number' => 'Batch'],
                 'uploads' => [
                     'image' => ['directory' => 'scholarBatch', 'width' => 1600, 'height' => 1066, 'label' => 'Monster Scholars batch image'],
                 ],
             ],
-            'students' => ['table' => 'students', 'label' => 'Students'],
+            'students' => ['table' => 'students', 'label' => 'Students', 'rich_text_fields' => ['data'], 'field_help' => ['course' => 'Enter the complete degree or qualification, such as Bachelor of Arts in Communication or Diploma in Information Technology.'], 'uploads' => ['image' => ['directory' => 'schools', 'width' => 300, 'height' => 300, 'label' => 'Scholar student picture']]],
             'sponsors' => ['table' => 'sponsors', 'label' => 'Sponsors'],
         ],
         'promos' => [
@@ -511,6 +530,7 @@ return [
                 'table' => 'giveaways',
                 'label' => 'Giveaways',
                 'presentation' => 'giveaway-cards',
+                'field_overrides' => ['is_active' => ['type' => 'checkbox']],
                 'rich_text_fields' => ['description'],
                 'hidden_form_fields' => ['code'],
                 'generated_fields' => [
@@ -520,6 +540,9 @@ return [
                     'image' => ['directory' => 'giveaways', 'width' => 500, 'height' => 500, 'label' => 'Square giveaway image'],
                 ],
                 'field_labels' => [
+                    'line1' => 'Additional Info 1',
+                    'line2' => 'Additional Info 2',
+                    'line3' => 'Additional Info 3',
                     'type' => 'Category',
                     'is_restricted' => 'General Audience?',
                 ],

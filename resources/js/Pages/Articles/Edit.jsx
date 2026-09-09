@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAppState } from '../../Contexts/AppStateContext';
 import { Head, Link } from '@inertiajs/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import AppShell from '../../Components/AppShell';
@@ -7,11 +8,15 @@ import ResourceDetails from '../../Components/ResourceDetails';
 import ResourceForm from '../../Components/ResourceForm';
 import { appPath } from '../../lib/appUrl';
 import { translateError } from '../../lib/errorTranslator';
-import { resourceFormValues, resourceRequestPayload } from '../../lib/resourceForm';
+import { resourceFormValues, resourceRequestPayload, validateResourceForm } from '../../lib/resourceForm';
 
-const endpoint = '/api/resources/digital-content-programs/articles';
 
-export default function Edit({ recordId }) {
+export default function Edit({ recordId, resourceSection = 'digital-content-programs', resourceItem = 'articles' }) {
+    const isEvent = resourceItem === 'gimik-board';
+    const label = isEvent ? 'Gimikboard' : 'Article';
+    const listPath = `/workspace/${resourceSection}/${resourceItem}`;
+    const endpoint = `/api/resources/${resourceSection}/${resourceItem}`;
+    const { notify } = useAppState();
     const [record, setRecord] = useState(null);
     const [resource, setResource] = useState({ can_write: false });
     const [fields, setFields] = useState([]);
@@ -37,6 +42,7 @@ export default function Edit({ recordId }) {
     }, [fields, values.category_id]);
 
     const loadDetails = useCallback(async () => {
+        if (isEvent) { setDetailsLoading(false); return; }
         setDetailsLoading(true);
         setDetailsError('');
         try {
@@ -82,6 +88,18 @@ export default function Edit({ recordId }) {
         const warnBeforeLeaving = (event) => {
             if (!dirty) return;
             event.preventDefault();
+        if (saving) return;
+        if (event.currentTarget.querySelector('[data-uploading="true"]')) {
+            notify({ type: 'error', title: 'Upload in progress', message: 'Wait for the image upload to finish before saving.' });
+            return;
+        }
+        const validationErrors = validateResourceForm(fields, values, true);
+        if (Object.keys(validationErrors).length) {
+            setErrors(validationErrors);
+            setMessage('Please correct the highlighted fields before saving.');
+            notify({ type: 'error', title: 'Form needs attention', message: 'Please correct the highlighted fields before submitting.' });
+            return;
+        }
             event.returnValue = '';
         };
 
@@ -121,21 +139,21 @@ export default function Edit({ recordId }) {
 
     return (
         <AppShell>
-            <Head title={record?.title ? `Edit ${record.title}` : 'Edit Article'} />
+            <Head title={`Edit ${label}`} />
             <main className="mx-auto max-w-[96rem] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
                 <nav className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.14em] text-ink-muted">
                     <Link href={appPath('/dashboard')}>Dashboard</Link>
                     <span>/</span>
-                    <Link href={appPath('/workspace/digital-content-programs/articles')}>Articles</Link>
+                    <Link href={appPath(listPath)}>{label}s</Link>
                     <span>/</span>
-                    <span className="max-w-lg truncate text-ink">{record?.title ?? `Article #${recordId}`}</span>
+                    <span className="max-w-lg truncate text-ink">{(isEvent ? record?.name : record?.title) ?? `${label} #${recordId}`}</span>
                 </nav>
 
                 <header className="mb-8 mt-5 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
                     <div className="min-w-0">
-                        <p className="rx-kicker">Article editor</p>
-                        <h1 className="mt-2 max-w-4xl font-heading text-3xl font-bold uppercase tracking-tight sm:text-5xl">{record?.title ?? 'Loading article'}</h1>
-                        <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-muted">Edit article details and ordered content, then review how the saved article will appear on RX93.1.</p>
+                        <p className="rx-kicker">{label} editor</p>
+                        <h1 className="mt-2 max-w-4xl font-heading text-3xl font-bold uppercase tracking-tight sm:text-5xl">{(isEvent ? record?.name : record?.title) ?? `Loading ${label.toLowerCase()}`}</h1>
+                        <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-muted">Edit the details and publication schedule, then review the preview before saving.</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         <div className="flex rounded-md border border-line bg-surface p-1">
@@ -153,12 +171,12 @@ export default function Edit({ recordId }) {
                         </div>
                         <Link
                             className="rx-button-secondary"
-                            href={appPath('/workspace/digital-content-programs/articles')}
+                            href={appPath(listPath)}
                             onClick={(event) => {
                                 if (dirty && !window.confirm('Leave without saving your article changes?')) event.preventDefault();
                             }}
                         >
-                            Back to Articles
+                            Back to {label}s
                         </Link>
                     </div>
                 </header>
@@ -166,16 +184,16 @@ export default function Edit({ recordId }) {
                 {message && <p className={`mb-5 border-l-4 p-4 text-sm ${Object.keys(errors).length > 0 ? 'border-red-500 bg-red-500/10 text-red-500' : 'border-rx-blue bg-rx-blue/10 text-ink'}`}>{message}</p>}
 
                 {loading ? (
-                    <section className="rx-panel p-12 text-center text-sm text-ink-muted">Loading article editor...</section>
+                    <section className="rx-panel p-12 text-center text-sm text-ink-muted">Loading {label.toLowerCase()} editor...</section>
                 ) : !record ? (
-                    <section className="rx-panel p-12 text-center text-sm text-red-500">The article could not be loaded.</section>
+                    <section className="rx-panel p-12 text-center text-sm text-red-500">The {label.toLowerCase()} could not be loaded.</section>
                 ) : (
                     <>
                         <div className={view === 'edit' ? 'block' : 'hidden'}>
                             <section className="rx-panel p-5 sm:p-7">
-                                <form id="article-record-form" onSubmit={save}>
+                                <form noValidate id="article-record-form" onSubmit={save}>
                                     <ResourceForm
-                                        errors={errors}
+                                        editing errors={errors}
                                         fields={fields}
                                         onChange={(name, value) => {
                                             setValues((current) => ({ ...current, [name]: value }));
@@ -187,12 +205,12 @@ export default function Edit({ recordId }) {
                                     />
                                     {resource.can_write && (
                                         <div className="mt-7 flex justify-end border-t border-line pt-5">
-                                            <button className="rx-button" disabled={saving || hasPendingCrop} type="submit">{saving ? 'Saving...' : 'Save Article'}</button>
+                                            <button className="rx-button" disabled={saving || hasPendingCrop} type="submit">{saving ? 'Saving...' : `Save ${label}`}</button>
                                         </div>
                                     )}
                                 </form>
 
-                                <ResourceDetails
+                                {!isEvent && <ResourceDetails
                                     canWrite={resource.can_write}
                                     details={details}
                                     endpoint={recordEndpoint}
@@ -202,16 +220,16 @@ export default function Edit({ recordId }) {
                                     onPreviewChange={setPreviewContents}
                                     record={record}
                                     reload={loadDetails}
-                                />
+                                />}
                             </section>
                         </div>
 
                         <div className={view === 'preview' ? 'block' : 'hidden'}>
                             <ArticlePreview
                                 category={category}
-                                contents={previewContents}
+                                contents={isEvent ? [{ id: recordId, content: values.description ?? '' }] : previewContents}
                                 preview={{ ...(details.preview ?? {}), related: details.related ?? [] }}
-                                record={previewRecord}
+                                record={isEvent ? { ...previewRecord, title: values.name, heading: '', event_duration: values.event_duration } : previewRecord}
                             />
                         </div>
                     </>

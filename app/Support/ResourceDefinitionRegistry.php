@@ -136,7 +136,10 @@ final class ResourceDefinitionRegistry
                 return [
                     ...$column,
                     'label' => $resource['field_labels'][$name]
-                        ?? ($name === 'is_active' ? 'Is Active?' : Str::headline($name)),
+                        ?? ($name === 'is_active' ? 'Is Active?' : Str::headline($relationTable ? Str::beforeLast($name, '_id') : $name)),
+                    'default' => $override['default'] ?? $column['default'],
+                    'create_hidden' => $override['create_hidden'] ?? false,
+                    'editor_resource' => ['section' => $resource['section'], 'item' => $resource['item']],
                     'help' => $resource['field_help'][$name] ?? null,
                     'type' => $override['type'] ?? $type,
                     'form' => ! $technical
@@ -226,7 +229,7 @@ final class ResourceDefinitionRegistry
                 'upload_supported' => false,
                 'crop' => null,
                 'crop_variants' => null,
-                'options' => $definition['options'] ?? [],
+                'options' => isset($definition['relation']) ? $this->relationOptions($definition['relation']) : ($definition['options'] ?? []),
                 'show_when' => $definition['show_when'] ?? null,
                 'clears' => $definition['clears'] ?? [],
             ];
@@ -352,7 +355,7 @@ final class ResourceDefinitionRegistry
 
     private function isMediaField(string $name): bool
     {
-        return (bool) preg_match('/(^|_)(image|photo|cover|thumbnail|banner|background|icon|logo|wallpaper|file|path)($|_)/i', $name);
+        return (bool) preg_match('/(^|_)(image|photo|seal|cover|thumbnail|banner|background|icon|logo|wallpaper|file|path)($|_)/i', $name);
     }
 
     /** @param array<string, mixed> $column */
@@ -374,7 +377,7 @@ final class ResourceDefinitionRegistry
             return 'textarea';
         }
 
-        if ($column['data_type'] === 'date') {
+        if ($column['data_type'] === 'date' || (! in_array($column['data_type'], ['datetime', 'timestamp', 'time'], true) && in_array($column['name'], ['birthday', 'birthdate', 'start_date', 'end_date', 'date', 'dated'], true))) {
             return 'date';
         }
 
@@ -463,7 +466,7 @@ final class ResourceDefinitionRegistry
         }
 
         return DB::table($table)
-            ->select(array_values(array_unique(['id', ...$labelColumns])))
+            ->select(array_values(array_unique(['id', ...$labelColumns, ...($table === 'albums' ? ['artist_id'] : [])])))
             ->when(in_array('deleted_at', $columns, true), fn ($query) => $query->whereNull('deleted_at'))
             ->when(
                 in_array('location', $columns, true),
@@ -472,7 +475,7 @@ final class ResourceDefinitionRegistry
             ->orderBy($labelColumns[0])
             ->limit(5000)
             ->get()
-            ->map(static function (object $record) use ($labelColumns): array {
+            ->map(static function (object $record) use ($labelColumns, $table): array {
                 $parts = collect($labelColumns)
                     ->map(static fn (string $column) => trim((string) ($record->{$column} ?? '')))
                     ->filter()
@@ -481,6 +484,7 @@ final class ResourceDefinitionRegistry
                 return [
                     'value' => $record->id,
                     'label' => $parts->implode(' ') ?: "Record #{$record->id}",
+                    ...($table === 'albums' ? ['artist_id' => $record->artist_id] : []),
                 ];
             })
             ->values()

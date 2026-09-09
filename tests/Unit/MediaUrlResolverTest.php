@@ -60,6 +60,7 @@ class MediaUrlResolverTest extends TestCase
 
     public function test_it_returns_the_station_fallback_for_missing_or_unsafe_files(): void
     {
+        $this->app->usePublicPath(storage_path('framework/testing/remote-fallback-fixture'));
         Http::fake([
             '*' => Http::response('', 404),
         ]);

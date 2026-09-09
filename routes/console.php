@@ -22,3 +22,5 @@ Artisan::command('inspire', function () {
 Schedule::command('charts:publish-scheduled')
     ->everyMinute()
     ->withoutOverlapping();
+
+Schedule::command('gimikboards:publish-scheduled')->everyMinute()->withoutOverlapping();

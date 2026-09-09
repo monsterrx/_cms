@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 import SelectControl from './SelectControl';
 
 const toolbarActions = [
@@ -26,6 +27,7 @@ export default function RichTextEditor({ disabled, error, field, onChange, onPas
     const editorRef = useRef(null);
     const [empty, setEmpty] = useState(!hasVisibleContent(value || ''));
     const [focused, setFocused] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         const editor = editorRef.current;
@@ -77,6 +79,34 @@ export default function RichTextEditor({ disabled, error, field, onChange, onPas
 
         event.preventDefault();
         execute('insertImage', previewUrl);
+    };
+
+    const dropImage = async (event) => {
+        if (disabled) return;
+        const files = Array.from(event.dataTransfer?.files ?? []).filter((file) => file.type.startsWith('image/'));
+        if (!files.length) return;
+        event.preventDefault();
+        setUploading(true);
+        const editor = editorRef.current;
+        let range = document.caretRangeFromPoint?.(event.clientX, event.clientY);
+        if (!range && document.caretPositionFromPoint) {
+            const position = document.caretPositionFromPoint(event.clientX, event.clientY);
+            if (position) { range = document.createRange(); range.setStart(position.offsetNode, position.offset); range.collapse(true); }
+        }
+        if (!range || !editor.contains(range.startContainer)) { range = document.createRange(); range.selectNodeContents(editor); range.collapse(false); }
+        const marker = document.createTextNode('');
+        range.insertNode(marker);
+        try {
+            for (const file of files) {
+                const payload = new FormData(); payload.append('image', file);
+                if (field.editor_resource) { payload.append('section', field.editor_resource.section); payload.append('item', field.editor_resource.item); }
+                const response = await axios.post('/api/editor-images', payload);
+                if (!editor.contains(marker)) break;
+                const image = document.createElement('img'); image.src = response.data.data.url; image.alt = file.name;
+                marker.before(image);
+            }
+            emitChange();
+        } finally { marker.remove(); setUploading(false); }
     };
 
     const labelColor = error ? 'text-red-500' : (focused ? 'text-rx-blue' : 'text-ink-muted');
@@ -146,6 +176,8 @@ export default function RichTextEditor({ disabled, error, field, onChange, onPas
                         aria-describedby={error ? `field-${field.name}-error` : undefined}
                         aria-invalid={Boolean(error)}
                         className="min-h-52 px-4 pb-4 pt-10 text-sm leading-7 text-ink outline-none [&_a]:text-rx-blue [&_a]:underline [&_blockquote]:border-l-4 [&_blockquote]:border-rx-blue [&_blockquote]:pl-4 [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:text-lg [&_h3]:font-semibold [&_img]:my-4 [&_img]:max-h-96 [&_img]:max-w-full [&_img]:rounded-md [&_img]:border [&_img]:border-line [&_img]:object-contain [&_ol]:list-decimal [&_ol]:pl-6 [&_p]:mb-3 [&_ul]:list-disc [&_ul]:pl-6"
+                        data-uploading={uploading}
+                        aria-busy={uploading}
                         contentEditable={!disabled}
                         id={`field-${field.name}`}
                         onBlur={() => {
@@ -155,12 +187,15 @@ export default function RichTextEditor({ disabled, error, field, onChange, onPas
                         onFocus={() => setFocused(true)}
                         onInput={emitChange}
                         onPaste={pasteImage}
+                        onDragOver={(event) => { if (!disabled && Array.from(event.dataTransfer.types).includes('Files')) event.preventDefault(); }}
+                        onDrop={(event) => { dropImage(event).catch(() => {}); }}
                         ref={editorRef}
                         role="textbox"
                         suppressContentEditableWarning
                     />
                 </div>
             </div>
+            {uploading && <p className="mt-2 text-xs text-ink-muted" role="status">Uploading image...</p>}
             {error && <p className="mt-1.5 text-xs text-red-500" id={`field-${field.name}-error`}>{error}</p>}
         </div>
     );

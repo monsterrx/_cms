@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import CalendarInput from './CalendarInput';
 import CardDropdown from './CardDropdown';
 import ImageCropField from './ImageCropField';
 import RichTextEditor from './RichTextEditor';
+import { eventDuration } from '../lib/resourceForm';
 
 function normalizeDateValue(value, type) {
     if (!value) {
@@ -56,6 +58,7 @@ function FloatingLabel({ error, field, floated, focused, required }) {
 
 export default function ResourceForm({
     errors,
+    editing = false,
     fields,
     onChange,
     onCropStatusChange,
@@ -64,13 +67,13 @@ export default function ResourceForm({
 }) {
     const [focusedField, setFocusedField] = useState(null);
     const formFields = fields.filter((field) => {
-        if (!field.form) {
+        if (!field.form || (!editing && field.create_hidden)) {
             return false;
         }
 
         const condition = field.show_when;
         return !condition || String(values[condition.field] ?? '') === String(condition.value);
-    });
+    }).sort((a, b) => Number(['file', 'audio'].includes(a.type)) - Number(['file', 'audio'].includes(b.type)));
 
     return (
         <div className="grid pt-2 md:grid-cols-2" style={{ columnGap: '1.5rem', rowGap: '2rem' }}>
@@ -79,7 +82,7 @@ export default function ResourceForm({
                 const errorId = `field-${field.name}-error`;
                 const disabled = readOnly || !field.writable;
                 const required = !field.nullable && field.default === null && field.type !== 'file';
-                const value = ['date', 'datetime-local'].includes(field.type)
+                const value = field.name === 'event_duration' ? eventDuration(values.start_date, values.end_date) : ['date', 'datetime-local'].includes(field.type)
                     ? normalizeDateValue(values[field.name], field.type)
                     : (values[field.name] ?? '');
                 const focused = focusedField === field.name;
@@ -88,6 +91,10 @@ export default function ResourceForm({
                     ? 'border-red-500 focus:border-red-500 focus:bg-red-500/5'
                     : 'border-line focus:border-rx-blue focus:bg-rx-blue/10';
                 const controlClass = `block min-h-14 w-full rounded-md border bg-transparent px-3 pb-2 pt-5 text-sm text-ink shadow-none outline-none transition-[border-color,background-color,opacity] duration-200 placeholder:text-transparent hover:bg-canvas/40 focus:ring-0 disabled:cursor-not-allowed disabled:bg-canvas/40 disabled:opacity-60 ${activeState}`;
+
+                if (field.type === 'audio') {
+                    return <div className="md:col-span-2" key={field.name}><label htmlFor={`field-${field.name}`}>{field.label}</label><input id={`field-${field.name}`} type="file" accept="audio/mpeg,audio/mp4,audio/ogg,audio/wav,.mp3,.m4a,.ogg,.wav" disabled={readOnly} onChange={(event) => onChange(field.name, event.target.files?.[0] ?? null)} aria-invalid={Boolean(error)} className="mt-2 block w-full" />{error && <p className="text-sm text-red-500">{error}</p>}</div>;
+                }
 
                 if (field.type === 'file') {
                     if (field.upload_supported && field.crop) {
@@ -162,7 +169,11 @@ export default function ResourceForm({
                 return (
                     <div className={field.type === 'textarea' ? 'md:col-span-2' : ''} key={field.name}>
                         <div className="relative">
-                            {field.type === 'textarea' ? (
+                            {field.type === 'date' ? (
+                                <CalendarInput id={`field-${field.name}`} name={field.name} value={value} disabled={disabled}
+                                    required={required} error={error} errorId={errorId} className={controlClass}
+                                    onChange={(next) => onChange(field.name, next)} onFocus={() => setFocusedField(field.name)} onBlur={() => setFocusedField(null)} />
+                            ) : field.type === 'textarea' ? (
                                 <textarea
                                     aria-describedby={error ? errorId : undefined}
                                     aria-invalid={Boolean(error)}
@@ -190,7 +201,7 @@ export default function ResourceForm({
                                     onChange={(selectedValue) => onChange(field.name, selectedValue)}
                                     onFocus={() => setFocusedField(field.name)}
                                     onOpenChange={(isOpen) => setFocusedField(isOpen ? field.name : null)}
-                                    options={field.options}
+                                    options={field.name === 'album_id' && fields.some((candidate) => candidate.name === 'artist_id' && candidate.virtual) ? field.options.filter((option) => String(option.artist_id) === String(values.artist_id)) : field.options}
                                     value={value}
                                 />
                             ) : (
@@ -208,12 +219,14 @@ export default function ResourceForm({
                                     placeholder=" "
                                     required={required}
                                     type={field.type}
+                                    onClick={['date', 'datetime-local'].includes(field.type) ? (event) => { try { event.currentTarget.showPicker?.(); } catch {} } : undefined}
                                     value={value}
                                 />
                             )}
 
                             <FloatingLabel error={error} field={field} floated={floated} focused={focused} required={required} />
                         </div>
+
 
                         {field.help && <p className="mt-2 text-xs leading-5 text-ink-muted">{field.help}</p>}
                         {error && <p className="mt-1.5 text-xs text-red-500" id={errorId}>{error}</p>}

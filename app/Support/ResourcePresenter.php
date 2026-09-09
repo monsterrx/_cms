@@ -187,7 +187,7 @@ final class ResourcePresenter
         return array_map(function (array $record) use ($schools): array {
             $record['school_name'] = $schools[$record['school_id']] ?? 'Unknown School';
 
-            return $record;
+            return $this->withDisplay($record, ['image' => $this->imageUrl('schools', $record['image'] ?? null), 'title' => $record['name'] ?? 'Untitled Event', 'subtitle' => $record['event_duration'] ?? '', 'status' => ! empty($record['is_published']) ? 'Published' : (! empty($record['published_at']) ? 'Scheduled' : 'Draft'), 'kind' => 'event']);
         }, $records);
     }
 

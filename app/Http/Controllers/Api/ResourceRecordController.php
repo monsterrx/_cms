@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Support\DesignationNavigation;
+use App\Support\ResourceAudioStorage;
 use App\Support\ResourceDefinitionRegistry;
 use App\Support\ResourceImageStorage;
 use App\Support\ResourcePresenter;
 use App\Support\RichTextSanitizer;
 use App\Support\StationContext;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -94,6 +97,14 @@ final class ResourceRecordController extends Controller
                 'section' => $section,
                 'item' => $item,
                 'label' => $resource['label'],
+                'singular_label' => match ($item) {
+                    'staffs' => 'Staff',
+                    'graphics-artist' => 'Slider',
+                    'mobile-application' => 'Mobile App Setting',
+                    'monster-music-awards' => 'MMA Entry',
+                    'scholar-batches' => 'Monster Scholar Batch',
+                    default => Str::singular($resource['label']),
+                },
                 'read_only' => (bool) $resource['read_only'],
                 'can_write' => $this->canWrite($request, $resource),
                 'can_export' => in_array($this->level($request), [1, 2], true),
@@ -133,6 +144,14 @@ final class ResourceRecordController extends Controller
                 'section' => $section,
                 'item' => $item,
                 'label' => $resource['label'],
+                'singular_label' => match ($item) {
+                    'staffs' => 'Staffs',
+                    'graphics-artist' => 'Slider',
+                    'mobile-application' => 'Mobile App Setting',
+                    'monster-music-awards' => 'MMA Entry',
+                    'scholar-batches' => 'Monster Scholar Batch',
+                    default => Str::singular($resource['label']),
+                },
                 'read_only' => (bool) $resource['read_only'],
                 'can_write' => $this->canWrite($request, $resource),
                 'can_export' => in_array($this->level($request), [1, 2], true),
@@ -164,6 +183,10 @@ final class ResourceRecordController extends Controller
             }
 
             $id = DB::transaction(function () use ($payload, $resource, $uploads): int {
+                if ($resource['item'] === 'graphics-artist') {
+                    DB::table('headers')->orderBy('id')->lockForUpdate()->get(['id']);
+                    $payload['number'] = ((int) DB::table('headers')->max('number')) + 1;
+                }
                 $id = DB::table($resource['table'])->insertGetId($payload);
                 $this->applyRelatedImages($uploads['related'], $payload);
 
@@ -290,7 +313,7 @@ final class ResourceRecordController extends Controller
             } elseif (in_array($field['type'], ['date', 'datetime-local'], true)) {
                 $fieldRules[] = 'date';
             } else {
-                $fieldRules[] = 'string';
+                $fieldRules[] = $field['type'] === 'select' ? Rule::in(array_column($field['options'], 'value')) : 'string';
             }
 
             if ($field['max_length'] && $field['type'] !== 'file') {
@@ -309,7 +332,24 @@ final class ResourceRecordController extends Controller
             $rules[$field['name']] = $fieldRules;
         }
 
-        $validator = Validator::make($request->all(), $rules);
+        if ($resource['item'] === 'songs' && $request->input('type') === 'sample') {
+            unset($rules['track_link']);
+        }
+        if ($resource['item'] === 'songs') {
+            $rules['artist_id'] = ['required', 'integer', Rule::in(array_column(collect($fields)->firstWhere('name', 'artist_id')['options'], 'value'))];
+            $rules['album_id'][] = Rule::exists('albums', 'id')->where('artist_id', $request->input('artist_id'));
+            if ($request->input('type') === 'sample') {
+                $needsAudio = $recordId === null || DB::table('songs')->where('id', $recordId)->value('type') !== 'sample';
+                $rules['sample'] = [$needsAudio ? 'required' : 'nullable', 'file', 'mimes:mp3,m4a,ogg,wav', 'max:20480'];
+            }
+        }
+        if ($resource['item'] === 'gimik-board') {
+            $startDate = $request->input('start_date') ?? ($recordId ? DB::table('gimikboards')->where('id', $recordId)->value('start_date') : null);
+            if ($startDate) {
+                $rules['end_date'][] = 'after_or_equal:'.$startDate;
+            }
+        }
+        $validator = Validator::make($request->all(), $rules, [], collect($fields)->pluck('label', 'name')->all());
         $validated = $validator->validate();
 
         $payload = collect($validated)
@@ -321,6 +361,14 @@ final class ResourceRecordController extends Controller
             if (array_key_exists($field['name'], $payload)) {
                 $payload[$field['name']] = $this->richText->sanitize($payload[$field['name']]);
             }
+        }
+
+        if (isset($validated['sample'])) {
+            $payload['sample'] = $validated['sample'];
+        }
+        if ($resource['item'] === 'students' && isset($payload['course'])) {
+            $payload['course'] = preg_replace('/\s+/u', ' ', trim($payload['course']));
+            $payload['course'] = DB::table('students')->whereRaw('LOWER(course) = ?', [mb_strtolower($payload['course'])])->value('course') ?? $payload['course'];
         }
 
         return $payload;
@@ -341,10 +389,38 @@ final class ResourceRecordController extends Controller
         $columnNames = array_column($fields, 'name');
         $tableColumns = array_column($this->registry->columns($resource['table']), 'name');
 
-        if (in_array('location', $columnNames, true)) {
-            $payload['location'] = $this->stations->current();
+        if (in_array('location', $tableColumns, true)) {
+            $payload['location'] = $this->stations->current($request);
         }
 
+        if ($resource['item'] === 'gimik-board') {
+            $existing = $creating ? null : DB::table('gimikboards')->where('id', $request->route('id'))->first();
+            $start = $payload['start_date'] ?? $existing?->start_date;
+            $end = $payload['end_date'] ?? $existing?->end_date;
+            if ($start && $end) {
+                $from = CarbonImmutable::parse($start);
+                $to = CarbonImmutable::parse($end);
+                if ($to->lessThan($from)) {
+                    throw ValidationException::withMessages(['end_date' => 'End date must be on or after the start date.']);
+                }
+                $months = ($to->year - $from->year) * 12 + $to->month - $from->month;
+                if ($to->day < $from->day) {
+                    $months--;
+                }
+                $days = (int) $from->addMonthsNoOverflow($months)->diffInDays($to);
+                $parts = [];
+                if ($months) {
+                    $parts[] = $months.' '.Str::plural('month', $months);
+                }
+                if ($days) {
+                    $parts[] = $months === 0 && $days % 7 === 0 ? ($days / 7).' '.Str::plural('week', $days / 7) : $days.' '.Str::plural('day', $days);
+                }
+                $payload['event_duration'] = implode(' and ', $parts) ?: '1 day';
+            }
+            if ($creating || array_key_exists('published_at', $payload)) {
+                $payload['is_published'] = ! empty($payload['published_at']) && Carbon::parse($payload['published_at'])->lte(now()) ? 1 : 0;
+            }
+        }
         foreach ($resource['filters'] as $filter) {
             if (($filter['operator'] ?? '=') === '=' && in_array($filter['column'] ?? null, $columnNames, true)) {
                 $payload[$filter['column']] = $filter['value'] ?? null;
@@ -425,6 +501,14 @@ final class ResourceRecordController extends Controller
                 continue;
             }
 
+            if ($resource['item'] === 'songs' && $field === 'sample') {
+                $audio = app(ResourceAudioStorage::class)->store($value);
+                $stored[] = $audio;
+                $payload['track_link'] = $audio['name'];
+                unset($payload['sample']);
+
+                continue;
+            }
             $definition = $this->registry->uploadDefinition($resource, $field);
             abort_if($definition === null, 422, 'Image uploads are not configured for this field.');
 

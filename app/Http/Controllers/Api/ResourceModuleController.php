@@ -181,6 +181,16 @@ final class ResourceModuleController extends Controller
             );
         }
 
+        if ($item === 'gimik-board' && in_array($action, ['publish', 'unpublish'], true)) {
+            DB::table('gimikboards')->where('id', $id)->update([
+                'published_at' => $action === 'publish' ? now() : null,
+                'is_published' => $action === 'publish' ? 1 : 0,
+                'updated_at' => now(),
+            ]);
+
+            return $this->successResponse(null, 'Event publication updated.');
+        }
+
         if ($item === 'graphics-artist' && $action === 'reorder') {
             $validated = $request->validate([
                 'ids' => ['required', 'array', 'min:1'],

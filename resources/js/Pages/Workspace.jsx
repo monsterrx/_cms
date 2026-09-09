@@ -15,7 +15,7 @@ import { getCreateAction } from '../Config/resourceActions';
 import { useAppState } from '../Contexts/AppStateContext';
 import { appPath } from '../lib/appUrl';
 import { translateError } from '../lib/errorTranslator';
-import { resourceFormValues, resourceRequestPayload } from '../lib/resourceForm';
+import { resourceFormValues, resourceRequestPayload, validateResourceForm } from '../lib/resourceForm';
 
 const emptyMeta = {
     current_page: 1,
@@ -98,7 +98,6 @@ function SectionOverview({ section }) {
 
 function ItemWorkspace({ section, item }) {
     const { notify } = useAppState();
-    const createAction = getCreateAction(item.slug);
     const endpoint = `/api/resources/${section.slug}/${item.slug}`;
     const requestedPageSize = ['jocks', 'indieground-artists', 'indieground-featured'].includes(item.slug)
         ? 12
@@ -249,6 +248,7 @@ function ItemWorkspace({ section, item }) {
         }).length;
     }, [records]);
 
+    const createAction = getCreateAction(item.slug, resource.singular_label);
     const dirty = useMemo(
         () => JSON.stringify(formValues) !== JSON.stringify(initialFormValues),
         [formValues, initialFormValues],
@@ -276,7 +276,7 @@ function ItemWorkspace({ section, item }) {
     };
 
     const openEdit = (record) => {
-        if (['articles', 'shows'].includes(item.slug)) {
+        if (['articles', 'shows', 'gimik-board'].includes(item.slug)) {
             router.visit(appPath(`/workspace/${section.slug}/${item.slug}/${record.id}`));
             return;
         }
@@ -296,6 +296,18 @@ function ItemWorkspace({ section, item }) {
     const saveRecord = async (event) => {
         event.preventDefault();
 
+        if (saving) return;
+        if (event.currentTarget.querySelector('[data-uploading="true"]')) {
+            notify({ type: 'error', title: 'Upload in progress', message: 'Wait for the image upload to finish before saving.' });
+            return;
+        }
+        const validationErrors = validateResourceForm(fields, formValues, Boolean(selectedRecord));
+        if (Object.keys(validationErrors).length) {
+            setFormErrors(validationErrors);
+            setFormMessage('Please correct the highlighted fields before saving.');
+            notify({ type: 'error', title: 'Form needs attention', message: 'Please correct the highlighted fields before submitting.' });
+            return;
+        }
         if (hasPendingCrop) {
             setFormMessage('Apply every selected image crop before saving the record.');
             return;
@@ -322,9 +334,9 @@ function ItemWorkspace({ section, item }) {
             }
 
             const createdId = response?.data?.data?.record?.id;
-            if (!selectedRecord && item.slug === 'articles' && createdId) {
+            if (!selectedRecord && ['articles', 'gimik-board'].includes(item.slug) && createdId) {
                 setModalOpen(false);
-                router.visit(appPath(`/workspace/${section.slug}/articles/${createdId}`));
+                router.visit(appPath(`/workspace/${section.slug}/${item.slug}/${createdId}`));
                 return;
             }
 
@@ -557,10 +569,11 @@ function ItemWorkspace({ section, item }) {
             </aside>
 
             <PersistentModal
+                confirmOnClose={modalCanEdit && Boolean(selectedRecord)}
                 dirty={modalCanEdit && dirty}
                 footer={modalCanEdit ? (
                     <div className="flex items-center justify-between gap-4">
-                        <p className="text-xs text-ink-muted">Close with the X button. Unsaved changes require confirmation.</p>
+                        <p className="text-xs text-ink-muted">Esc or click outside to close. Unsaved changes require two confirmations.</p>
                         <button className="rx-button" disabled={saving || hasPendingCrop} form="resource-record-form" type="submit">
                             {saving ? 'Saving...' : 'Save'}
                         </button>
@@ -572,7 +585,7 @@ function ItemWorkspace({ section, item }) {
                 )}
                 onClose={() => setModalOpen(false)}
                 open={modalOpen}
-                title={selectedRecord ? `Edit ${item.label} #${selectedRecord.id}` : `New ${item.label}`}
+                title={selectedRecord ? `Edit ${resource.singular_label ?? item.label} #${selectedRecord.id}` : `New ${resource.singular_label ?? item.label}`}
             >
                 {reviewFirst && (
                     <div className="mb-6 flex flex-col gap-4 rounded-lg border border-rx-blue/30 bg-rx-blue/10 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -609,8 +622,9 @@ function ItemWorkspace({ section, item }) {
                     </div>
                 )}
                 {formMessage && <div className="mb-5 border-l-4 border-red-500 bg-red-500/10 p-4 text-sm text-red-500" role="alert">{formMessage}</div>}
-                <form id="resource-record-form" onSubmit={saveRecord}>
+                <form noValidate id="resource-record-form" onSubmit={saveRecord}>
                     <ResourceForm
+                        editing={Boolean(selectedRecord)}
                         errors={formErrors}
                         fields={selectedRecord && item.slug === 'mobile-application'
                             ? fields.filter((field) => field.type !== 'file')
